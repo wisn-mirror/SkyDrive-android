@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.we.gallerymanager"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+}
+//def qmui_arch_version = '2.0.0-alpha08'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":library")
+
+//    annotationProcessor "androidx.room:room-compiler:2.2.5" // For Kotlin use kapt instead of annotationProcessor
+    kapt "androidx.room:room-compiler:2.2.5" // For Kotlin use kapt instead of annotationProcessor
+
+    implementation "androidx.work:work-runtime:2.4.0"
+    implementation "androidx.room:room-runtime:2.2.5"
+    implementation 'com.jeremyliao:live-event-bus-x:1.7.2'
+
+    debugImplementation 'io.github.skyhacker2:sqliteonweb:1.0.1'
+    releaseImplementation 'io.github.skyhacker2:sqliteonweb-no-op:1.0.2'
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.2.5"
+
+    // optional - RxJava support for Room
+    implementation "androidx.room:room-rxjava2:2.2.5"
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:2.2.5"
+
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+
+
+    // Test helpers
+    testImplementation "androidx.room:room-testing:2.2.5"
+
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}

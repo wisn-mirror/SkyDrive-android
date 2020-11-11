@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="itemData"
+            type="com.wisn.qm.mode.db.beans.UploadBean" />
+        <variable
+            name="FileType"
+            type="com.wisn.qm.mode.bean.FileType" />
+    </data>
+
+    <com.library.base.views.QMUIRoundConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rootview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="4dp"
+        android:clickable="true"
+        app:qmui_backgroundColor="@color/qmui_config_color_white"
+        app:qmui_radius="4dp"
+        app:qmui_shadowAlpha="0.4"
+        app:qmui_shadowElevation="6dp">
+
+
+        <com.qmuiteam.qmui.widget.QMUIRadiusImageView2
+            android:id="@+id/iv_header"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/cloud_album_icon_album_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:qmui_corner_radius="2dp" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@{itemData.fileName}"
+            app:layout_constraintBottom_toTopOf="@+id/des"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_header"
+            app:layout_constraintTop_toTopOf="@+id/iv_header"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="namenamenamenamenamenamenamenamenamenamenamenamenamenamename" />
+
+        <TextView
+            android:id="@+id/des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{itemData.getUploadTimeStr()+itemData.getUploadStatusStr() }"
+            android:textColor="@{itemData.uploadStatus == 2 ? @color/green : @color/red}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_header"
+            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="上传成功" />
+
+    </com.library.base.views.QMUIRoundConstraintLayout>
+</layout>

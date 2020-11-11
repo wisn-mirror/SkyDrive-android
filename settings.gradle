@@ -1,0 +1,3 @@
+rootProject.name='QM'
+include ':app'
+include ':library'

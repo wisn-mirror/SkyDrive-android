@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/qmui_skin_support_color_background">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/v_header_click"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:background="#fff"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.qmuiteam.qmui.widget.QMUIRadiusImageView2
+                    android:id="@+id/iv_header"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="28dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_default_avatar"
+                    app:layout_constraintBottom_toBottomOf="@+id/v_header_click"
+                    app:layout_constraintStart_toStartOf="@+id/v_header_click"
+                    app:layout_constraintTop_toTopOf="@+id/v_header_click"
+                    app:qmui_is_circle="true" />
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="#666"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_content"
+                    app:layout_constraintStart_toEndOf="@+id/iv_header"
+                    app:layout_constraintTop_toTopOf="@+id/iv_header"
+                    tools:text="Wisn" />
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="无限空间"
+                    android:textColor="#666"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_header"
+                    app:layout_constraintStart_toEndOf="@+id/iv_header"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_username" />
+
+
+                <ImageView
+                    android:id="@+id/iv_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/qmui_icon_quick_action_more_arrow_right"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_header"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/iv_header" />
+
+
+                <com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView
+                    android:id="@+id/groupListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/v_header_click" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</merge>

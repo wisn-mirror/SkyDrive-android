@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2 xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:clipChildren="false">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/top_bg"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/bottom_black_bg_90"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:fitsSystemWindows="true"
+            android:padding="10dp"
+            android:src="@mipmap/ic_left_back_white" />
+
+        <View
+            android:id="@+id/bottom_bg"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/bottom_black_bg_270"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="100dp"
+            android:minHeight="34dp"
+            android:paddingBottom="6dp"
+            android:text="上传"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_addto"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_addto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="100dp"
+            android:minHeight="34dp"
+            android:paddingBottom="6dp"
+            android:text="添加"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/tv_upload" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="top_bg,iv_back,bottom_bg,tv_upload,tv_addto" />
+    </com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2>
+
+</layout>
