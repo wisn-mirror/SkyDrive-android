@@ -1,3 +1,4 @@
+include ':player'
 rootProject.name='QM'
 include ':app'
 include ':library'
