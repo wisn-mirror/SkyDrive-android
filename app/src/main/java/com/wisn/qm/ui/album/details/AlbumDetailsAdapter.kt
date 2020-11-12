@@ -9,7 +9,6 @@ import com.library.base.config.Constant
 import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
 import com.wisn.qm.databinding.RvItemAlbumDetailMediaBinding
-import com.wisn.qm.databinding.RvItemAlbumDetailProgressBinding
 import com.wisn.qm.databinding.RvItemAlbumDetailTimetitleBinding
 import com.wisn.qm.databinding.RvItemAlbumDetailTitleBinding
 import com.wisn.qm.mode.bean.FileType
@@ -60,7 +59,7 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
         } else if (viewType == FileType.ImageViewItem) {
             viewHolder.setDataBinding<RvItemAlbumDetailMediaBinding>(viewHolder.itemView)
         } else if (viewType == FileType.UploadProgressItem) {
-            viewHolder.setDataBinding<RvItemAlbumDetailProgressBinding>(viewHolder.itemView)
+//            viewHolder.setDataBinding<RvItemAlbumDetailProgressBinding>(viewHolder.itemView)
         }
     }
 

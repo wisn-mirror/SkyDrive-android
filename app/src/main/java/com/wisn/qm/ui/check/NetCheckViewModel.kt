@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
@@ -21,6 +20,7 @@ import kotlin.concurrent.fixedRateTimer
 class NetCheckViewModel : BaseViewModel() {
     private var result: MutableLiveData<String?>? = null
     private var fixedRateTimer: Timer? = null
+    private var ipTemp: String? = null
     private val TAG = "CheckNetViewModel"
     var isSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -37,7 +37,7 @@ class NetCheckViewModel : BaseViewModel() {
             //            WifiManager wifiManager = (WifiManager) App.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             val wifiManager = BaseApp.app.getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
             var multicastLock = wifiManager.createMulticastLock("multicast.test")
-            fixedRateTimer = fixedRateTimer("", false, 200, 3000) {
+            fixedRateTimer = fixedRateTimer("", false, 100, 2000) {
                 multicastLock!!.acquire()
                 broadCastGroup!!.sendBackMessage(UdpConfig.groupIp, UdpConfig.Group_ServerportRecevie, "AABBC")
                 LogUtils.d(TAG, "发送 探针 ${Thread.currentThread().name}")
@@ -52,7 +52,6 @@ class NetCheckViewModel : BaseViewModel() {
 
     private fun setResult(message: String?, ip: String) {
         LogUtils.d(TAG, " MESSAGE:$message ip:$ip")
-        fixedRateTimer?.cancel()
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             getResult().setValue(" $message ip:$ip   ${Thread.currentThread().name}")
@@ -68,15 +67,21 @@ class NetCheckViewModel : BaseViewModel() {
     }
 
     fun setServerIp(ip: String) {
-//        launchGo()
-        launchGoLo({
-            LogUtils.d(TAG, Thread.currentThread().name)
-            if (NetCheckUtils.isConnectByIp(ip)) {
-                ApiNetWork.newInstance().updateBaseUrl(ip)
+        if (ipTemp.isNullOrEmpty()) {
+            ipTemp = ip;
+            launchGoLo({
                 LogUtils.d(TAG, Thread.currentThread().name)
-                isSuccess.postValue(true)
-            }
-        })
+                if (NetCheckUtils.isConnectByIp(ip)) {
+                    ApiNetWork.newInstance().updateBaseUrl(ip)
+                    fixedRateTimer?.cancel()
+                    LogUtils.d(TAG, Thread.currentThread().name)
+                    isSuccess.postValue(true)
+                } else {
+                    ipTemp = null
+                }
+            })
+
+        }
 
     }
 

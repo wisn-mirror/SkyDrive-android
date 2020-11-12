@@ -1,14 +1,12 @@
 package com.library.base
-
-import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDexApplication
 import com.blankj.utilcode.util.Utils
 import com.library.base.config.Constant
 import com.library.base.config.GlobalUser
-import com.qmuiteam.qmui.arch.QMUIFragmentActivity
 import com.qmuiteam.qmui.arch.QMUISwipeBackActivityManager
 
-open class BaseApp : Application() {
+open class BaseApp : MultiDexApplication() {
 
     companion object {
          lateinit var app: BaseApp
