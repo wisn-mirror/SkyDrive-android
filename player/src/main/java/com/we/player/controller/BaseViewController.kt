@@ -12,19 +12,16 @@ import com.we.player.IViewController
  */
 class BaseViewController(context: Context) : FrameLayout(context), IViewController {
     override fun hideController() {
-        TODO("Not yet implemented")
     }
 
     override fun showController() {
-        TODO("Not yet implemented")
     }
 
     override fun setLocked(isLock: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun isLocked(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
 }

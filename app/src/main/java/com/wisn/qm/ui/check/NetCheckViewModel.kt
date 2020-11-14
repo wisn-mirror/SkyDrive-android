@@ -39,10 +39,10 @@ class NetCheckViewModel : BaseViewModel() {
             var multicastLock = wifiManager.createMulticastLock("multicast.test")
             fixedRateTimer = fixedRateTimer("", false, 100, 2000) {
                 multicastLock!!.acquire()
-                broadCastGroup!!.sendBackMessage(UdpConfig.groupIp, UdpConfig.Group_ServerportRecevie, "AABBC")
+                broadCastGroup!!.sendBackMessage(UdpConfig.groupIp, UdpConfig.Group_ServerportRecevie, "group broadcast request ping")
                 LogUtils.d(TAG, "发送 探针 ${Thread.currentThread().name}")
                 getResult().postValue("${System.currentTimeMillis()} 发送 探针...")
-                broadCastAll!!.sendBackMessage(UdpConfig.groupALL, UdpConfig.All_ServerportRecevie, "AABBC")
+                broadCastAll!!.sendBackMessage(UdpConfig.groupALL, UdpConfig.All_ServerportRecevie, "broadcast request ping")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -65,6 +65,8 @@ class NetCheckViewModel : BaseViewModel() {
         }
         return result!!
     }
+
+
 
     fun setServerIp(ip: String) {
         if (ipTemp.isNullOrEmpty()) {

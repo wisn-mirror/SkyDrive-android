@@ -32,7 +32,7 @@ interface IRenderView {
     /**
      * 视频截图
      */
-    fun getScreenShot(): Bitmap
+    fun getScreenShot(): Bitmap?
 
     /**
      * 释放资源

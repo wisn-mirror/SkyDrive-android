@@ -24,6 +24,7 @@ import com.wisn.qm.databinding.FragmentNetcheckBinding
 import com.wisn.qm.ui.MainActivity
 import com.wisn.qm.ui.home.HomeFragment
 import com.wisn.qm.ui.user.LoginFragment
+import com.wisn.qm.ui.video.VideoPlayerFragment
 
 
 /**
@@ -45,6 +46,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
         addLeftBackImageButton?.setOnClickListener {
             popBackStack()
         }
+        startFragment(VideoPlayerFragment())
     }
 
     override fun initView(views: View) {
