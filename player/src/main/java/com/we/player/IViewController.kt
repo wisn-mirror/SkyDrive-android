@@ -28,5 +28,7 @@ interface IViewController {
      */
     fun isLocked():Boolean
 
+    fun getLayoutId(): Int
+
 
 }

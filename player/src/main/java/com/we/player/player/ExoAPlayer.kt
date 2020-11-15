@@ -52,7 +52,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
             return
         }
         simpleExoPlayer?.setMediaSource(mMediaSource!!)
-        mMediaSource!!.addEventListener(Handler(),mMediaSourceEventListener)
+        mMediaSource!!.addEventListener(Handler(), mMediaSourceEventListener)
         simpleExoPlayer?.prepare()
     }
 
@@ -95,6 +95,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
         super.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio)
+        mPlayerEventListener?.onPlayerEventVideoSizeChanged(width, height)
     }
 
     override fun onSurfaceSizeChanged(width: Int, height: Int) {
@@ -103,6 +104,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun onRenderedFirstFrame() {
         super.onRenderedFirstFrame()
+
     }
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -115,5 +117,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun onPlayerError(error: ExoPlaybackException) {
         super.onPlayerError(error)
+
+
     }
 }

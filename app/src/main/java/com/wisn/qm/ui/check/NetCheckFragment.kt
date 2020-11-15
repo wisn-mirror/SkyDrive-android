@@ -144,4 +144,9 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.destory()
+    }
 }

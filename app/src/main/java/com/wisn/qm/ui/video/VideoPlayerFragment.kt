@@ -3,6 +3,8 @@ package com.wisn.qm.ui.video
 import android.view.LayoutInflater
 import android.view.View
 import com.qmuiteam.qmui.arch.QMUIFragment
+import com.we.player.controller.StandardController
+import com.we.player.controller.component.PlayControlView
 import com.we.player.player.ExoPlayerFactory
 import com.we.player.render.TextureRenderView
 import com.we.player.view.VideoView
@@ -25,6 +27,9 @@ class VideoPlayerFragment() : QMUIFragment() {
         videoview?.setUrl("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
         videoview.mIRenderView=TextureRenderView(requireContext())
         videoview.mediaPlayer= ExoPlayerFactory()
+       var standardController= StandardController(requireContext());
+        standardController.addIViewItemController(PlayControlView(requireContext()))
+        videoview.setIViewControllerView(standardController)
         videoview.start()
 
 

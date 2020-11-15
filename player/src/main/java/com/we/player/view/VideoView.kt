@@ -7,10 +7,9 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.library.base.BaseApp
-import com.we.player.APlayer
-import com.we.player.IRenderView
-import com.we.player.MediaPlayerController
-import com.we.player.PlayerFactory
+import com.we.player.*
+import com.we.player.controller.BaseViewController
+import com.we.player.controller.IViewItemController
 import com.we.player.player.PlayerEventListener
 
 /**
@@ -25,23 +24,14 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     constructor(context: Context,attributeSet: AttributeSet?):this(context,attributeSet,0)
     constructor(context: Context,attributeSet: AttributeSet?,defStyleAttr:Int): super(context,attributeSet,defStyleAttr){
     }
-    //播放器的各种状态
-    val STATE_ERROR = -1
-    val STATE_IDLE = 0
-    val STATE_PREPARING = 1
-    val STATE_PREPARED = 2
-    val STATE_PLAYING = 3
-    val STATE_PAUSED = 4
-    val STATE_PLAYBACK_COMPLETED = 5
-    val STATE_BUFFERING = 6
-    val STATE_BUFFERED = 7
-    val STATE_START_ABORT = 8 //开始播放中止
+
 
     protected var mVideoSize = intArrayOf(0, 0)
 
 
     var mediaPlayer: PlayerFactory<APlayer>? = null
     var mIRenderView: IRenderView? = null
+    var iViewController: BaseViewController? = null
 
 
     var mAPlayer: APlayer? = null
@@ -53,16 +43,14 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         mPlayerContainer
     }
 
-
-
-
-    override fun start() {
-        mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
-        mAPlayer?.mPlayerEventListener = this
-        mAPlayer?.initPlayer()
-        mAPlayer?.start()
-        addDisplay()
-        startPrepare(false)
+    fun setIViewControllerView(viewcontroller: BaseViewController){
+        iViewController?.let {
+            mPlayerContainer?.removeView(iViewController)
+        }
+        this.iViewController=viewcontroller
+        mPlayerContainer?.addView(iViewController,  LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT))
     }
 
     fun addDisplay() {
@@ -87,6 +75,15 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         mAPlayer?.prepareAsync()
     }
 //////////////////播放器相关动作/////////////////////////////
+
+    override fun start() {
+        mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
+        mAPlayer?.mPlayerEventListener = this
+        mAPlayer?.initPlayer()
+        mAPlayer?.start()
+        addDisplay()
+        startPrepare(false)
+    }
 
     override fun pause() {
         mAPlayer?.pause()

@@ -37,6 +37,18 @@ class TextureRenderView(context: Context) : TextureView(context), IRenderView, T
 
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        try {
+            val doMeasure = mMeasureHelper.doMeasure(widthMeasureSpec, heightMeasureSpec)
+            if (doMeasure != null) {
+                setMeasuredDimension(doMeasure.get(0), doMeasure.get(1))
+            } else {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
     override fun setVideoRotation(degree: Int) {
         mMeasureHelper.setVideoRotation(degree)
     }

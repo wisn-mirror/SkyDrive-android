@@ -86,6 +86,8 @@ class NetCheckViewModel : BaseViewModel() {
         }
 
     }
-
+    fun destory(){
+        fixedRateTimer?.cancel()
+    }
 
 }
