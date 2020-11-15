@@ -70,7 +70,7 @@ class TextureRenderView(context: Context) : TextureView(context), IRenderView, T
         if (mSurfaceTexture == null) {
             mSurfaceTexture = p0
             mSurface = Surface(mSurfaceTexture)
-            player?.setSurface(mSurface)
+            player?.setSurface(mSurface!!)
         } else {
             setSurfaceTexture(mSurfaceTexture!!)
         }

@@ -1,8 +1,9 @@
-package com.we.player.player
+package com.we.player.player.exo
 
 import android.app.Application
 import android.os.Handler
 import android.view.Surface
+import android.view.SurfaceHolder
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId
@@ -22,6 +23,8 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
     var mMediaSource: MediaSource? = null
     var simpleExoPlayer: SimpleExoPlayer? = null
     val newInstance = ExoSourceHelper.newInstance(app)
+    var parameters: PlaybackParameters? = null
+
 
     private val mMediaSourceEventListener: MediaSourceEventListener = object : MediaSourceEventListener {
         fun onReadingStarted(windowIndex: Int, mediaPeriodId: MediaPeriodId?) {
@@ -45,6 +48,15 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun setSurface(surface: Surface?) {
         simpleExoPlayer?.setVideoSurface(surface)
+    }
+
+    override fun setDisplay(holder: SurfaceHolder) {
+        super.setDisplay(holder)
+        if (holder == null) {
+            setSurface(null)
+        } else {
+            setSurface(holder!!.surface)
+        }
     }
 
     override fun prepareAsync() {
@@ -86,11 +98,45 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
     }
 
     override fun setSpeed(speed: Float) {
-        simpleExoPlayer?.setPlaybackParameters(PlaybackParameters(speed))
+        this.parameters = PlaybackParameters(speed)
+        simpleExoPlayer?.setPlaybackParameters(parameters)
     }
 
     override fun setVolume(v1: Float, v2: Float) {
         simpleExoPlayer?.volume = (v1 + v2) / 2;
+    }
+
+    override fun geSpeed(): Float {
+        return if (this.parameters != null) this.parameters!!.speed else 1f
+    }
+
+
+    override fun setLooping(isLooping: Boolean) {
+        simpleExoPlayer?.repeatMode = if (isLooping) Player.REPEAT_MODE_ALL else Player.REPEAT_MODE_OFF
+    }
+
+    override fun getBufferedPercentage(): Int {
+        return simpleExoPlayer?.bufferedPercentage!!
+    }
+
+    override fun getDuration(): Long {
+        return simpleExoPlayer?.duration!!
+    }
+
+    override fun getCurrentPosition(): Long {
+        return simpleExoPlayer?.currentPosition!!
+    }
+
+    override fun isPlaying(): Boolean {
+        if (simpleExoPlayer == null) {
+            return false
+        } else {
+            return when (simpleExoPlayer!!.playbackState) {
+                Player.STATE_BUFFERING, Player.STATE_READY -> simpleExoPlayer!!.playWhenReady
+                Player.STATE_ENDED, Player.STATE_IDLE -> false
+                else -> false
+            }
+        }
     }
 
     override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {

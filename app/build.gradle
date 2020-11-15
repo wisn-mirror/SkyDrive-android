@@ -39,6 +39,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":library")
     implementation project(":player")
+    implementation project(":playerexo")
 
 //    annotationProcessor "androidx.room:room-compiler:2.2.5" // For Kotlin use kapt instead of annotationProcessor
     kapt "androidx.room:room-compiler:2.2.5" // For Kotlin use kapt instead of annotationProcessor

@@ -1,6 +1,7 @@
 package com.we.player
 
 import android.view.Surface
+import android.view.SurfaceHolder
 import com.we.player.player.PlayerEventListener
 
 /**
@@ -10,6 +11,7 @@ import com.we.player.player.PlayerEventListener
  * @CreateDate: 2020/11/12 下午7:51
  */
 abstract class APlayer {
+
     var mPlayerEventListener: PlayerEventListener? = null
 
     /**
@@ -28,7 +30,12 @@ abstract class APlayer {
     /**
      * 设置渲染视频的View,主要用于TextureView
      */
-    abstract fun setSurface(surface: Surface?)
+    open fun setSurface(surface: Surface?) {}
+
+    /**
+     * 设置渲染视频的View,主要用于SurfaceView
+     */
+    open fun setDisplay(holder: SurfaceHolder) {}
 
     /**
      * 准备开始播放（异步）
@@ -61,6 +68,11 @@ abstract class APlayer {
     abstract fun seekTo(seekto: Long)
 
     /**
+     * 是否循环播放
+     */
+    abstract fun setLooping(isLooping: Boolean)
+
+    /**
      * 释放
      */
     abstract fun release()
@@ -73,7 +85,33 @@ abstract class APlayer {
     /**
      * 设置声音
      */
-    abstract fun setVolume(v1: Float, v2: Float);
+    abstract fun setVolume(v1: Float, v2: Float)
+
+
+    /**
+     * 当前播放速度
+     */
+    abstract fun geSpeed(): Float
+
+    /**
+     * 获取缓冲百分比
+     */
+    abstract fun getBufferedPercentage(): Int
+
+    /**
+     * 视频总时长
+     */
+    abstract fun getDuration(): Long
+
+    /**
+     * 获取当前播放位置
+     */
+    abstract fun getCurrentPosition(): Long
+
+    /**
+     * 当前是否播放状态
+     */
+    abstract fun isPlaying(): Boolean
 
 
 }
