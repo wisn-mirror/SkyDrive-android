@@ -1,4 +1,4 @@
-package com.we.player
+package com.we.player.player
 
 import android.app.Application
 

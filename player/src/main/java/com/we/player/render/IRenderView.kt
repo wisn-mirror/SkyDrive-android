@@ -1,7 +1,8 @@
-package com.we.player
+package com.we.player.render
 
 import android.graphics.Bitmap
 import android.view.View
+import com.we.player.player.APlayer
 
 /**
  * @Description:
@@ -9,6 +10,12 @@ import android.view.View
  * @CreateDate: 2020/11/12 下午7:47
  */
 interface IRenderView {
+
+    /**
+     * 设置视频比例
+     */
+    fun setScreenScaleType(screenScaleType: Int)
+
     /**
      * 关联最终的播放核心
      */

@@ -7,10 +7,12 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.library.base.BaseApp
-import com.we.player.*
 import com.we.player.controller.BaseViewController
-import com.we.player.controller.IViewItemController
+import com.we.player.player.APlayer
 import com.we.player.player.PlayerEventListener
+import com.we.player.player.PlayerFactory
+import com.we.player.player.ScreenConfig
+import com.we.player.render.IRenderView
 
 /**
  *
@@ -20,38 +22,45 @@ import com.we.player.player.PlayerEventListener
  */
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
-    constructor(context: Context):this(context,null)
-    constructor(context: Context,attributeSet: AttributeSet?):this(context,attributeSet,0)
-    constructor(context: Context,attributeSet: AttributeSet?,defStyleAttr:Int): super(context,attributeSet,defStyleAttr){
-    }
-
-
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
+    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {}
     protected var mVideoSize = intArrayOf(0, 0)
-
 
     var mediaPlayer: PlayerFactory<APlayer>? = null
     var mIRenderView: IRenderView? = null
+
     var iViewController: BaseViewController? = null
+        set(value) {
+            field = value
+            mPlayerContainer?.removeView(value)
+            mPlayerContainer?.addView(field, LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT))
+        }
+
+    var isMute: Boolean = false
+        set(value) {
+            field = value
+            mAPlayer?.setVolume(0f, 0f)
+        }
+
+    var mCurrentScreenScaleType: Int? = ScreenConfig.SCREEN_SCALE_DEFAULT
+        set(value) {
+            field = value
+            mIRenderView?.setScreenScaleType(mCurrentScreenScaleType!!)
+        }
 
 
     var mAPlayer: APlayer? = null
     val mPlayerContainer: FrameLayout? by lazy {
         var mPlayerContainer = FrameLayout(getContext())
-        VideoView@this.addView(mPlayerContainer, LayoutParams(
+        VideoView@ this.addView(mPlayerContainer, LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT))
         mPlayerContainer
     }
 
-    fun setIViewControllerView(viewcontroller: BaseViewController){
-        iViewController?.let {
-            mPlayerContainer?.removeView(iViewController)
-        }
-        this.iViewController=viewcontroller
-        mPlayerContainer?.addView(iViewController,  LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT))
-    }
 
     fun addDisplay() {
         if (mIRenderView == null || mAPlayer == null) {
@@ -74,6 +83,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         }
         mAPlayer?.prepareAsync()
     }
+
 //////////////////播放器相关动作/////////////////////////////
 
     override fun start() {
@@ -90,12 +100,11 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun getDuration(): Long {
-        return 0
+        return mAPlayer?.getDuration()!!
     }
 
     override fun getCurrentPosition(): Long {
-//       mAPlayer?.cu
-        return 0
+        return mAPlayer?.getCurrentPosition()!!
     }
 
     override fun seekTo(pos: Long) {
@@ -103,13 +112,63 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun isPlaying(): Boolean {
-//        return mAPlayer?.is
-        return true
+        return mAPlayer?.isPlaying()!!
     }
 
     override fun getBufferedPercentage(): Int {
+        return mAPlayer?.getBufferedPercentage()!!
+    }
+
+    override fun setSpeed(speed: Float) {
+        mAPlayer?.setSpeed(speed)
+    }
+
+    override fun getSpeed(): Float {
+        return mAPlayer?.geSpeed()!!
+    }
+
+    override fun setLooping(looping: Boolean) {
+        mAPlayer?.setLooping(looping)
+    }
+
+
+    override fun getTcpSpeed(): Long {
         return 0
     }
+
+    override fun replay(resetPosition: Boolean) {
+
+    }
+
+    /**
+     * 只能支持TextureRenderView,不支持surfaceview
+     */
+    override fun setMirrorRotation(enable: Boolean) {
+        mIRenderView?.getRenderView()?.scaleX = if (enable) -1f else 1f;
+    }
+
+    /**
+     * 截屏
+     */
+    override fun doScreenShot(): Bitmap? {
+        return mIRenderView?.getScreenShot()
+    }
+
+    /**
+     * 获取视频尺寸
+     */
+    override fun getVideoSize(): IntArray? {
+        return mVideoSize
+    }
+
+    /**
+     * 设置旋转角度
+     */
+    override fun setVideoRotation(rotation: Int) {
+        mIRenderView?.setVideoRotation(rotation)
+        this.rotation = rotation.toFloat()
+    }
+
 
     override fun startFullScreen() {
     }
@@ -121,40 +180,17 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         return false
     }
 
-    override fun setMute(isMute: Boolean) {
+    override fun startTinyScreen() {
+//        TODO("Not yet implemented")
     }
 
-    override fun isMute(): Boolean {
+    override fun stopTinyScreen() {
+//        TODO("Not yet implemented")
+    }
+
+    override fun isTinyScreen(): Boolean {
+//        TODO("Not yet implemented")
         return false
-    }
-
-    override fun setScreenScaleType(screenScaleType: Int) {
-    }
-
-    override fun setSpeed(speed: Float) {
-    }
-
-    override fun getSpeed(): Float {
-        return 0f
-    }
-
-    override fun getTcpSpeed(): Long {
-        return 0
-    }
-
-    override fun replay(resetPosition: Boolean) {
-    }
-
-    override fun setMirrorRotation(enable: Boolean) {
-
-    }
-
-    override fun doScreenShot(): Bitmap? {
-        return null
-    }
-
-    override fun getVideoSize(): IntArray? {
-        return mVideoSize
     }
 
 
@@ -175,10 +211,10 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     override fun onPlayerEventVideoSizeChanged(videoWidth: Int, videoHeight: Int) {
         mVideoSize[0] = videoWidth
         mVideoSize[1] = videoHeight
-
-//        mIRenderView?.setScaleType(mCurrentScreenScaleType)
+        mIRenderView?.setScreenScaleType(mCurrentScreenScaleType!!)
         mIRenderView?.setVideoSize(videoWidth, videoHeight)
     }
+
 //////////////////设置播放地址////////////////////////////////
 
     protected var mUrl //当前播放视频的地址
@@ -201,7 +237,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
      * @param url     视频地址
      * @param headers 请求头
      */
-   open fun setUrl(url: String, headers: Map<String, String>?) {
+    open fun setUrl(url: String, headers: Map<String, String>?) {
         mAssetFileDescriptor = null
         mUrl = url
         mHeaders = headers

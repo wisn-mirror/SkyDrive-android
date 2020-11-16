@@ -1,7 +1,7 @@
 package com.we.player.player.exo
 
 import android.app.Application
-import com.we.player.PlayerFactory
+import com.we.player.player.PlayerFactory
 import com.we.player.player.mediaplayer.AndroidMediaPlayer
 
 /**

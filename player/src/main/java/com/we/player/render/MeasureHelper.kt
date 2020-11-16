@@ -1,7 +1,7 @@
 package com.we.player.render
 
 import android.view.View
-import com.we.player.VideoViewConfig
+import com.we.player.player.ScreenConfig
 
 /**
  *
@@ -48,30 +48,30 @@ class MeasureHelper {
             return intArrayOf(width, height)
         }
         when (mCurrentScreenScale) {
-            VideoViewConfig.SCREEN_SCALE_DEFAULT -> if (mVideoWidth * height < width * mVideoHeight) {
+            ScreenConfig.SCREEN_SCALE_DEFAULT -> if (mVideoWidth * height < width * mVideoHeight) {
                 width = height * mVideoWidth / mVideoHeight
             } else if (mVideoWidth * height > width * mVideoHeight) {
                 height = width * mVideoHeight / mVideoWidth
             }
-            VideoViewConfig.SCREEN_SCALE_ORIGINAL -> {
+            ScreenConfig.SCREEN_SCALE_ORIGINAL -> {
                 width = mVideoWidth
                 height = mVideoHeight
             }
-            VideoViewConfig.SCREEN_SCALE_16_9 -> if (height > width / 16 * 9) {
+            ScreenConfig.SCREEN_SCALE_16_9 -> if (height > width / 16 * 9) {
                 height = width / 16 * 9
             } else {
                 width = height / 9 * 16
             }
-            VideoViewConfig.SCREEN_SCALE_4_3 -> if (height > width / 4 * 3) {
+            ScreenConfig.SCREEN_SCALE_4_3 -> if (height > width / 4 * 3) {
                 height = width / 4 * 3
             } else {
                 width = height / 3 * 4
             }
-            VideoViewConfig.SCREEN_SCALE_MATCH_PARENT -> {
+            ScreenConfig.SCREEN_SCALE_MATCH_PARENT -> {
                 width = widthMeasureSpec
                 height = heightMeasureSpec
             }
-            VideoViewConfig.SCREEN_SCALE_CENTER_CROP -> if (mVideoWidth * height > width * mVideoHeight) {
+            ScreenConfig.SCREEN_SCALE_CENTER_CROP -> if (mVideoWidth * height > width * mVideoHeight) {
                 width = height * mVideoWidth / mVideoHeight
             } else {
                 height = width * mVideoHeight / mVideoWidth

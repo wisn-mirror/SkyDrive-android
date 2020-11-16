@@ -1,4 +1,4 @@
-package com.we.player
+package com.we.player.view
 
 import android.graphics.Bitmap
 
@@ -23,21 +23,17 @@ interface MediaPlayerController {
 
     fun getBufferedPercentage(): Int
 
-    fun startFullScreen()
+//    fun setMute(isMute: Boolean)
+//
+//    fun isMute(): Boolean
 
-    fun stopFullScreen()
-
-    fun isFullScreen(): Boolean
-
-    fun setMute(isMute: Boolean)
-
-    fun isMute(): Boolean
-
-    fun setScreenScaleType(screenScaleType: Int)
+//    fun setScreenScaleType(screenScaleType: Int)
 
     fun setSpeed(speed: Float)
 
     fun getSpeed(): Float
+
+    fun setLooping(looping: Boolean)
 
     fun getTcpSpeed(): Long
 
@@ -49,6 +45,26 @@ interface MediaPlayerController {
 
     fun getVideoSize(): IntArray?
 
-    fun setRotation(rotation: Float)
+    fun setVideoRotation(rotation: Int)
+
+
+
+
+    fun startFullScreen()
+
+    fun stopFullScreen()
+
+    fun isFullScreen(): Boolean
+
+
+    fun startTinyScreen()
+
+    fun stopTinyScreen()
+
+    fun isTinyScreen(): Boolean
+
+
+
+
 
 }

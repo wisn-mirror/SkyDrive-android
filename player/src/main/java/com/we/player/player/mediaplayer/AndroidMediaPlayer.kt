@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.view.Surface
 import android.view.SurfaceHolder
-import com.we.player.APlayer
+import com.we.player.player.APlayer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

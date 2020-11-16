@@ -1,7 +1,6 @@
 package com.we.player.controller
 
-import com.we.player.IViewController
-import com.we.player.MediaPlayerController
+import com.we.player.view.MediaPlayerController
 
 /**
  *

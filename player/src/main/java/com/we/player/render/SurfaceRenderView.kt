@@ -6,8 +6,7 @@ import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
-import com.we.player.APlayer
-import com.we.player.IRenderView
+import com.we.player.player.APlayer
 
 /**
  *
@@ -24,6 +23,11 @@ class SurfaceRenderView(context: Context) : SurfaceView(context), IRenderView, S
         surfaceHolder.setFormat(PixelFormat.RGBA_8888)
     }
 
+    override fun setScreenScaleType(screenScaleType: Int) {
+        mMeasureHelper.setScreenScale(screenScaleType)
+        requestLayout()
+    }
+
     override fun attachToPlayer(player: APlayer) {
         this.player = player
     }
@@ -33,9 +37,9 @@ class SurfaceRenderView(context: Context) : SurfaceView(context), IRenderView, S
             val doMeasure = mMeasureHelper.doMeasure(widthMeasureSpec, heightMeasureSpec)
             if (doMeasure != null) {
                 setMeasuredDimension(doMeasure.get(0), doMeasure.get(1))
-            } else {
+            }/* else {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-            }
+            }*/
         } catch (e: Exception) {
         }
     }
@@ -49,7 +53,7 @@ class SurfaceRenderView(context: Context) : SurfaceView(context), IRenderView, S
 
     override fun setVideoRotation(degree: Int) {
         mMeasureHelper.setVideoRotation(degree)
-
+        rotation=degree.toFloat()
     }
 
     override fun getRenderView(): View {

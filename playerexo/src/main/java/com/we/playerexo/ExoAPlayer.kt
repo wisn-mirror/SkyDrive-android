@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId
 import com.google.android.exoplayer2.source.MediaSourceEventListener
 import com.google.android.exoplayer2.video.VideoListener
-import com.we.player.APlayer
+import com.we.player.player.APlayer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
