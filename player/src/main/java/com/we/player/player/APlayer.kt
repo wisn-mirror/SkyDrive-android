@@ -12,6 +12,7 @@ import com.we.player.player.PlayerEventListener
  */
 abstract class APlayer {
 
+
     var mPlayerEventListener: PlayerEventListener? = null
 
     /**

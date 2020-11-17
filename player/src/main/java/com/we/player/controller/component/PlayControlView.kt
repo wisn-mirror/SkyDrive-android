@@ -17,6 +17,7 @@ import com.we.player.controller.WrapController
  * @CreateDate: 2020/11/14 下午10:57
  */
 class PlayControlView : FrameLayout, IViewItemController {
+    var controlWrapper: WrapController?=null
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
@@ -25,6 +26,7 @@ class PlayControlView : FrameLayout, IViewItemController {
     }
 
     override fun attach(controlWrapper: WrapController) {
+        this.controlWrapper=controlWrapper
     }
 
     override fun getView(): View {
@@ -32,6 +34,7 @@ class PlayControlView : FrameLayout, IViewItemController {
     }
 
     override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+
 
     }
 
@@ -45,6 +48,7 @@ class PlayControlView : FrameLayout, IViewItemController {
     }
 
     override fun onLockStateChanged(isLocked: Boolean) {
+
     }
 
 }

@@ -2,6 +2,7 @@ package com.we.player.player.exo
 
 import android.app.Application
 import android.os.Handler
+import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
 import com.google.android.exoplayer2.*
@@ -10,6 +11,7 @@ import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId
 import com.google.android.exoplayer2.source.MediaSourceEventListener
 import com.google.android.exoplayer2.video.VideoListener
 import com.we.player.player.APlayer
+import com.we.player.player.PlayStatus
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -20,11 +22,15 @@ import kotlinx.coroutines.launch
  * @CreateDate: 2020/11/12 下午7:52
  */
 class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoListener {
+    val TAG: String = "ExoAPlayer"
     var mMediaSource: MediaSource? = null
     var simpleExoPlayer: SimpleExoPlayer? = null
     val newInstance = ExoSourceHelper.newInstance(app)
     var parameters: PlaybackParameters? = null
-
+    private var mLastReportedPlaybackState = PlayStatus.STATE_IDLE
+    private var mLastReportedPlayWhenReady = false
+    private var mIsPreparing = false
+    private var mIsBuffering = false
 
     private val mMediaSourceEventListener: MediaSourceEventListener = object : MediaSourceEventListener {
         fun onReadingStarted(windowIndex: Int, mediaPeriodId: MediaPeriodId?) {
@@ -142,28 +148,47 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
     override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
         super.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio)
         mPlayerEventListener?.onPlayerEventVideoSizeChanged(width, height)
+        if (unappliedRotationDegrees > 0) {
+            mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_VIDEO_ROTATION_CHANGED, unappliedRotationDegrees)
+        }
     }
 
     override fun onSurfaceSizeChanged(width: Int, height: Int) {
         super.onSurfaceSizeChanged(width, height)
+        Log.d(TAG, "onSurfaceSizeChanged width$width height$height")
     }
 
     override fun onRenderedFirstFrame() {
         super.onRenderedFirstFrame()
-
+        if (mPlayerEventListener != null && mIsPreparing) {
+            mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_VIDEO_RENDERING_START, 0)
+            mIsPreparing = false
+        }
     }
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         super.onPlayerStateChanged(playWhenReady, playbackState)
-    }
-
-    override fun onPlaybackStateChanged(state: Int) {
-        super.onPlaybackStateChanged(state)
+        if (mIsPreparing) return
+        if (mLastReportedPlayWhenReady != playWhenReady || mLastReportedPlaybackState != playbackState) {
+            when (playbackState) {
+                Player.STATE_BUFFERING -> {
+                    mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_BUFFERING_START, getBufferedPercentage())
+                    mIsBuffering = true
+                }
+                Player.STATE_READY -> if (mIsBuffering) {
+                    mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_BUFFERING_END, getBufferedPercentage())
+                    mIsBuffering = false
+                }
+                Player.STATE_ENDED -> mPlayerEventListener?.onPlayerEventCompletion()
+            }
+            mLastReportedPlaybackState = playbackState
+            mLastReportedPlayWhenReady = playWhenReady
+        }
     }
 
     override fun onPlayerError(error: ExoPlaybackException) {
         super.onPlayerError(error)
-
+        mPlayerEventListener?.onPlayerEventError()
 
     }
 }

@@ -63,6 +63,12 @@ dependencies {
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     api 'androidx.annotation:annotation:1.1.0'
     api 'com.github.bumptech.glide:glide:4.11.0'
+
+
+    debugApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+
+
     api 'com.tencent.bugly:crashreport:3.2.422' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
 //    api 'com.tencent.bugly:nativecrashreport:3.7.500' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 

@@ -24,16 +24,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="scaletype" />
+
         <Button
             android:id="@+id/mirrorRotion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="mirrorRotion" />
+            android:text="mirror" />
+
         <Button
             android:id="@+id/Rotation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rotation" />
+
+        <Button
+            android:id="@+id/Speeds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="speed" />
     </LinearLayout>
 
 </FrameLayout>

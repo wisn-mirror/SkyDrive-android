@@ -11,7 +11,9 @@ import com.we.player.R
  * @Author: Wisn
  * @CreateDate: 2020/11/15 上午10:39
  */
-class StandardController :BaseViewController{
+class StandardController : BaseViewController {
+
+
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {

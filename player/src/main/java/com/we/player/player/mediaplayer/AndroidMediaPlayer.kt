@@ -5,9 +5,11 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
 import com.we.player.player.APlayer
+import com.we.player.player.PlayStatus
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
  * @CreateDate: 2020/11/15 下午10:19
  */
 class AndroidMediaPlayer(var app: Application) : APlayer() {
+    var TAG: String = "AndroidMediaPlayer"
     var mediaPlayer: MediaPlayer? = null
     private var mIsPreparing = false
     private var mBufferedPercent = 0
@@ -37,7 +40,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.setDataSource(app, Uri.parse(path), headers)
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -46,7 +50,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             mIsPreparing = true
             mediaPlayer?.prepareAsync()
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -54,7 +59,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.start()
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -62,7 +68,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.pause()
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -70,7 +77,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.stop()
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -80,7 +88,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             mediaPlayer?.setSurface(null)
             mediaPlayer?.setDisplay(null)
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -88,7 +97,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.seekTo(seekto.toInt())
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -96,7 +106,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
         try {
             mediaPlayer?.isLooping = isLooping
         } catch (e: Exception) {
-            mPlayerEventListener?.onPlayerEventError()
+            e.printStackTrace()
+            mPlayerEventListener?.onPlayerException(e.message)
         }
     }
 
@@ -111,7 +122,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             try {
                 mediaPlayer?.release()
             } catch (e: Exception) {
-
+                e.printStackTrace()
             }
         }
     }
@@ -131,9 +142,10 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             try {
                 val speed1 = mediaPlayer?.playbackParams?.setSpeed(speed)
                 speed1?.let {
-                    mediaPlayer?.playbackParams
+                    mediaPlayer?.playbackParams=speed1
                 }
             } catch (e: java.lang.Exception) {
+                e.printStackTrace()
                 mPlayerEventListener?.onPlayerEventError()
             }
         }
@@ -148,7 +160,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             try {
                 return mediaPlayer?.playbackParams?.speed!!
             } catch (e: java.lang.Exception) {
-                mPlayerEventListener?.onPlayerEventError()
+                e.printStackTrace()
             }
         }
         return 1f
@@ -173,6 +185,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
 //////////////////////////////////
 
     private val onErrorListener = MediaPlayer.OnErrorListener { mp, what, extra ->
+        Log.d(TAG,"onErrorListener what,$what extra $extra")
         mPlayerEventListener?.onPlayerEventError()
         true
     }
@@ -180,7 +193,9 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
     private val onCompletionListener = MediaPlayer.OnCompletionListener { mPlayerEventListener?.onPlayerEventCompletion() }
 
     private val onInfoListener = MediaPlayer.OnInfoListener { mp, what, extra -> //解决MEDIA_INFO_VIDEO_RENDERING_START多次回调问题
-        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+        Log.d(TAG," OnInfoListener what,$what extra $extra")
+
+        if (what == PlayStatus.MEDIA_INFO_VIDEO_RENDERING_START) {
             if (mIsPreparing) {
                 mPlayerEventListener?.onPlayerEventInfo(what, extra)
                 mIsPreparing = false
@@ -200,6 +215,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
     }
 
     private val onVideoSizeChangedListener = MediaPlayer.OnVideoSizeChangedListener { mp, width, height ->
+
         val videoWidth = mp.videoWidth
         val videoHeight = mp.videoHeight
         if (videoWidth != 0 && videoHeight != 0) {

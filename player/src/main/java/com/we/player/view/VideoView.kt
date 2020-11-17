@@ -6,12 +6,10 @@ import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
 import com.we.player.controller.BaseViewController
-import com.we.player.player.APlayer
-import com.we.player.player.PlayerEventListener
-import com.we.player.player.PlayerFactory
-import com.we.player.player.ScreenConfig
+import com.we.player.player.*
 import com.we.player.render.IRenderView
 
 /**
@@ -21,10 +19,12 @@ import com.we.player.render.IRenderView
  * @CreateDate: 2020/11/13 下午8:33
  */
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
+    var TAG: String = "VideoView"
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {}
+
     protected var mVideoSize = intArrayOf(0, 0)
 
     var mediaPlayer: PlayerFactory<APlayer>? = null
@@ -82,21 +82,26 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             mAPlayer?.setDataSource(mUrl, mHeaders)
         }
         mAPlayer?.prepareAsync()
+        setPlayStatus(PlayStatus.STATE_PREPARING)
     }
 
 //////////////////播放器相关动作/////////////////////////////
 
     override fun start() {
+        //todo 检查网络，是否提示
+
         mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
         mAPlayer?.mPlayerEventListener = this
         mAPlayer?.initPlayer()
-        mAPlayer?.start()
+//        mAPlayer?.start()
         addDisplay()
         startPrepare(false)
     }
 
     override fun pause() {
         mAPlayer?.pause()
+        setPlayStatus(PlayStatus.STATE_PAUSED)
+
     }
 
     override fun getDuration(): Long {
@@ -171,9 +176,13 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
 
     override fun startFullScreen() {
+        setPlayStatus(PlayStatus.PLAYER_FULL_SCREEN)
+
     }
 
     override fun stopFullScreen() {
+        setPlayStatus(PlayStatus.PLAYER_NORMAL)
+
     }
 
     override fun isFullScreen(): Boolean {
@@ -181,32 +190,71 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun startTinyScreen() {
-//        TODO("Not yet implemented")
+        setPlayStatus(PlayStatus.PLAYER_TINY_SCREEN)
     }
 
     override fun stopTinyScreen() {
-//        TODO("Not yet implemented")
+        setPlayStatus(PlayStatus.PLAYER_NORMAL)
+
     }
 
     override fun isTinyScreen(): Boolean {
-//        TODO("Not yet implemented")
         return false
     }
 
 
-/////////////////播放器的回调//////////////////////////
+    /////////////////播放器的回调//////////////////////////
+    fun setPlayStatus(status: Int) {
+        var msg = PlayStatusStr.getStatusStr(status);
+        LogUtils.d(TAG, "状态 ：$msg")
+        iViewController?.setPlayStatus(status)
+    }
 
     override fun onPlayerEventError() {
+        setPlayStatus(PlayStatus.STATE_ERROR)
+    }
+
+    override fun onPlayerException(message: String?) {
+        LogUtils.d(TAG, "onPlayerException ：$message")
     }
 
     override fun onPlayerEventCompletion() {
+        setPlayStatus(PlayStatus.STATE_PLAYBACK_COMPLETED)
     }
 
     override fun onPlayerEventInfo(what: Int, extra: Int) {
+        when (what) {
+            PlayStatus.MEDIA_INFO_VIDEO_RENDERING_START -> {
+                /**
+                 * 开始渲染视频画面
+                 */
+                setPlayStatus(PlayStatus.STATE_PLAYING)
+            }
+            PlayStatus.MEDIA_INFO_BUFFERING_START -> {
+                /**
+                 * 缓冲开始
+                 */
+                setPlayStatus(PlayStatus.STATE_BUFFERING)
+            }
+            PlayStatus.MEDIA_INFO_BUFFERING_END -> {
+                /**
+                 * 缓冲结束
+                 */
+                setPlayStatus(PlayStatus.STATE_BUFFERED)
+            }
+            PlayStatus.MEDIA_INFO_VIDEO_ROTATION_CHANGED -> {
+                /**
+                 * 视频旋转信息
+                 */
+                mIRenderView?.setVideoRotation(extra)
+            }
+        }
     }
 
     override fun onPlayerEventPrepared() {
+        setPlayStatus(PlayStatus.STATE_PREPARED)
     }
+
 
     override fun onPlayerEventVideoSizeChanged(videoWidth: Int, videoHeight: Int) {
         mVideoSize[0] = videoWidth
