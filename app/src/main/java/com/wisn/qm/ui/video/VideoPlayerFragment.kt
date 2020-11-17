@@ -34,12 +34,12 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
 //        videoview?.mediaPlayer= ExoPlayerFactory()
         videoview?.mediaPlayer = AndroidMediaPlayerFactory()
         var standardController = StandardController(requireContext());
-        standardController.addIViewItemController(PlayControlView(requireContext()))
+        standardController.addIViewItemControllerOne(PlayControlView(requireContext()))
         videoview?.iViewController = standardController
-        videoview?.start()
         videoview?.setLooping(true)
         videoview?.isMute = true
 
+        rootView.findViewById<View>(R.id.start).setOnClickListener(this)
         rootView.findViewById<View>(R.id.scaletype).setOnClickListener(this)
         rootView.findViewById<View>(R.id.mirrorRotion).setOnClickListener(this)
         rootView.findViewById<View>(R.id.Rotation).setOnClickListener(this)
@@ -58,6 +58,9 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
     var speeds: Float = 1f
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.start -> {
+                videoview?.start()
+            }
             R.id.scaletype -> {
                 when (videoview?.mCurrentScreenScaleType) {
                     ScreenConfig.SCREEN_SCALE_DEFAULT -> {
@@ -96,8 +99,6 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
                 }
                 videoview?.setSpeed(speeds)
                 speedsBt?.setText("speed$speeds")
-
-
             }
         }
     }

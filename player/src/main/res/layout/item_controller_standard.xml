@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
+        android:padding="4dp"
         android:src="@drawable/we_selector_lock_button" />
 </FrameLayout>

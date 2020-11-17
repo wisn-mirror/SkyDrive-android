@@ -2,6 +2,7 @@ package com.we.player.controller
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -15,10 +16,23 @@ import com.we.player.view.MediaPlayerController
  * @CreateDate: 2020/11/12 下午7:55
  */
 abstract class BaseViewController : FrameLayout, IViewController {
+    val TAG:String="BaseViewController"
     var iviewItemController: MutableList<IViewItemController> = arrayListOf()
     var fadeout: Runnable = object : Runnable {
         override fun run() {
             hideController()
+        }
+    }
+    var runProgress: Runnable = object : Runnable {
+        override fun run() {
+            iviewItemController.forEach {
+                if (mediaPlayerController != null) {
+                    it.setProgress(mediaPlayerController!!.getDuration(), mediaPlayerController!!.getCurrentPosition())
+                    if (mediaPlayerController!!.isPlaying()) {
+                        postDelayed(this, mediaPlayerController!!.getRefreshTime())
+                    }
+                }
+            }
         }
     }
 
@@ -33,6 +47,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
         show.duration = 300
         show
     }
+    var islock: Boolean = false
     var wrapController: WrapController? = null
     var mediaPlayerController: MediaPlayerController? = null
         set(value) {
@@ -50,32 +65,41 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
     override fun setPlayStatus(status: Int) {
         this.iviewItemController.forEach {
-             it.onPlayStateChanged(status )
+            it.onPlayStateChanged(status)
         }
     }
 
     override fun hideController() {
-
+        this.iviewItemController.forEach {
+            it.onVisibilityChanged(false, mHideAnim)
+        }
     }
 
     override fun showController() {
-
+        this.iviewItemController.forEach {
+            it.onVisibilityChanged(true, mShowAnim)
+        }
     }
 
     override fun setLocked(isLock: Boolean) {
+        this.islock = islock
+        this.iviewItemController.forEach {
+            it.onLockStateChanged(isLock)
+        }
     }
 
     override fun isLocked(): Boolean {
-        return false
+        return islock
     }
 
 
     override fun startProgress() {
-
+        Log.d(TAG,"startProgress")
+        post(runProgress)
     }
 
     override fun stopProgress() {
-
+        removeCallbacks(runProgress)
     }
 
     override fun startTimeFade() {

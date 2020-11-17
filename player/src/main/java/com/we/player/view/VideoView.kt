@@ -20,7 +20,7 @@ import com.we.player.render.IRenderView
  */
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     var TAG: String = "VideoView"
-
+    var refreshPregressTime:Long=1000
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {}
@@ -89,7 +89,6 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun start() {
         //todo 检查网络，是否提示
-
         mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
         mAPlayer?.mPlayerEventListener = this
         mAPlayer?.initPlayer()
@@ -112,6 +111,10 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         return mAPlayer?.getCurrentPosition()!!
     }
 
+    override fun getRefreshTime(): Long {
+        return refreshPregressTime;
+    }
+
     override fun seekTo(pos: Long) {
         mAPlayer?.seekTo(pos)
     }
@@ -125,6 +128,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun setSpeed(speed: Float) {
+        refreshPregressTime= (1000/speed).toLong()
         mAPlayer?.setSpeed(speed)
     }
 

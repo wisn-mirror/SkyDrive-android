@@ -17,17 +17,13 @@ interface MediaPlayerController {
 
     fun getCurrentPosition(): Long
 
+    fun getRefreshTime(): Long
+
     fun seekTo(pos: Long)
 
     fun isPlaying(): Boolean
 
     fun getBufferedPercentage(): Int
-
-//    fun setMute(isMute: Boolean)
-//
-//    fun isMute(): Boolean
-
-//    fun setScreenScaleType(screenScaleType: Int)
 
     fun setSpeed(speed: Float)
 
@@ -46,8 +42,6 @@ interface MediaPlayerController {
     fun getVideoSize(): IntArray?
 
     fun setVideoRotation(rotation: Int)
-
-
 
 
     fun startFullScreen()
