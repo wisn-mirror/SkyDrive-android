@@ -61,7 +61,6 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         when (v?.id) {
             R.id.start -> {
                 videoview?.start()
-//                videoview?.setLooping(true)
             }
             R.id.scaletype -> {
                 when (videoview?.mCurrentScreenScaleType) {
