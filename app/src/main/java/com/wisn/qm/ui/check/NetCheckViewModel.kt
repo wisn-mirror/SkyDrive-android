@@ -25,7 +25,7 @@ class NetCheckViewModel : BaseViewModel() {
     var isSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
     fun initBroadcastListener() {
-        try {
+       /* try {
             var broadCastGroup = BroadcastGroup.getInstance()
             broadCastGroup?.listenerMessage(UdpConfig.groupIp, UdpConfig.Group_ClientListenport, MessageCall { message, ip ->
                 setResult("group $message ", ip)
@@ -46,7 +46,7 @@ class NetCheckViewModel : BaseViewModel() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
 
 

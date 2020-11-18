@@ -5,6 +5,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.Surface
 import android.view.SurfaceHolder
+import com.blankj.utilcode.util.LogUtils
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MediaSource.MediaPeriodId
@@ -69,6 +70,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
         if (mMediaSource == null) {
             return
         }
+        simpleExoPlayer?.playWhenReady = true
         simpleExoPlayer?.setMediaSource(mMediaSource!!)
         mMediaSource!!.addEventListener(Handler(), mMediaSourceEventListener)
         simpleExoPlayer?.prepare()
@@ -76,6 +78,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun start() {
         simpleExoPlayer?.playWhenReady = true
+
     }
 
     override fun pause() {
@@ -155,12 +158,12 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun onSurfaceSizeChanged(width: Int, height: Int) {
         super.onSurfaceSizeChanged(width, height)
-        Log.d(TAG, "onSurfaceSizeChanged width$width height$height")
+        LogUtils.d(TAG, "onSurfaceSizeChanged width$width height$height")
     }
 
     override fun onRenderedFirstFrame() {
         super.onRenderedFirstFrame()
-        if (mPlayerEventListener != null && mIsPreparing) {
+        if (mPlayerEventListener != null && !mIsPreparing) {
             mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_VIDEO_RENDERING_START, 0)
             mIsPreparing = false
         }
@@ -168,16 +171,18 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         super.onPlayerStateChanged(playWhenReady, playbackState)
-        if (mIsPreparing) return
+        LogUtils.d(TAG, "onPlayerStateChanged playWhenReady：$playWhenReady playbackState：$playbackState")
+
+//        if (mIsPreparing) return
         if (mLastReportedPlayWhenReady != playWhenReady || mLastReportedPlaybackState != playbackState) {
             when (playbackState) {
                 Player.STATE_BUFFERING -> {
                     mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_BUFFERING_START, getBufferedPercentage())
                     mIsBuffering = true
                 }
-                Player.STATE_READY -> if (mIsBuffering) {
+                Player.STATE_READY -> {
                     mPlayerEventListener?.onPlayerEventInfo(PlayStatus.MEDIA_INFO_BUFFERING_END, getBufferedPercentage())
-                    mIsBuffering = false
+                    mIsPreparing = false
                 }
                 Player.STATE_ENDED -> mPlayerEventListener?.onPlayerEventCompletion()
             }

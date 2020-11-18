@@ -20,6 +20,7 @@ import com.we.player.render.IRenderView
  */
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     var TAG: String = "VideoView"
+    var isLoop: Boolean = false
     var refreshPregressTime:Long=1000
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
@@ -27,6 +28,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     protected var mVideoSize = intArrayOf(0, 0)
 
+    var currentState: Int? = PlayStatus.STATE_IDLE
     var mediaPlayer: PlayerFactory<APlayer>? = null
     var mIRenderView: IRenderView? = null
 
@@ -37,6 +39,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             mPlayerContainer?.addView(field, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT))
+            iViewController?.mediaPlayerController=this
         }
 
     var isMute: Boolean = false
@@ -88,13 +91,18 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 //////////////////播放器相关动作/////////////////////////////
 
     override fun start() {
-        //todo 检查网络，是否提示
-        mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
-        mAPlayer?.mPlayerEventListener = this
-        mAPlayer?.initPlayer()
-//        mAPlayer?.start()
-        addDisplay()
-        startPrepare(false)
+        if (PlayStatus.isPlayingStatus(currentState)) {
+            mAPlayer?.start()
+            setPlayStatus(PlayStatus.STATE_PLAYING)
+        } else {
+            //todo 检查网络，是否提示
+            mAPlayer = mediaPlayer?.createPlayer(BaseApp.app)
+            mAPlayer?.mPlayerEventListener = this
+            mAPlayer?.initPlayer()
+            addDisplay()
+            startPrepare(false)
+            mAPlayer?.setLooping(isLoop)
+        }
     }
 
     override fun pause() {
@@ -137,6 +145,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun setLooping(looping: Boolean) {
+        isLoop=looping
         mAPlayer?.setLooping(looping)
     }
 
@@ -206,13 +215,14 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         return false
     }
 
-
     /////////////////播放器的回调//////////////////////////
     fun setPlayStatus(status: Int) {
         var msg = PlayStatusStr.getStatusStr(status);
         LogUtils.d(TAG, "状态 ：$msg")
+        currentState=status
         iViewController?.setPlayStatus(status)
     }
+
 
     override fun onPlayerEventError() {
         setPlayStatus(PlayStatus.STATE_ERROR)

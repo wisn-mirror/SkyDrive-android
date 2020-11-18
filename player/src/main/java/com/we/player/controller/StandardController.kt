@@ -18,6 +18,7 @@ class StandardController : BaseViewController {
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
         LayoutInflater.from(getContext()).inflate(getLayoutId(), this, true)
+
     }
 
     override fun getLayoutId(): Int {

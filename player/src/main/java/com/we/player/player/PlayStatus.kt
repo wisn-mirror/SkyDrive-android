@@ -9,6 +9,16 @@ package com.we.player.player
 object PlayStatus {
 
 
+    fun isPlayingStatus(currentState:Int?): Boolean {
+        when(currentState){
+            STATE_ERROR,STATE_IDLE,STATE_START_ABORT,STATE_PREPARING,STATE_PLAYBACK_COMPLETED->{
+                return false
+            }
+        }
+        return true
+    }
+
+
     /**
      *  播放错误
      */

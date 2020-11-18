@@ -10,7 +10,7 @@ import android.view.animation.Animation
  *
  */
 interface IViewItemController {
-    fun attach(controlWrapper: WrapController)
+    fun attach(controlWrapper: WrapController?)
 
     fun getView(): View
 

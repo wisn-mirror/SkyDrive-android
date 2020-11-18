@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
  */
 class AndroidMediaPlayer(var app: Application) : APlayer() {
     var TAG: String = "AndroidMediaPlayer"
+
     var mediaPlayer: MediaPlayer? = null
     private var mIsPreparing = false
     private var mBufferedPercent = 0
@@ -142,7 +143,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             try {
                 val speed1 = mediaPlayer?.playbackParams?.setSpeed(speed)
                 speed1?.let {
-                    mediaPlayer?.playbackParams=speed1
+                    mediaPlayer?.playbackParams = speed1
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -185,7 +186,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
 //////////////////////////////////
 
     private val onErrorListener = MediaPlayer.OnErrorListener { mp, what, extra ->
-        Log.d(TAG,"onErrorListener what,$what extra $extra")
+        Log.d(TAG, "onErrorListener what,$what extra $extra")
         mPlayerEventListener?.onPlayerEventError()
         true
     }
@@ -193,7 +194,7 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
     private val onCompletionListener = MediaPlayer.OnCompletionListener { mPlayerEventListener?.onPlayerEventCompletion() }
 
     private val onInfoListener = MediaPlayer.OnInfoListener { mp, what, extra -> //解决MEDIA_INFO_VIDEO_RENDERING_START多次回调问题
-        Log.d(TAG," OnInfoListener what,$what extra $extra")
+        Log.d(TAG, " OnInfoListener what,$what extra $extra")
 
         if (what == PlayStatus.MEDIA_INFO_VIDEO_RENDERING_START) {
             if (mIsPreparing) {

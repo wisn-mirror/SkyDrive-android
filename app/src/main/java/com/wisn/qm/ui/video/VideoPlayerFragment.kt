@@ -8,6 +8,7 @@ import com.we.player.controller.StandardController
 import com.we.player.controller.component.PlayControlView
 import com.we.player.player.ScreenConfig
 import com.we.player.player.exo.AndroidMediaPlayerFactory
+import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.TextureRenderView
 import com.we.player.view.VideoView
 import com.wisn.qm.R
@@ -60,6 +61,7 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         when (v?.id) {
             R.id.start -> {
                 videoview?.start()
+//                videoview?.setLooping(true)
             }
             R.id.scaletype -> {
                 when (videoview?.mCurrentScreenScaleType) {

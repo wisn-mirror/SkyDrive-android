@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.FrameLayout
+import com.blankj.utilcode.util.LogUtils
 import com.we.player.view.MediaPlayerController
 
 /**
@@ -25,8 +26,11 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
     var runProgress: Runnable = object : Runnable {
         override fun run() {
+            LogUtils.d(TAG, "runProgress!!! ${iviewItemController.size} ")
+
             iviewItemController.forEach {
                 if (mediaPlayerController != null) {
+                    LogUtils.d(TAG, "runProgress ${mediaPlayerController!!.getDuration()}, ${mediaPlayerController!!.getCurrentPosition()}")
                     it.setProgress(mediaPlayerController!!.getDuration(), mediaPlayerController!!.getCurrentPosition())
                     if (mediaPlayerController!!.isPlaying()) {
                         postDelayed(this, mediaPlayerController!!.getRefreshTime())
@@ -54,6 +58,9 @@ abstract class BaseViewController : FrameLayout, IViewController {
             field = value
             if (value != null) {
                 wrapController = WrapController(value, this)
+                this.iviewItemController.forEach {
+                    it.attach(wrapController)
+                }
             }
         }
 
@@ -64,6 +71,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
 
     override fun setPlayStatus(status: Int) {
+
         this.iviewItemController.forEach {
             it.onPlayStateChanged(status)
         }
@@ -94,7 +102,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
 
     override fun startProgress() {
-        Log.d(TAG,"startProgress")
+        LogUtils.d(TAG,"startProgress")
         post(runProgress)
     }
 
@@ -129,6 +137,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
         this.iviewItemController.addAll(itemControllerlist)
         this.iviewItemController.forEach {
             addView(it.getView())
+            it.attach(wrapController)
         }
     }
 
@@ -136,6 +145,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
         this.iviewItemController.add(iviewItemController)
         removeView(iviewItemController.getView())
         addView(iviewItemController.getView())
+        iviewItemController.attach(wrapController)
     }
 
 }
