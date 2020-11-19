@@ -105,8 +105,8 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
             curr_time?.setText(TimeStrUtils.stringForTime(it))
             bottom_progress?.progress = it.toInt()
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                seekBar?.setProgress(it.toInt(),true)
-            }else{
+                seekBar?.setProgress(it.toInt(), true)
+            } else {
                 seekBar?.progress = it.toInt()
             }
         }
@@ -118,7 +118,12 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fullscreen -> {
-
+                val isFull = controlWrapper?.mediaPlayerController?.isFullScreen()
+                if (isFull == null || !isFull) {
+                    controlWrapper?.mediaPlayerController?.startFullScreen()
+                } else {
+                    controlWrapper?.mediaPlayerController?.stopFullScreen()
+                }
             }
             R.id.iv_play -> {
                 val playing = controlWrapper?.mediaPlayerController?.isPlaying()
@@ -154,7 +159,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         var max = seekBar?.max
         if (max != null && max > 0) {
             val duration = controlWrapper?.mediaPlayerController?.getDuration();
-            var target = duration!!*p0?.progress!! / max
+            var target = duration!! * p0?.progress!! / max
             controlWrapper?.mediaPlayerController?.seekTo(target)
         }
     }

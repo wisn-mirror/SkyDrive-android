@@ -1,16 +1,20 @@
 package com.we.player.view
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
 import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
 import com.we.player.controller.BaseViewController
 import com.we.player.player.*
 import com.we.player.render.IRenderView
+import com.we.player.utils.PlayerUtils
 
 /**
  *
@@ -21,7 +25,11 @@ import com.we.player.render.IRenderView
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     var TAG: String = "VideoView"
     var isLoop: Boolean = false
-    var refreshPregressTime:Long=1000
+    var isFull: Boolean = false
+    var refreshPregressTime: Long = 1000
+    var decodeView: ViewGroup? = null
+    var activity: Activity? = null
+
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {}
@@ -39,7 +47,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             mPlayerContainer?.addView(field, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT))
-            iViewController?.mediaPlayerController=this
+            iViewController?.mediaPlayerController = this
         }
 
     var isMute: Boolean = false
@@ -136,7 +144,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun setSpeed(speed: Float) {
-        refreshPregressTime= (1000/speed).toLong()
+        refreshPregressTime = (1000 / speed).toLong()
         mAPlayer?.setSpeed(speed)
     }
 
@@ -145,7 +153,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun setLooping(looping: Boolean) {
-        isLoop=looping
+        isLoop = looping
         mAPlayer?.setLooping(looping)
     }
 
@@ -190,16 +198,34 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun startFullScreen() {
         setPlayStatus(PlayStatus.PLAYER_FULL_SCREEN)
-
+        activity = PlayerUtils.scanForActivity(context)
+        decodeView = PlayerUtils.getDecorViewByActivity(activity)
+        decodeView?.let {
+            this.removeView(mPlayerContainer)
+            decodeView?.addView(mPlayerContainer,LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT))
+            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+            isFull = true
+            activity?.window?.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
     }
 
     override fun stopFullScreen() {
         setPlayStatus(PlayStatus.PLAYER_NORMAL)
+        decodeView?.let {
+            decodeView?.removeView(mPlayerContainer)
+            this.addView(mPlayerContainer)
+            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+            isFull = false
+        }
 
     }
 
     override fun isFullScreen(): Boolean {
-        return false
+        return isFull
     }
 
     override fun startTinyScreen() {
@@ -219,7 +245,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     fun setPlayStatus(status: Int) {
         var msg = PlayStatusStr.getStatusStr(status);
         LogUtils.d(TAG, "状态 ：$msg")
-        currentState=status
+        currentState = status
         iViewController?.setPlayStatus(status)
     }
 
