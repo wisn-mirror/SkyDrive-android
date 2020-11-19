@@ -4,11 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import com.qmuiteam.qmui.arch.QMUIFragment
-import com.we.player.controller.StandardController
+import com.we.player.controller.controller.StandardController
 import com.we.player.controller.component.PlayControlView
 import com.we.player.player.ScreenConfig
 import com.we.player.player.exo.AndroidMediaPlayerFactory
-import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.TextureRenderView
 import com.we.player.view.VideoView
 import com.wisn.qm.R
@@ -35,7 +34,7 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
 //        videoview?.mediaPlayer= ExoPlayerFactory()
         videoview?.mediaPlayer = AndroidMediaPlayerFactory()
         var standardController = StandardController(requireContext());
-        standardController.addIViewItemControllerOne(PlayControlView(requireContext()))
+//        standardController.addIViewItemControllerOne(PlayControlView(requireContext()))
         videoview?.iViewController = standardController
         videoview?.setLooping(true)
         videoview?.isMute = true

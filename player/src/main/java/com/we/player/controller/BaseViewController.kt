@@ -2,7 +2,6 @@ package com.we.player.controller
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -17,8 +16,9 @@ import com.we.player.view.MediaPlayerController
  * @CreateDate: 2020/11/12 下午7:55
  */
 abstract class BaseViewController : FrameLayout, IViewController {
-    val TAG:String="BaseViewController"
-    var iviewItemController: MutableList<IViewItemController> = arrayListOf()
+    val TAG: String = "BaseViewController"
+    var iviewItemControllers: MutableList<IViewItemController> = arrayListOf()
+    var IGestureViewItemControllers: MutableList<IViewItemController> = arrayListOf()
     var fadeout: Runnable = object : Runnable {
         override fun run() {
             hideController()
@@ -26,16 +26,16 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
     var runProgress: Runnable = object : Runnable {
         override fun run() {
-            LogUtils.d(TAG, "runProgress!!! ${iviewItemController.size} ")
+            LogUtils.d(TAG, "runProgress!!! ${iviewItemControllers.size} ")
 
-            iviewItemController.forEach {
+            iviewItemControllers.forEach {
                 if (mediaPlayerController != null) {
                     LogUtils.d(TAG, "runProgress ${mediaPlayerController!!.getDuration()}, ${mediaPlayerController!!.getCurrentPosition()}")
                     it.setProgress(mediaPlayerController!!.getDuration(), mediaPlayerController!!.getCurrentPosition())
-                    if (mediaPlayerController!!.isPlaying()) {
-                        postDelayed(this, mediaPlayerController!!.getRefreshTime())
-                    }
                 }
+            }
+            if (mediaPlayerController!!.isPlaying()) {
+                postDelayed(this, mediaPlayerController!!.getRefreshTime())
             }
         }
     }
@@ -52,13 +52,14 @@ abstract class BaseViewController : FrameLayout, IViewController {
         show
     }
     var islock: Boolean = false
+    var isRunProgress: Boolean = false
     var wrapController: WrapController? = null
     var mediaPlayerController: MediaPlayerController? = null
         set(value) {
             field = value
             if (value != null) {
                 wrapController = WrapController(value, this)
-                this.iviewItemController.forEach {
+                this.iviewItemControllers.forEach {
                     it.attach(wrapController)
                 }
             }
@@ -72,26 +73,26 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
     override fun setPlayStatus(status: Int) {
 
-        this.iviewItemController.forEach {
+        this.iviewItemControllers.forEach {
             it.onPlayStateChanged(status)
         }
     }
 
     override fun hideController() {
-        this.iviewItemController.forEach {
+        this.iviewItemControllers.forEach {
             it.onVisibilityChanged(false, mHideAnim)
         }
     }
 
     override fun showController() {
-        this.iviewItemController.forEach {
+        this.iviewItemControllers.forEach {
             it.onVisibilityChanged(true, mShowAnim)
         }
     }
 
     override fun setLocked(isLock: Boolean) {
         this.islock = islock
-        this.iviewItemController.forEach {
+        this.iviewItemControllers.forEach {
             it.onLockStateChanged(isLock)
         }
     }
@@ -102,11 +103,15 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
 
     override fun startProgress() {
-        LogUtils.d(TAG,"startProgress")
-        post(runProgress)
+        LogUtils.d(TAG, "startProgress")
+        if (!isRunProgress) {
+            isRunProgress = true
+            post(runProgress)
+        }
     }
 
     override fun stopProgress() {
+        isRunProgress = false
         removeCallbacks(runProgress)
     }
 
@@ -129,23 +134,30 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
     fun addIViewItemControllerList(isRemoveAll: Boolean, itemControllerlist: MutableList<IViewItemController>) {
         if (isRemoveAll) {
-            this.iviewItemController.forEach {
+            this.iviewItemControllers.forEach {
                 removeView(it.getView())
             }
-            this.iviewItemController.clear()
+            this.iviewItemControllers.clear()
+            this.IGestureViewItemControllers.clear()
         }
-        this.iviewItemController.addAll(itemControllerlist)
-        this.iviewItemController.forEach {
+        this.iviewItemControllers.addAll(itemControllerlist)
+        this.iviewItemControllers.forEach {
             addView(it.getView())
             it.attach(wrapController)
+            if (it is IGestureViewItemController) {
+                IGestureViewItemControllers.add(it)
+            }
         }
     }
 
     fun addIViewItemControllerOne(iviewItemController: IViewItemController) {
-        this.iviewItemController.add(iviewItemController)
+        this.iviewItemControllers.add(iviewItemController)
         removeView(iviewItemController.getView())
         addView(iviewItemController.getView())
         iviewItemController.attach(wrapController)
+        if (iviewItemController is IGestureViewItemController) {
+            IGestureViewItemControllers.add(iviewItemController)
+        }
     }
 
 }

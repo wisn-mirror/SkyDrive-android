@@ -6,8 +6,8 @@ import android.content.pm.ActivityInfo
 import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
@@ -81,7 +81,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         mIRenderView!!.attachToPlayer(mAPlayer!!)
         mPlayerContainer?.addView(mIRenderView!!.getRenderView(), 0, LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT))
+                ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER))
     }
 
     fun startPrepare(reset: Boolean) {
@@ -202,14 +202,14 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         decodeView = PlayerUtils.getDecorViewByActivity(activity)
         decodeView?.let {
             this.removeView(mPlayerContainer)
-            decodeView?.addView(mPlayerContainer,LayoutParams(
+            decodeView?.addView(mPlayerContainer, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT))
             activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
             isFull = true
-            activity?.window?.setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//            activity?.window?.setFlags(
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
     }
 
