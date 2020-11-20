@@ -64,5 +64,15 @@ interface IViewController {
      */
     fun getCutoutHeight(): Int
 
+    /**
+     * 是否显示
+     */
+    fun isShowController():Boolean
+
+    /**
+     * 切换状态栏
+     */
+    fun toggleControllerView()
+
 
 }

@@ -59,7 +59,6 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
     override fun onPlayStateChanged(playState: Int) {
         when (playState) {
             PlayStatus.STATE_START_ABORT -> {
-//                visibility=View.VISIBLE
                 ll_net_tip?.visibility = View.VISIBLE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
@@ -67,7 +66,6 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             }
             PlayStatus.STATE_BUFFERED,
             PlayStatus.STATE_PREPARING -> {
-//                visibility=View.VISIBLE
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.VISIBLE
@@ -84,7 +82,7 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             PlayStatus.STATE_PLAYING -> {
                 ll_net_tip?.visibility = View.GONE
                 start_play?.isSelected = true
-                start_play?.visibility = View.VISIBLE
+                start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
             }
 
@@ -93,7 +91,6 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             PlayStatus.STATE_IDLE,
             PlayStatus.STATE_PLAYBACK_COMPLETED,
             PlayStatus.STATE_BUFFERING -> {
-//                visibility=View.GONE
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE

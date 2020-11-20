@@ -126,12 +126,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
                 }
             }
             R.id.iv_play -> {
-                val playing = controlWrapper?.mediaPlayerController?.isPlaying()
-                if (playing == null || !playing) {
-                    controlWrapper?.mediaPlayerController?.start()
-                } else {
-                    controlWrapper?.mediaPlayerController?.pause()
-                }
+                controlWrapper?.mediaPlayerController?.togglePlay()
             }
         }
     }

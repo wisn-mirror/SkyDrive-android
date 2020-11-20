@@ -33,6 +33,8 @@ interface MediaPlayerController {
 
     fun getTcpSpeed(): Long
 
+    fun togglePlay()
+
     fun replay(resetPosition: Boolean)
 
     fun setMirrorRotation(enable: Boolean)

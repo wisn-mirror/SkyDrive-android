@@ -9,6 +9,7 @@ import android.widget.*
 import com.we.player.R
 import com.we.player.controller.IGestureViewItemController
 import com.we.player.controller.WrapController
+import com.we.player.utils.TimeStrUtils
 
 /**
  *
@@ -20,32 +21,78 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
 
     var TAG: String? = "GestureControlView"
     var controlWrapper: WrapController? = null
+    var center_container: LinearLayout? = null
+    var iv_icon: ImageView? = null
+    var tv_percent: TextView? = null
+    var pro_percent: ProgressBar? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
         LayoutInflater.from(getContext()).inflate(R.layout.item_controller_gesture, this, true)
+        center_container = findViewById(R.id.center_container)
+        iv_icon = findViewById(R.id.iv_icon)
+        tv_percent = findViewById(R.id.tv_percent)
+        pro_percent = findViewById(R.id.pro_percent)
     }
 
-    override fun onStartSlide() {
-//        TODO("Not yet implemented")
+    /**
+     * 开始滑动
+     */
+    override fun onGestureStartSlide() {
+        center_container?.visibility = View.VISIBLE
     }
 
-    override fun onStopSlide() {
-//        TODO("Not yet implemented")
+    /**
+     * 结束滑动
+     */
+    override fun onGestureStopSlide() {
+        center_container?.visibility = View.GONE
+
     }
 
-    override fun onPositionChange(slidePosition: Int, currentPosition: Int, duration: Int) {
-//        TODO("Not yet implemented")
+    /**
+     * 滑动调整进度
+     * @param slidePosition 滑动进度
+     * @param currentPosition 当前播放进度
+     * @param duration 视频总长度
+     */
+    override fun onGesturePositionChange(slidePosition: Int, currentPosition: Long, duration: Long) {
+        if (slidePosition > currentPosition) {
+            iv_icon?.setImageResource(R.drawable.ic_action_fast_forward)
+        } else {
+            iv_icon?.setImageResource(R.drawable.ic_action_fast_rewind)
+        }
+        tv_percent?.setText(String.format("%s/%s", TimeStrUtils.stringForTime(slidePosition.toLong()), TimeStrUtils.stringForTime(duration)))
+        pro_percent?.visibility = GONE
     }
 
-    override fun onBrightnessChange(percent: Int) {
-//        TODO("Not yet implemented")
+    /**
+     * 滑动调整亮度
+     * @param percent 亮度百分比
+     */
+    override fun onGestureBrightnessChange(percent: Int) {
+        iv_icon?.setImageResource(R.drawable.ic_action_brightness)
+        tv_percent?.setText("$percent%")
+        pro_percent?.progress=percent
+        pro_percent?.visibility = View.VISIBLE
     }
 
-    override fun onVolumeChange(percent: Int) {
-//        TODO("Not yet implemented")
+    /**
+     * 滑动调整音量
+     * @param percent 音量百分比
+     */
+    override fun onGestureVolumeChange(percent: Int) {
+        if (percent <= 0) {
+            iv_icon?.setImageResource(R.drawable.ic_action_volume_off)
+        } else {
+            iv_icon?.setImageResource(R.drawable.ic_action_volume_up)
+        }
+        tv_percent?.setText("$percent%")
+        pro_percent?.progress=percent
+        pro_percent?.visibility = View.VISIBLE
     }
+
 
     override fun attach(controlWrapper: WrapController?) {
         this.controlWrapper = controlWrapper

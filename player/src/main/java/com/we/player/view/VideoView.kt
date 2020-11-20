@@ -162,6 +162,15 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         return 0
     }
 
+    override fun togglePlay() {
+        val playing = mAPlayer?.isPlaying()
+        if (playing == null || !playing) {
+            mAPlayer?.start()
+        } else {
+            mAPlayer?.pause()
+        }
+    }
+
     override fun replay(resetPosition: Boolean) {
 
     }

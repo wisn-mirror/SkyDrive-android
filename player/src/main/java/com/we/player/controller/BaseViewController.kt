@@ -18,7 +18,7 @@ import com.we.player.view.MediaPlayerController
 abstract class BaseViewController : FrameLayout, IViewController {
     val TAG: String = "BaseViewController"
     var iviewItemControllers: MutableList<IViewItemController> = arrayListOf()
-    var IGestureViewItemControllers: MutableList<IViewItemController> = arrayListOf()
+    var IGestureViewItemControllers: MutableList<IGestureViewItemController> = arrayListOf()
     var fadeout: Runnable = object : Runnable {
         override fun run() {
             hideController()
@@ -30,7 +30,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
             iviewItemControllers.forEach {
                 if (mediaPlayerController != null) {
-                    LogUtils.d(TAG, "runProgress ${mediaPlayerController!!.getDuration()}, ${mediaPlayerController!!.getCurrentPosition()}")
+//                    LogUtils.d(TAG, "runProgress ${mediaPlayerController!!.getDuration()}, ${mediaPlayerController!!.getCurrentPosition()}")
                     it.setProgress(mediaPlayerController!!.getDuration(), mediaPlayerController!!.getCurrentPosition())
                 }
             }
@@ -53,6 +53,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
     var islock: Boolean = false
     var isRunProgress: Boolean = false
+    var isShowControl: Boolean = false
     var wrapController: WrapController? = null
     var mediaPlayerController: MediaPlayerController? = null
         set(value) {
@@ -78,17 +79,6 @@ abstract class BaseViewController : FrameLayout, IViewController {
         }
     }
 
-    override fun hideController() {
-        this.iviewItemControllers.forEach {
-            it.onVisibilityChanged(false, mHideAnim)
-        }
-    }
-
-    override fun showController() {
-        this.iviewItemControllers.forEach {
-            it.onVisibilityChanged(true, mShowAnim)
-        }
-    }
 
     override fun setLocked(isLock: Boolean) {
         this.islock = islock
@@ -122,6 +112,43 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
     override fun stopTimeFade() {
         removeCallbacks(fadeout)
+    }
+
+    override fun hideController() {
+        if (isShowControl) {
+            isShowControl = false
+            startTimeFade()
+            this.iviewItemControllers.forEach {
+                it.onVisibilityChanged(false, mHideAnim)
+            }
+            onVisibilityChanged(false, mHideAnim)
+        }
+    }
+
+    override fun showController() {
+        if (!isShowControl) {
+            isShowControl = true
+            this.iviewItemControllers.forEach {
+                it.onVisibilityChanged(true, mShowAnim)
+            }
+            onVisibilityChanged(true, mShowAnim)
+        }
+    }
+
+    fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+
+    }
+
+    override fun isShowController(): Boolean {
+        return isShowControl
+    }
+
+    override fun toggleControllerView() {
+        if (isShowControl) {
+            hideController()
+        } else {
+            showController()
+        }
     }
 
     override fun hasCutout(): Boolean {
