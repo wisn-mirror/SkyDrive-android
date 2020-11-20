@@ -114,16 +114,10 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             R.id.status_btn -> {
                 //继续播放
                 controlWrapper?.mediaPlayerController?.start()
-
             }
             R.id.start_play -> {
                 //开始播放
-                val playing = controlWrapper?.mediaPlayerController?.isPlaying()
-                if (playing == null || !playing) {
-                    controlWrapper?.mediaPlayerController?.start()
-                } else {
-                    controlWrapper?.mediaPlayerController?.pause()
-                }
+                controlWrapper?.mediaPlayerController?.togglePlay()
             }
         }
     }

@@ -7,10 +7,19 @@
     tools:background="#1B1A1A">
 
     <ImageView
-        android:id="@+id/button"
+        android:id="@+id/lock_left"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:padding="4dp"
+        android:src="@drawable/we_selector_lock_button" />
+
+    <ImageView
+        android:id="@+id/lock_right"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical|right"
         android:layout_marginLeft="10dp"
         android:padding="4dp"
         android:src="@drawable/we_selector_lock_button" />

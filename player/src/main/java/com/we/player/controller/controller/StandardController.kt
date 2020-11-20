@@ -2,6 +2,8 @@ package com.we.player.controller.controller
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.widget.ImageView
 import com.we.player.R
 import com.we.player.controller.component.ErrorControlView
 import com.we.player.controller.component.GestureControlView
@@ -14,7 +16,9 @@ import com.we.player.controller.component.PreviewControlView
  * @Author: Wisn
  * @CreateDate: 2020/11/15 上午10:39
  */
-class StandardController : GestureController{
+class StandardController : GestureController, View.OnClickListener {
+    var lock_left: ImageView? = null
+    var lock_right: ImageView? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
@@ -23,9 +27,34 @@ class StandardController : GestureController{
         addIViewItemControllerOne(ErrorControlView(context))
         addIViewItemControllerOne(PlayControlView(context))
         addIViewItemControllerOne(GestureControlView(context))
+        lock_left = findViewById(R.id.lock_left)
+        lock_right = findViewById(R.id.lock_right)
+        lock_left?.setOnClickListener(this)
+        lock_right?.setOnClickListener(this)
     }
 
     override fun getLayoutId(): Int {
         return R.layout.item_controller_standard
     }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.lock_right, R.id.lock_left -> {
+
+            }
+
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        mediaPlayerController?.let {
+            if(it.isFullScreen()){
+                it.stopFullScreen()
+                return true
+            }
+        }
+        return super.onBackPressed()
+    }
+
+
 }

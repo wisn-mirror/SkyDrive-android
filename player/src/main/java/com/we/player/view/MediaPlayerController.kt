@@ -59,8 +59,7 @@ interface MediaPlayerController {
 
     fun isTinyScreen(): Boolean
 
-
-
+    fun onBackPressed(): Boolean
 
 
 }

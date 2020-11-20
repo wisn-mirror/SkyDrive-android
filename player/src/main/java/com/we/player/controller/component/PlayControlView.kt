@@ -61,6 +61,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     }
 
     override fun onPlayStateChanged(playState: Int) {
+        LogUtils.d(TAG, "onPlayStateChanged", playState)
         when (playState) {
             PlayStatus.STATE_IDLE,
             PlayStatus.STATE_PLAYBACK_COMPLETED -> {
@@ -74,7 +75,6 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
 
             }
             PlayStatus.STATE_PLAYING -> {
-                LogUtils.d(TAG, "onPlayStateChanged")
                 controlWrapper?.iViewController?.startProgress()
                 iv_play?.isSelected = true
             }

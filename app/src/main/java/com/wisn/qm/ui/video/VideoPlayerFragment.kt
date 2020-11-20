@@ -102,4 +102,11 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
             }
         }
     }
+
+    override fun onBackPressed() {
+        if(videoview?.onBackPressed() == true){
+            return
+        }
+        super.onBackPressed()
+    }
 }

@@ -16,7 +16,7 @@
         android:background="@drawable/we_progress_bg"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:visibility="visible">
 
         <ImageView

@@ -73,7 +73,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
 
     override fun setPlayStatus(status: Int) {
-
+        LogUtils.d(TAG, "setPlayStatus")
         this.iviewItemControllers.forEach {
             it.onPlayStateChanged(status)
         }
@@ -185,6 +185,10 @@ abstract class BaseViewController : FrameLayout, IViewController {
         if (iviewItemController is IGestureViewItemController) {
             IGestureViewItemControllers.add(iviewItemController)
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        return false
     }
 
 }

@@ -120,15 +120,15 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun getDuration(): Long {
-        return mAPlayer?.getDuration()!!
+        return mAPlayer?.getDuration()?:0
     }
 
     override fun getCurrentPosition(): Long {
-        return mAPlayer?.getCurrentPosition()!!
+        return mAPlayer?.getCurrentPosition()?:0
     }
 
     override fun getRefreshTime(): Long {
-        return refreshPregressTime;
+        return refreshPregressTime
     }
 
     override fun seekTo(pos: Long) {
@@ -136,11 +136,12 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun isPlaying(): Boolean {
-        return mAPlayer?.isPlaying()!!
+
+        return mAPlayer?.isPlaying()?:false
     }
 
     override fun getBufferedPercentage(): Int {
-        return mAPlayer?.getBufferedPercentage()!!
+        return mAPlayer?.getBufferedPercentage()?:0
     }
 
     override fun setSpeed(speed: Float) {
@@ -149,7 +150,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun getSpeed(): Float {
-        return mAPlayer?.geSpeed()!!
+        return mAPlayer?.geSpeed()?:1f
     }
 
     override fun setLooping(looping: Boolean) {
@@ -163,11 +164,10 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun togglePlay() {
-        val playing = mAPlayer?.isPlaying()
-        if (playing == null || !playing) {
-            mAPlayer?.start()
+        if (!isPlaying()) {
+            start()
         } else {
-            mAPlayer?.pause()
+            pause()
         }
     }
 
@@ -248,6 +248,11 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun isTinyScreen(): Boolean {
         return false
+    }
+
+
+    override fun onBackPressed(): Boolean {
+        return iViewController?.onBackPressed()?:false
     }
 
     /////////////////播放器的回调//////////////////////////

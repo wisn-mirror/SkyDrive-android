@@ -74,5 +74,10 @@ interface IViewController {
      */
     fun toggleControllerView()
 
+    /**
+     * 返回按钮
+     */
+    fun onBackPressed():Boolean
+
 
 }

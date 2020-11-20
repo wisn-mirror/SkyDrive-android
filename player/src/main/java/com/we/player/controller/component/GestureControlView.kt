@@ -34,6 +34,7 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
         iv_icon = findViewById(R.id.iv_icon)
         tv_percent = findViewById(R.id.tv_percent)
         pro_percent = findViewById(R.id.pro_percent)
+        visibility=View.GONE
     }
 
     /**
