@@ -115,9 +115,6 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
 
     }
 
-    override fun onPlayerStateChanged(playerState: Int) {
-
-    }
 
     override fun setProgress(duration: Long?, position: Long?) {
 

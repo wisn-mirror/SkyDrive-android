@@ -19,8 +19,6 @@ interface IViewItemController {
 
     fun onPlayStateChanged(playState: Int)
 
-    fun onPlayerStateChanged(playerState: Int)
-
     fun setProgress(duration: Long?, position: Long?)
 
     fun onLockStateChanged(isLocked: Boolean)

@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.*
+import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
 import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
 import com.we.player.player.PlayStatus
+import com.we.player.player.PlayStatusStr
 import com.we.player.view.MediaPlayerController
 
 /**
@@ -61,6 +63,8 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
     }
 
     override fun onPlayStateChanged(playState: Int) {
+        LogUtils.d(TAG, "onPlayStateChanged  $playState  ${PlayStatusStr.getStatusStr(playState)} " )
+
         when (playState) {
             PlayStatus.STATE_START_ABORT -> {
                 ll_net_tip?.visibility = View.VISIBLE
@@ -68,12 +72,15 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
                 loading?.visibility = View.GONE
 
             }
-            PlayStatus.STATE_BUFFERED,
+            PlayStatus.STATE_BUFFERED->{
+                ll_net_tip?.visibility = View.GONE
+                start_play?.visibility = View.GONE
+                loading?.visibility = View.GONE
+            }
             PlayStatus.STATE_PREPARING -> {
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.VISIBLE
-
             }
 
             PlayStatus.STATE_PAUSED -> {
@@ -101,10 +108,6 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
 
             }
         }
-    }
-
-    override fun onPlayerStateChanged(playerState: Int) {
-
     }
 
     override fun setProgress(duration: Long?, position: Long?) {

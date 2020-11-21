@@ -38,8 +38,6 @@ abstract class GestureController : BaseViewController, GestureDetector.OnGesture
 
     private val mCanChangePosition = true
 
-    private val mEnableInNormal = false
-
     private var mCanSlide = false
 
     private var mCurPlayState = 0
@@ -60,7 +58,7 @@ abstract class GestureController : BaseViewController, GestureDetector.OnGesture
     override fun setPlayStatus(status: Int) {
         super.setPlayStatus(status)
         if (status == PlayStatus.PLAYER_NORMAL) {
-            mCanSlide = mEnableInNormal
+            mCanSlide = false
         } else if (status == PlayStatus.PLAYER_FULL_SCREEN) {
             mCanSlide = true
         }
@@ -193,8 +191,8 @@ abstract class GestureController : BaseViewController, GestureDetector.OnGesture
         p0?.let {
             if (!PlayStatus.isPlayingStatus(mCurPlayState) //不处于播放状态
                     || !mIsGestureEnabled //关闭了手势
-                    || PlayerUtils.isEdge(context, p0)) {
-                //处于屏幕边沿
+                    || PlayerUtils.isEdge(context, p0)) { //处于屏幕边沿
+
                 LogUtils.d(TAGA, "：p0：" + p0)
                 return true
             }
@@ -221,15 +219,15 @@ abstract class GestureController : BaseViewController, GestureDetector.OnGesture
     override fun onDoubleTap(p0: MotionEvent?): Boolean {
         p0?.let {
             if (!mIsGestureEnabled //关闭了手势
-                    || !mCanSlide //关闭了滑动手势
+//                    || !mCanSlide //关闭了滑动手势
                     || isLocked() //锁住了屏幕
                     || PlayerUtils.isEdge(context, p0)//处于屏幕边沿
-                    || !mediaPlayerController!!.isFullScreen()) {
+            ){
+//                    || !mediaPlayerController!!.isFullScreen()) {
                 //todo 显示锁定
 
             } else {
                mediaPlayerController?.togglePlay()
-
             }
         }
         return true

@@ -2,7 +2,6 @@ package com.we.player.player
 
 import android.view.Surface
 import android.view.SurfaceHolder
-import com.we.player.player.PlayerEventListener
 
 /**
  *

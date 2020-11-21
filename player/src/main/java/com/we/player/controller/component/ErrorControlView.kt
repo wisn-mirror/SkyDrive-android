@@ -67,9 +67,6 @@ class ErrorControlView : FrameLayout, IViewItemController, View.OnClickListener 
         }
     }
 
-    override fun onPlayerStateChanged(playerState: Int) {
-
-    }
 
     override fun setProgress(duration: Long?, position: Long?) {
 

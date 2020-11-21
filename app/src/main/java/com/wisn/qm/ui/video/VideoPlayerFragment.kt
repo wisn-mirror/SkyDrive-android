@@ -8,6 +8,7 @@ import com.we.player.controller.controller.StandardController
 import com.we.player.controller.component.PlayControlView
 import com.we.player.player.ScreenConfig
 import com.we.player.player.exo.AndroidMediaPlayerFactory
+import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.TextureRenderView
 import com.we.player.view.VideoView
 import com.wisn.qm.R
@@ -31,8 +32,8 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         videoview?.setUrl("http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4")
         videoview?.mIRenderView = TextureRenderView(requireContext())
 //        videoview?.mIRenderView = SurfaceRenderView(requireContext())
-//        videoview?.mediaPlayer= ExoPlayerFactory()
-        videoview?.mediaPlayer = AndroidMediaPlayerFactory()
+        videoview?.mediaPlayer= ExoPlayerFactory()
+//        videoview?.mediaPlayer = AndroidMediaPlayerFactory()
         var standardController = StandardController(requireContext());
 //        standardController.addIViewItemControllerOne(PlayControlView(requireContext()))
         videoview?.iViewController = standardController

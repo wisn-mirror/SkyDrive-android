@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.*
+import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
 import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
+import com.we.player.player.PlayStatus
+import com.we.player.player.PlayStatusStr
 import com.we.player.view.MediaPlayerController
 
 /**
@@ -24,11 +27,21 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
 
     var mediaPlayerController: MediaPlayerController? = null
     var iViewController: IViewController? = null
+    var back: ImageView? = null
+    var title: TextView? = null
+    var sys_time: TextView? = null
+    var battery: TextView? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
         LayoutInflater.from(getContext()).inflate(R.layout.item_controller_title, this, true)
+        back = findViewById(R.id.back)
+        title = findViewById(R.id.title)
+        sys_time = findViewById(R.id.sys_time)
+        battery = findViewById(R.id.battery)
+        back?.setOnClickListener(this)
+        visibility = GONE
     }
 
     override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
@@ -46,11 +59,16 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
     }
 
     override fun onPlayStateChanged(playState: Int) {
+        LogUtils.d(TAG, "onPlayStateChanged  $playState  ${PlayStatusStr.getStatusStr(playState)} ")
 
-    }
-
-    override fun onPlayerStateChanged(playerState: Int) {
-
+        when (playState) {
+            PlayStatus.PLAYER_FULL_SCREEN -> {
+                visibility = VISIBLE
+            }
+            else -> {
+                visibility = GONE
+            }
+        }
     }
 
     override fun setProgress(duration: Long?, position: Long?) {
@@ -61,7 +79,11 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
     override fun onLockStateChanged(isLocked: Boolean) {}
 
     override fun onClick(p0: View?) {
-
+        when (p0?.id) {
+            R.id.back -> {
+                mediaPlayerController?.stopFullScreen()
+            }
+        }
     }
 
 }

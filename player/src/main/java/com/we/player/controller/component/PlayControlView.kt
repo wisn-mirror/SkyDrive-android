@@ -51,8 +51,8 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     }
 
     override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
-        this.mediaPlayerController=mediaPlayerController
-        this.iViewController=iViewController
+        this.mediaPlayerController = mediaPlayerController
+        this.iViewController = iViewController
     }
 
     override fun getView(): View {
@@ -60,7 +60,22 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     }
 
     override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+        LogUtils.d(TAG, "onVisibilityChanged  $isVisible ")
 
+        if (isVisible) {
+            if (mediaPlayerController?.isFullScreen()!! && iViewController?.isLocked()!!) {
+                bottom_progress?.visibility = GONE
+                bottom_container?.visibility = GONE
+            } else {
+                bottom_progress?.visibility = GONE
+//            bottom_container?.startAnimation(anim)
+                bottom_container?.visibility = VISIBLE
+            }
+        } else {
+            bottom_progress?.visibility = VISIBLE
+            bottom_container?.visibility = GONE
+
+        }
 
     }
 
@@ -81,6 +96,14 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
             PlayStatus.STATE_PLAYING -> {
                 iViewController?.startProgress()
                 iv_play?.isSelected = true
+//                if(iViewController?.isShowController()!!){
+//                    bottom_progress?.visibility = GONE
+//                    bottom_container?.visibility=View.VISIBLE
+//                }else{
+//                    bottom_progress?.visibility = VISIBLE
+//                    bottom_container?.visibility=View.GONE
+//                }
+
             }
             PlayStatus.STATE_PAUSED -> {
                 iViewController?.stopProgress()
@@ -95,9 +118,6 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         }
     }
 
-    override fun onPlayerStateChanged(playerState: Int) {
-
-    }
 
     override fun setProgress(duration: Long?, position: Long?) {
         duration?.let {
@@ -122,15 +142,15 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fullscreen -> {
-                val isFull =  mediaPlayerController?.isFullScreen()
+                val isFull = mediaPlayerController?.isFullScreen()
                 if (isFull == null || !isFull) {
-                     mediaPlayerController?.startFullScreen()
+                    mediaPlayerController?.startFullScreen()
                 } else {
-                     mediaPlayerController?.stopFullScreen()
+                    mediaPlayerController?.stopFullScreen()
                 }
             }
             R.id.iv_play -> {
-                 mediaPlayerController?.togglePlay()
+                mediaPlayerController?.togglePlay()
             }
         }
     }
@@ -141,7 +161,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         }
         var max = seekBar?.max
         if (max != null && max > 0) {
-            val duration =  mediaPlayerController?.getDuration();
+            val duration = mediaPlayerController?.getDuration();
             duration?.let {
                 var target = duration * progress / max
                 curr_time?.setText(TimeStrUtils.stringForTime(target))
@@ -157,9 +177,9 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onStopTrackingTouch(p0: SeekBar?) {
         var max = seekBar?.max
         if (max != null && max > 0) {
-            val duration =  mediaPlayerController?.getDuration();
+            val duration = mediaPlayerController?.getDuration();
             var target = duration!! * p0?.progress!! / max
-             mediaPlayerController?.seekTo(target)
+            mediaPlayerController?.seekTo(target)
         }
     }
 

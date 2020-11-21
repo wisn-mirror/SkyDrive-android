@@ -3,12 +3,12 @@ package com.we.player.controller.controller
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.Animation
 import android.widget.ImageView
+import androidx.core.view.isGone
+import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
-import com.we.player.controller.component.ErrorControlView
-import com.we.player.controller.component.GestureControlView
-import com.we.player.controller.component.PlayControlView
-import com.we.player.controller.component.PreviewControlView
+import com.we.player.controller.component.*
 
 /**
  *
@@ -27,11 +27,32 @@ class StandardController : GestureController, View.OnClickListener {
         addIViewItemControllerOne(ErrorControlView(context))
         addIViewItemControllerOne(PlayControlView(context))
         addIViewItemControllerOne(GestureControlView(context))
+        addIViewItemControllerOne(TitleControlView(context))
         lock_left = findViewById(R.id.lock_left)
         lock_right = findViewById(R.id.lock_right)
         lock_left?.setOnClickListener(this)
         lock_right?.setOnClickListener(this)
+        lock_left?.visibility= GONE
+        lock_right?.visibility= GONE
     }
+
+    override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+        //必须是全屏幕的时候才有锁定
+        if (isVisible && mediaPlayerController?.isFullScreen()!!) {
+            if (islock) {
+                lock_left?.visibility = VISIBLE
+                lock_right?.visibility = VISIBLE
+            } else {
+                lock_left?.visibility = GONE
+                lock_right?.visibility = VISIBLE
+            }
+
+        } else {
+            lock_left?.visibility = GONE
+            lock_right?.visibility = GONE
+        }
+    }
+
 
     override fun getLayoutId(): Int {
         return R.layout.item_controller_standard
@@ -40,7 +61,7 @@ class StandardController : GestureController, View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.lock_right, R.id.lock_left -> {
-
+                setLocked(!islock)
             }
 
         }
@@ -48,7 +69,7 @@ class StandardController : GestureController, View.OnClickListener {
 
     override fun onBackPressed(): Boolean {
         mediaPlayerController?.let {
-            if(it.isFullScreen()){
+            if (it.isFullScreen()) {
                 it.stopFullScreen()
                 return true
             }

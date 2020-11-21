@@ -47,13 +47,13 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
 
     private val mHideAnim: Animation by lazy {
-        var show = AlphaAnimation(1f, 0f)
-        show.duration = 300
-        show
+        var hide = AlphaAnimation(1f, 0f)
+        hide.duration = 300
+        hide
     }
     var islock: Boolean = false
     var isRunProgress: Boolean = false
-    var isShowControl: Boolean = false
+    var isShowControl: Boolean = true
     var mediaPlayerController: MediaPlayerController? = null
         set(value) {
             field = value
@@ -114,26 +114,28 @@ abstract class BaseViewController : FrameLayout, IViewController {
 
     override fun hideController() {
         if (isShowControl) {
-            isShowControl = false
-            startTimeFade()
+            stopTimeFade()
             this.iviewItemControllers.forEach {
                 it.onVisibilityChanged(false, mHideAnim)
             }
             onVisibilityChanged(false, mHideAnim)
+            isShowControl = false
+
         }
     }
 
     override fun showController() {
         if (!isShowControl) {
-            isShowControl = true
             this.iviewItemControllers.forEach {
                 it.onVisibilityChanged(true, mShowAnim)
             }
             onVisibilityChanged(true, mShowAnim)
+            startTimeFade()
+            isShowControl = true
         }
     }
 
-    fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+    open  fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
 
     }
 
