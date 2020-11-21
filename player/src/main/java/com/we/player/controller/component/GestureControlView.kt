@@ -8,8 +8,9 @@ import android.view.animation.Animation
 import android.widget.*
 import com.we.player.R
 import com.we.player.controller.IGestureViewItemController
-import com.we.player.controller.WrapController
+import com.we.player.controller.IViewController
 import com.we.player.utils.TimeStrUtils
+import com.we.player.view.MediaPlayerController
 
 /**
  *
@@ -20,7 +21,9 @@ import com.we.player.utils.TimeStrUtils
 class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClickListener {
 
     var TAG: String? = "GestureControlView"
-    var controlWrapper: WrapController? = null
+
+    var mediaPlayerController: MediaPlayerController? = null
+    var iViewController: IViewController? = null
     var center_container: LinearLayout? = null
     var iv_icon: ImageView? = null
     var tv_percent: TextView? = null
@@ -95,10 +98,10 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
     }
 
 
-    override fun attach(controlWrapper: WrapController?) {
-        this.controlWrapper = controlWrapper
+    override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
+        this.mediaPlayerController=mediaPlayerController
+        this.iViewController=iViewController
     }
-
     override fun getView(): View {
         return this
     }

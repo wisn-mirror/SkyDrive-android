@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.*
-import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
+import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
-import com.we.player.controller.WrapController
-import com.we.player.player.PlayStatus
+import com.we.player.view.MediaPlayerController
 
 /**
  *
@@ -21,7 +20,10 @@ import com.we.player.player.PlayStatus
 class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener {
 
     var TAG: String? = "TitleControlView"
-    var controlWrapper: WrapController? = null
+
+
+    var mediaPlayerController: MediaPlayerController? = null
+    var iViewController: IViewController? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
@@ -29,8 +31,9 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
         LayoutInflater.from(getContext()).inflate(R.layout.item_controller_title, this, true)
     }
 
-    override fun attach(controlWrapper: WrapController?) {
-        this.controlWrapper = controlWrapper
+    override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
+        this.mediaPlayerController = mediaPlayerController
+        this.iViewController = iViewController
     }
 
     override fun getView(): View {

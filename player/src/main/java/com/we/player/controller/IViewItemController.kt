@@ -2,6 +2,7 @@ package com.we.player.controller
 
 import android.view.View
 import android.view.animation.Animation
+import com.we.player.view.MediaPlayerController
 
 /**
  * @Description:
@@ -10,7 +11,7 @@ import android.view.animation.Animation
  *
  */
 interface IViewItemController {
-    fun attach(controlWrapper: WrapController?)
+    fun attach( mediaPlayerController: MediaPlayerController?,  iViewController: IViewController)
 
     fun getView(): View
 

@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.*
-import com.qmuiteam.qmui.kotlin.wrapContent
 import com.we.player.R
+import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
-import com.we.player.controller.WrapController
 import com.we.player.player.PlayStatus
+import com.we.player.view.MediaPlayerController
 
 /**
  *
@@ -21,7 +21,9 @@ import com.we.player.player.PlayStatus
 class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListener {
 
     var TAG: String? = "PreviewControlView"
-    var controlWrapper: WrapController? = null
+
+    var mediaPlayerController: MediaPlayerController? = null
+    var iViewController: IViewController? = null
     var thumb: ImageView? = null
     var start_play: ImageView? = null
     var loading: ProgressBar? = null
@@ -43,8 +45,10 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
         status_btn?.setOnClickListener(this)
     }
 
-    override fun attach(controlWrapper: WrapController?) {
-        this.controlWrapper = controlWrapper
+
+    override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
+        this.mediaPlayerController=mediaPlayerController
+        this.iViewController=iViewController
     }
 
     override fun getView(): View {
@@ -113,11 +117,11 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
         when (p0?.id) {
             R.id.status_btn -> {
                 //继续播放
-                controlWrapper?.mediaPlayerController?.start()
+                mediaPlayerController?.start()
             }
             R.id.start_play -> {
                 //开始播放
-                controlWrapper?.mediaPlayerController?.togglePlay()
+                mediaPlayerController?.togglePlay()
             }
         }
     }

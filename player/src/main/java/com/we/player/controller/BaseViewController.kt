@@ -54,14 +54,12 @@ abstract class BaseViewController : FrameLayout, IViewController {
     var islock: Boolean = false
     var isRunProgress: Boolean = false
     var isShowControl: Boolean = false
-    var wrapController: WrapController? = null
     var mediaPlayerController: MediaPlayerController? = null
         set(value) {
             field = value
             if (value != null) {
-                wrapController = WrapController(value, this)
                 this.iviewItemControllers.forEach {
-                    it.attach(wrapController)
+                    it.attach(value, this)
                 }
             }
         }
@@ -170,7 +168,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
         this.iviewItemControllers.addAll(itemControllerlist)
         this.iviewItemControllers.forEach {
             addView(it.getView())
-            it.attach(wrapController)
+            it.attach(mediaPlayerController,this)
             if (it is IGestureViewItemController) {
                 IGestureViewItemControllers.add(it)
             }
@@ -181,7 +179,7 @@ abstract class BaseViewController : FrameLayout, IViewController {
         this.iviewItemControllers.add(iviewItemController)
         removeView(iviewItemController.getView())
         addView(iviewItemController.getView())
-        iviewItemController.attach(wrapController)
+        iviewItemController.attach(mediaPlayerController,this)
         if (iviewItemController is IGestureViewItemController) {
             IGestureViewItemControllers.add(iviewItemController)
         }

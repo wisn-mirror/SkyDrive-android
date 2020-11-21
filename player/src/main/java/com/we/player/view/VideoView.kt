@@ -4,13 +4,18 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.AssetFileDescriptor
+import android.content.res.TypedArray
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
 import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
+import com.we.player.R
 import com.we.player.controller.BaseViewController
 import com.we.player.player.*
 import com.we.player.render.IRenderView
@@ -25,14 +30,25 @@ import com.we.player.utils.PlayerUtils
 class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     var TAG: String = "VideoView"
     var isLoop: Boolean = false
+    var mEnableAudioFocus: Boolean = false
     var isFull: Boolean = false
     var refreshPregressTime: Long = 1000
+    var mPlayerBackgroundColor: Int = -1
     var decodeView: ViewGroup? = null
     var activity: Activity? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
-    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {}
+    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
+        //读取xml中的配置，并综合全局配置
+        val a: TypedArray = context.obtainStyledAttributes(attributeSet, R.styleable.VideoView)
+        mEnableAudioFocus = a.getBoolean(R.styleable.VideoView_enableAudioFocus, mEnableAudioFocus)
+        isLoop = a.getBoolean(R.styleable.VideoView_looping, false)
+        mCurrentScreenScaleType = a.getInt(R.styleable.VideoView_screenScaleType, ScreenConfig.SCREEN_SCALE_DEFAULT)
+        mPlayerBackgroundColor = a.getColor(R.styleable.VideoView_playerBackgroundColor, Color.BLACK)
+        a.recycle()
+
+    }
 
     protected var mVideoSize = intArrayOf(0, 0)
 
@@ -69,6 +85,9 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         VideoView@ this.addView(mPlayerContainer, LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT))
+        if(mPlayerBackgroundColor!=-1){
+            mPlayerContainer.setBackgroundColor(mPlayerBackgroundColor)
+        }
         mPlayerContainer
     }
 
@@ -216,6 +235,14 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
                     ViewGroup.LayoutParams.MATCH_PARENT))
             activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
             isFull = true
+            var uiOptions: Int = decodeView!!.getSystemUiVisibility()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                uiOptions = uiOptions or SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                uiOptions = uiOptions or SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            }
+            decodeView!!.setSystemUiVisibility(uiOptions)
 //            activity?.window?.setFlags(
 //                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -229,6 +256,15 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             this.addView(mPlayerContainer)
             activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             isFull = false
+            var uiOptions: Int = decodeView!!.getSystemUiVisibility()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                uiOptions = uiOptions and SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                uiOptions = uiOptions and SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
+            }
+            decodeView?.setSystemUiVisibility(uiOptions)
+//            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
 
     }

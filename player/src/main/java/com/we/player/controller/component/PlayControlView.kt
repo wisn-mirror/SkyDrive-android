@@ -8,10 +8,11 @@ import android.view.animation.Animation
 import android.widget.*
 import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
+import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
-import com.we.player.controller.WrapController
 import com.we.player.player.PlayStatus
 import com.we.player.utils.TimeStrUtils
+import com.we.player.view.MediaPlayerController
 
 /**
  *
@@ -22,7 +23,9 @@ import com.we.player.utils.TimeStrUtils
 class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     var TAG: String? = "PlayControlView"
-    var controlWrapper: WrapController? = null
+
+    var mediaPlayerController: MediaPlayerController? = null
+    var iViewController: IViewController? = null
     var bottom_container: LinearLayout? = null
     var fullscreen: ImageView? = null
     var iv_play: ImageView? = null
@@ -47,8 +50,9 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         seekBar?.setOnSeekBarChangeListener(this)
     }
 
-    override fun attach(controlWrapper: WrapController?) {
-        this.controlWrapper = controlWrapper
+    override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
+        this.mediaPlayerController=mediaPlayerController
+        this.iViewController=iViewController
     }
 
     override fun getView(): View {
@@ -75,15 +79,15 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
 
             }
             PlayStatus.STATE_PLAYING -> {
-                controlWrapper?.iViewController?.startProgress()
+                iViewController?.startProgress()
                 iv_play?.isSelected = true
             }
             PlayStatus.STATE_PAUSED -> {
-                controlWrapper?.iViewController?.stopProgress()
+                iViewController?.stopProgress()
                 iv_play?.isSelected = false
             }
             PlayStatus.STATE_BUFFERED, PlayStatus.STATE_BUFFERING -> {
-                val playing = controlWrapper?.mediaPlayerController?.isPlaying()
+                val playing = mediaPlayerController?.isPlaying()
                 playing?.let {
                     iv_play?.isSelected = it
                 }
@@ -118,15 +122,15 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.fullscreen -> {
-                val isFull = controlWrapper?.mediaPlayerController?.isFullScreen()
+                val isFull =  mediaPlayerController?.isFullScreen()
                 if (isFull == null || !isFull) {
-                    controlWrapper?.mediaPlayerController?.startFullScreen()
+                     mediaPlayerController?.startFullScreen()
                 } else {
-                    controlWrapper?.mediaPlayerController?.stopFullScreen()
+                     mediaPlayerController?.stopFullScreen()
                 }
             }
             R.id.iv_play -> {
-                controlWrapper?.mediaPlayerController?.togglePlay()
+                 mediaPlayerController?.togglePlay()
             }
         }
     }
@@ -137,7 +141,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         }
         var max = seekBar?.max
         if (max != null && max > 0) {
-            val duration = controlWrapper?.mediaPlayerController?.getDuration();
+            val duration =  mediaPlayerController?.getDuration();
             duration?.let {
                 var target = duration * progress / max
                 curr_time?.setText(TimeStrUtils.stringForTime(target))
@@ -153,9 +157,9 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onStopTrackingTouch(p0: SeekBar?) {
         var max = seekBar?.max
         if (max != null && max > 0) {
-            val duration = controlWrapper?.mediaPlayerController?.getDuration();
+            val duration =  mediaPlayerController?.getDuration();
             var target = duration!! * p0?.progress!! / max
-            controlWrapper?.mediaPlayerController?.seekTo(target)
+             mediaPlayerController?.seekTo(target)
         }
     }
 

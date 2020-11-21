@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.*
-import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
+import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
-import com.we.player.controller.WrapController
 import com.we.player.player.PlayStatus
+import com.we.player.view.MediaPlayerController
 
 /**
  *
@@ -21,7 +21,8 @@ import com.we.player.player.PlayStatus
 class ErrorControlView : FrameLayout, IViewItemController, View.OnClickListener {
 
     var TAG: String? = "ErrorControlView"
-    var controlWrapper: WrapController? = null
+    var mediaPlayerController: MediaPlayerController? = null
+    var iViewController: IViewController? = null
     var message: TextView? = null
     var status_btn: TextView? = null
 
@@ -34,8 +35,10 @@ class ErrorControlView : FrameLayout, IViewItemController, View.OnClickListener 
         status_btn?.setOnClickListener(this)
     }
 
-    override fun attach(controlWrapper: WrapController?) {
-        this.controlWrapper = controlWrapper
+
+    override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
+        this.mediaPlayerController=mediaPlayerController
+        this.iViewController=iViewController
     }
 
     override fun getView(): View {
@@ -78,7 +81,7 @@ class ErrorControlView : FrameLayout, IViewItemController, View.OnClickListener 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.status_btn -> {
-                controlWrapper?.mediaPlayerController?.replay(false)
+                mediaPlayerController?.replay(false)
             }
         }
     }
