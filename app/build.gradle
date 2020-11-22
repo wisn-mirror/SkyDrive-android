@@ -17,10 +17,30 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
+            properties.load(inputStream)
+            storeFile file(properties.getProperty('RELEASE_STOREFILE'))
+            keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
+            keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
+            storePassword properties.getProperty('RELEASE_STOREPASSWORD')
+        }
+    }
+
 
     buildTypes {
         release {
             minifyEnabled false
+            debuggable false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -32,6 +52,25 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def date = releaseTime()
+            def applicationId = variant.applicationId
+            def versionName = defaultConfig.versionName
+            def versionCode = defaultConfig.versionCode
+            def debugType = variant.buildType.name
+            outputFileName = "${debugType}_${versionName}_${date}_${applicationId}.apk"
+        }
+    }
+    dexOptions {
+//        incremental true
+        javaMaxHeapSize "4g"
+    }
+}
+def releaseTime() {
+    return new Date().format("MMdd_hhmm", TimeZone.getTimeZone("Asia/Shanghai"))
 }
 //def qmui_arch_version = '2.0.0-alpha08'
 
