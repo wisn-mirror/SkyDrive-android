@@ -63,7 +63,9 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
         LogUtils.d(TAG, "onVisibilityChanged  $isVisible ")
 
         if (isVisible) {
-            if (mediaPlayerController?.isFullScreen()!! && iViewController?.isLocked()!!) {
+            val fullScreen = mediaPlayerController?.isFullScreen()!!
+            val islocked =iViewController?.isLocked()!!
+            if ( fullScreen&&islocked) {
                 bottom_progress?.visibility = GONE
                 bottom_container?.visibility = GONE
             } else {

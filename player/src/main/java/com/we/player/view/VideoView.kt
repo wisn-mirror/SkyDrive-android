@@ -270,7 +270,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun isFullScreen(): Boolean {
-        return isFull
+        return this.isFull
     }
 
     override fun startTinyScreen() {

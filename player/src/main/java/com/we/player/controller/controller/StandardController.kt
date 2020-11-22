@@ -62,6 +62,8 @@ class StandardController : GestureController, View.OnClickListener {
         when (p0?.id) {
             R.id.lock_right, R.id.lock_left -> {
                 setLocked(!islock)
+
+
             }
 
         }

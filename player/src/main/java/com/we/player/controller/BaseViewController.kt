@@ -78,15 +78,16 @@ abstract class BaseViewController : FrameLayout, IViewController {
     }
 
 
-    override fun setLocked(isLock: Boolean) {
-        this.islock = islock
+    override fun setLocked(lock: Boolean) {
+        this.islock = lock
         this.iviewItemControllers.forEach {
-            it.onLockStateChanged(isLock)
+            it.onLockStateChanged(lock)
         }
+        hideController()
     }
 
     override fun isLocked(): Boolean {
-        return islock
+        return this.islock
     }
 
 

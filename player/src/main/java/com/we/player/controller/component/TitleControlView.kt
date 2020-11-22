@@ -81,7 +81,7 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.back -> {
-                mediaPlayerController?.stopFullScreen()
+                mediaPlayerController?.onBackPressed()
             }
         }
     }
