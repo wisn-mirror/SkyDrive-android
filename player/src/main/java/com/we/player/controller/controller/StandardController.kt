@@ -5,8 +5,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.widget.ImageView
-import androidx.core.view.isGone
-import com.blankj.utilcode.util.LogUtils
 import com.we.player.R
 import com.we.player.controller.component.*
 
@@ -32,8 +30,8 @@ class StandardController : GestureController, View.OnClickListener {
         lock_right = findViewById(R.id.lock_right)
         lock_left?.setOnClickListener(this)
         lock_right?.setOnClickListener(this)
-        lock_left?.visibility= GONE
-        lock_right?.visibility= GONE
+        lock_left?.visibility = GONE
+        lock_right?.visibility = GONE
     }
 
     override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {

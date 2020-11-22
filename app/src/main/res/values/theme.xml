@@ -29,6 +29,10 @@
 
 
     <style name="AppTheme" parent="QMUI.Compat.NoActionBar">
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowBackground">@drawable/start</item>
         <item name="qmui_skin_support_color_background">@color/qmui_config_color_background</item>
         <item name="qmui_skin_support_topbar_bg">@color/app_color_blue</item>
         <item name="QMUITopBarStyle">@style/QDTopBar</item>
