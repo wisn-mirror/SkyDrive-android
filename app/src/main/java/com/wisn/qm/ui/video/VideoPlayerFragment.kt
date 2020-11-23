@@ -1,8 +1,10 @@
 package com.wisn.qm.ui.video
 
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import com.blankj.utilcode.util.LogUtils
 import com.qmuiteam.qmui.arch.QMUIFragment
 import com.we.player.controller.controller.StandardController
 import com.we.player.controller.component.PlayControlView
@@ -20,6 +22,8 @@ import com.wisn.qm.R
  * @CreateDate: 2020/11/13 下午3:15
  */
 class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
+    val TAG: String = "VideoPlayerFragment"
+
     var videoview: VideoView? = null
     var speedsBt: Button? = null
     override fun onCreateView(): View {
@@ -47,6 +51,12 @@ class VideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         speedsBt = rootView.findViewById(R.id.Speeds)
         speedsBt?.setOnClickListener(this)
 
+
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        LogUtils.d(TAG, " onOrientationChanged  onConfigurationChanged!!!! $newConfig")
 
     }
 

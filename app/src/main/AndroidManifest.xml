@@ -51,7 +51,13 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             />
-        <!--  android:launchMode="singleTask"  -->
+        <!--              android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode"
+                    android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+
+
+
+        android:launchMode="singleTask"             android:screenOrientation="portrait"
+ -->
     </application>
 
 </manifest>

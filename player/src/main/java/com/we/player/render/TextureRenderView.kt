@@ -6,6 +6,7 @@ import android.graphics.SurfaceTexture
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
+import com.we.player.helper.MeasureHelper
 import com.we.player.player.APlayer
 
 /**

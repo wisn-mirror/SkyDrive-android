@@ -7,6 +7,7 @@ import android.view.animation.Animation
 import android.widget.ImageView
 import com.we.player.R
 import com.we.player.controller.component.*
+import com.we.player.player.PlayStatus
 
 /**
  *
@@ -51,6 +52,24 @@ class StandardController : GestureController, View.OnClickListener {
         }
     }
 
+    override fun onLockStateChanged(isLocked: Boolean) {
+        super.onLockStateChanged(isLocked)
+        if (islock) {
+            lock_left?.isSelected = true
+            lock_right?.isSelected = true
+        } else {
+            lock_left?.isSelected = false
+            lock_right?.isSelected = false
+        }
+    }
+
+    override fun setPlayStatus(status: Int) {
+        super.setPlayStatus(status)
+        if (status == PlayStatus.PLAYER_NORMAL) {
+            lock_left?.visibility = GONE
+            lock_right?.visibility = GONE
+        }
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.item_controller_standard
@@ -60,8 +79,6 @@ class StandardController : GestureController, View.OnClickListener {
         when (p0?.id) {
             R.id.lock_right, R.id.lock_left -> {
                 setLocked(!islock)
-
-
             }
 
         }

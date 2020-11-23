@@ -44,6 +44,7 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
      * 开始滑动
      */
     override fun onGestureStartSlide() {
+        visibility=View.VISIBLE
         center_container?.visibility = View.VISIBLE
     }
 
@@ -51,6 +52,7 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
      * 结束滑动
      */
     override fun onGestureStopSlide() {
+        visibility=View.GONE
         center_container?.visibility = View.GONE
 
     }

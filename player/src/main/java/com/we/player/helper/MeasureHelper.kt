@@ -1,4 +1,4 @@
-package com.we.player.render
+package com.we.player.helper
 
 import android.view.View
 import com.we.player.player.ScreenConfig

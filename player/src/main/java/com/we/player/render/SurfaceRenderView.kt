@@ -6,6 +6,7 @@ import android.graphics.PixelFormat
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
+import com.we.player.helper.MeasureHelper
 import com.we.player.player.APlayer
 
 /**

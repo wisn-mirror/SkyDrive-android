@@ -24,7 +24,6 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
 
     var TAG: String? = "TitleControlView"
 
-
     var mediaPlayerController: MediaPlayerController? = null
     var iViewController: IViewController? = null
     var back: ImageView? = null
@@ -54,18 +53,27 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
     }
 
     override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
+        if (isVisible) {
+            val fullScreen = mediaPlayerController?.isFullScreen()!!
+            val islocked = iViewController?.isLocked()!!
+            if (fullScreen && !islocked) {
+                visibility = VISIBLE
+            } else {
+                visibility = GONE
+            }
+        } else {
+            visibility = GONE
 
-
+        }
     }
 
     override fun onPlayStateChanged(playState: Int) {
         LogUtils.d(TAG, "onPlayStateChanged  $playState  ${PlayStatusStr.getStatusStr(playState)} ")
-
         when (playState) {
             PlayStatus.PLAYER_FULL_SCREEN -> {
                 visibility = VISIBLE
             }
-            else -> {
+            PlayStatus.PLAYER_NORMAL -> {
                 visibility = GONE
             }
         }

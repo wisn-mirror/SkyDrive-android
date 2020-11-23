@@ -11,7 +11,6 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import com.blankj.utilcode.util.LogUtils
 import com.library.base.BaseApp
@@ -85,7 +84,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
         VideoView@ this.addView(mPlayerContainer, LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT))
-        if(mPlayerBackgroundColor!=-1){
+        if (mPlayerBackgroundColor != -1) {
             mPlayerContainer.setBackgroundColor(mPlayerBackgroundColor)
         }
         mPlayerContainer
@@ -139,11 +138,11 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun getDuration(): Long {
-        return mAPlayer?.getDuration()?:0
+        return mAPlayer?.getDuration() ?: 0
     }
 
     override fun getCurrentPosition(): Long {
-        return mAPlayer?.getCurrentPosition()?:0
+        return mAPlayer?.getCurrentPosition() ?: 0
     }
 
     override fun getRefreshTime(): Long {
@@ -156,11 +155,11 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun isPlaying(): Boolean {
 
-        return mAPlayer?.isPlaying()?:false
+        return mAPlayer?.isPlaying() ?: false
     }
 
     override fun getBufferedPercentage(): Int {
-        return mAPlayer?.getBufferedPercentage()?:0
+        return mAPlayer?.getBufferedPercentage() ?: 0
     }
 
     override fun setSpeed(speed: Float) {
@@ -169,7 +168,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun getSpeed(): Float {
-        return mAPlayer?.geSpeed()?:1f
+        return mAPlayer?.geSpeed() ?: 1f
     }
 
     override fun setLooping(looping: Boolean) {
@@ -224,16 +223,18 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
 
-    override fun startFullScreen() {
+    override fun startFullScreen(requestedOrientation: Int) {
         setPlayStatus(PlayStatus.PLAYER_FULL_SCREEN)
-        activity = PlayerUtils.scanForActivity(context)
+        if (activity == null) {
+            activity = PlayerUtils.scanForActivity(context)
+        }
         decodeView = PlayerUtils.getDecorViewByActivity(activity)
         decodeView?.let {
             this.removeView(mPlayerContainer)
             decodeView?.addView(mPlayerContainer, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT))
-            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+            activity?.requestedOrientation = requestedOrientation
             isFull = true
             var uiOptions: Int = decodeView!!.getSystemUiVisibility()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -251,10 +252,16 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun stopFullScreen() {
         setPlayStatus(PlayStatus.PLAYER_NORMAL)
+        if (!isFull) {
+            return
+        }
+        if (activity == null) {
+            activity = PlayerUtils.scanForActivity(context)
+        }
         decodeView?.let {
             decodeView?.removeView(mPlayerContainer)
             this.addView(mPlayerContainer)
-            activity?.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             isFull = false
             var uiOptions: Int = decodeView!!.getSystemUiVisibility()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -288,7 +295,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
 
     override fun onBackPressed(): Boolean {
-        return iViewController?.onBackPressed()?:false
+        return iViewController?.onBackPressed() ?: false
     }
 
     /////////////////播放器的回调//////////////////////////

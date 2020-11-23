@@ -1,6 +1,7 @@
 package com.we.player.controller.component
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -64,8 +65,8 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
 
         if (isVisible) {
             val fullScreen = mediaPlayerController?.isFullScreen()!!
-            val islocked =iViewController?.isLocked()!!
-            if ( fullScreen&&islocked) {
+            val islocked = iViewController?.isLocked()!!
+            if (fullScreen && islocked) {
                 bottom_progress?.visibility = GONE
                 bottom_container?.visibility = GONE
             } else {
@@ -84,6 +85,12 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
     override fun onPlayStateChanged(playState: Int) {
         LogUtils.d(TAG, "onPlayStateChanged", playState)
         when (playState) {
+            PlayStatus.PLAYER_FULL_SCREEN -> {
+                fullscreen?.isSelected = true
+            }
+            PlayStatus.PLAYER_NORMAL -> {
+                fullscreen?.isSelected = false
+            }
             PlayStatus.STATE_IDLE,
             PlayStatus.STATE_PLAYBACK_COMPLETED -> {
                 bottom_progress?.progress = 0
@@ -146,7 +153,7 @@ class PlayControlView : FrameLayout, IViewItemController, View.OnClickListener, 
             R.id.fullscreen -> {
                 val isFull = mediaPlayerController?.isFullScreen()
                 if (isFull == null || !isFull) {
-                    mediaPlayerController?.startFullScreen()
+                    mediaPlayerController?.startFullScreen(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                 } else {
                     mediaPlayerController?.stopFullScreen()
                 }

@@ -1,4 +1,4 @@
-package com.we.player.player
+package com.we.player.helper
 
 import android.content.Context
 import android.media.AudioManager
