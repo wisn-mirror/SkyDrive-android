@@ -4,7 +4,6 @@ startTime=$(date +%s)
 WORKSPACERoot=$(cd `dirname $0`;cd ..; pwd)
 echo ${WORKSPACERoot}
 WORKSPACE=${WORKSPACERoot}/app
-buildtools25=/Users/mac/Library/Android/sdk/build-tools/25.0.2
 backup_Dir=${WORKSPACERoot}/apppackage/lastreleaseapp
 BuildLog=${WORKSPACERoot}/apppackage
 
@@ -18,6 +17,8 @@ RELEASE_KEY_PASSWORD=$(prop "RELEASE_KEY_PASSWORD")
 RELEASE_STOREFILE=$(prop "RELEASE_STOREFILE")
 RELEASE_STOREPASSWORD=$(prop "RELEASE_STOREPASSWORD")
 RELEASE_KEY_ALIAS=$(prop "RELEASE_KEY_ALIAS")
+buildtools25=$(prop "sdk.dir")/build-tools/25.0.2
+
 #这种方法不能处理key中包含.的情况
 #while read line;
 #do
@@ -30,6 +31,8 @@ echo keypassword :${RELEASE_KEY_PASSWORD}
 echo keyPath :${RELEASE_STOREFILE}
 echo password :${RELEASE_STOREPASSWORD}
 echo alias :${RELEASE_KEY_ALIAS}
+echo sdkdir :${buildtools25}
+
 
 
 #开始打包
