@@ -25,6 +25,8 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
     var mediaPlayer: MediaPlayer? = null
     private var mIsPreparing = false
     private var mBufferedPercent = 0
+    var lastVolume: Float = 1f
+    var lastIsMulte: Boolean = false
 
     override fun initPlayer() {
         mediaPlayer = MediaPlayer()
@@ -153,7 +155,9 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
     }
 
     override fun setVolume(v1: Float, v2: Float) {
+        lastVolume = (v1 + v2) / 2
         mediaPlayer?.setVolume(v1, v2)
+        lastIsMulte = lastVolume == 0f
     }
 
     override fun geSpeed(): Float {
@@ -165,6 +169,21 @@ class AndroidMediaPlayer(var app: Application) : APlayer() {
             }
         }
         return 1f
+    }
+
+    override fun toggleMulteReturnCurrent(): Boolean {
+        if (lastVolume == 0f) {
+            lastIsMulte = true
+        }
+        if (lastIsMulte) {
+            mediaPlayer?.setVolume(lastVolume, lastVolume)
+            lastIsMulte = false
+        } else {
+            mediaPlayer?.setVolume(0f, 0f)
+            lastIsMulte = true
+        }
+
+        return lastIsMulte
     }
 
     override fun getBufferedPercentage(): Int {

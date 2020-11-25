@@ -10,9 +10,14 @@
             android:gravity="bottom"
             android:src="@drawable/splash_theme_logo" />
     </item>-->
-    <item >
+  <!--  <item >
         <bitmap
             android:gravity="center"
+            android:src="@drawable/splash_theme_logo" />
+    </item>-->
+    <item  android:bottom="80dp">
+        <bitmap
+            android:gravity="bottom|center_horizontal"
             android:src="@drawable/splash_theme_logo" />
     </item>
 </layer-list>

@@ -18,15 +18,20 @@ import com.we.player.player.PlayStatus
 class StandardController : GestureController, View.OnClickListener {
     var lock_left: ImageView? = null
     var lock_right: ImageView? = null
+    var previewControlView: PreviewControlView? = null
+    var titleControlView: TitleControlView? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
-        addIViewItemControllerOne(PreviewControlView(context))
+        previewControlView = PreviewControlView(context)
+        titleControlView = TitleControlView(context)
+
+        addIViewItemControllerOne(previewControlView!!)
         addIViewItemControllerOne(ErrorControlView(context))
         addIViewItemControllerOne(PlayControlView(context))
         addIViewItemControllerOne(GestureControlView(context))
-        addIViewItemControllerOne(TitleControlView(context))
+        addIViewItemControllerOne( titleControlView!!)
         lock_left = findViewById(R.id.lock_left)
         lock_right = findViewById(R.id.lock_right)
         lock_left?.setOnClickListener(this)
@@ -80,7 +85,6 @@ class StandardController : GestureController, View.OnClickListener {
             R.id.lock_right, R.id.lock_left -> {
                 setLocked(!islock)
             }
-
         }
     }
 

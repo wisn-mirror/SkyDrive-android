@@ -7,6 +7,7 @@ import android.graphics.Point
 import android.os.Build
 import android.util.TypedValue
 import android.view.*
+import com.library.base.BaseApp
 
 /**
  *
@@ -95,6 +96,16 @@ object PlayerUtils {
             val back = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK)
             !(menu || back)
         }
+    }
+
+    /**
+     * 获取状态栏高度
+     * @param context
+     * @return
+     */
+    fun getStatusBarHeight(): Int {
+        val resourceId: Int = BaseApp.app.resources.getIdentifier("status_bar_height", "dimen", "android")
+        return BaseApp.app.resources.getDimensionPixelSize(resourceId)
     }
 
     /**

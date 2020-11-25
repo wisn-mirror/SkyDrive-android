@@ -1,7 +1,6 @@
 package com.wisn.qm.ui.check
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.text.method.ScrollingMovementMethod
@@ -22,7 +21,7 @@ import com.wisn.qm.R
 import com.wisn.qm.databinding.FragmentNetcheckBinding
 import com.wisn.qm.ui.home.HomeFragment
 import com.wisn.qm.ui.user.LoginFragment
-import com.wisn.qm.ui.video.VideoPlayerFragment
+import com.wisn.qm.ui.video.TestVideoPlayerFragment
 
 
 /**
@@ -61,7 +60,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
             }
             viewModel.setServerIp("$sp1.$sp2.$sp3.$sp4")
 
-            startFragment(VideoPlayerFragment())
+            startFragment(TestVideoPlayerFragment())
         }
         viewModel.getResult().observe(this, Observer {
             val text = dataBinding?.result?.text;

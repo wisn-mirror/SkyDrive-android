@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/we_shape_stardard_controller_top_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">

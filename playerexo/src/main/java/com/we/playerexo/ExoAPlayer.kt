@@ -32,6 +32,8 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
     private var mLastReportedPlayWhenReady = false
     private var mIsPreparing = false
     private var mIsBuffering = false
+    var lastIsMulte: Boolean = false
+
 
     private val mMediaSourceEventListener: MediaSourceEventListener = object : MediaSourceEventListener {
         fun onReadingStarted(windowIndex: Int, mediaPeriodId: MediaPeriodId?) {
@@ -113,6 +115,19 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun setVolume(v1: Float, v2: Float) {
         simpleExoPlayer?.volume = (v1 + v2) / 2;
+    }
+
+    override fun toggleMulteReturnCurrent(): Boolean {
+        if (simpleExoPlayer?.volume == 0f) {
+            lastIsMulte = true
+        }
+        if (lastIsMulte) {
+            simpleExoPlayer?.volume = 1f
+        } else {
+            simpleExoPlayer?.volume = 0f
+        }
+        lastIsMulte = simpleExoPlayer?.volume == 0f
+        return lastIsMulte
     }
 
     override fun geSpeed(): Float {

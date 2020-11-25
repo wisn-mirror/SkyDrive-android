@@ -12,6 +12,7 @@ import com.we.player.controller.IViewController
 import com.we.player.controller.IViewItemController
 import com.we.player.player.PlayStatus
 import com.we.player.player.PlayStatusStr
+import com.we.player.utils.PlayerUtils
 import com.we.player.view.MediaPlayerController
 
 /**
@@ -24,23 +25,27 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
 
     var TAG: String? = "TitleControlView"
 
+    var backListener: BackListener? = null
     var mediaPlayerController: MediaPlayerController? = null
     var iViewController: IViewController? = null
     var back: ImageView? = null
     var title: TextView? = null
     var sys_time: TextView? = null
     var battery: TextView? = null
+    var bottom_container: LinearLayout? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
         LayoutInflater.from(getContext()).inflate(R.layout.item_controller_title, this, true)
+        bottom_container = findViewById(R.id.bottom_container)
         back = findViewById(R.id.back)
         title = findViewById(R.id.title)
         sys_time = findViewById(R.id.sys_time)
         battery = findViewById(R.id.battery)
         back?.setOnClickListener(this)
-        visibility = GONE
+        visibility = View.VISIBLE
+        bottom_container?.setPadding(0, PlayerUtils.getStatusBarHeight(), 0, 0)
     }
 
     override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
@@ -54,9 +59,10 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
 
     override fun onVisibilityChanged(isVisible: Boolean, anim: Animation?) {
         if (isVisible) {
-            val fullScreen = mediaPlayerController?.isFullScreen()!!
+//            val fullScreen = mediaPlayerController?.isFullScreen()!!
             val islocked = iViewController?.isLocked()!!
-            if (fullScreen && !islocked) {
+//            if (fullScreen && !islocked) {
+            if (!islocked) {
                 visibility = VISIBLE
             } else {
                 visibility = GONE
@@ -89,8 +95,18 @@ class TitleControlView : FrameLayout, IViewItemController, View.OnClickListener 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.back -> {
-                mediaPlayerController?.onBackPressed()
+                if(mediaPlayerController?.isFullScreen()!!){
+                    mediaPlayerController?.onBackPressed()
+
+                }else{
+                    backListener?.back()
+                }
             }
+        }
+    }
+    interface BackListener{
+        fun back(){
+
         }
     }
 

@@ -49,8 +49,8 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
 
 
     override fun attach(mediaPlayerController: MediaPlayerController?, iViewController: IViewController) {
-        this.mediaPlayerController=mediaPlayerController
-        this.iViewController=iViewController
+        this.mediaPlayerController = mediaPlayerController
+        this.iViewController = iViewController
     }
 
     override fun getView(): View {
@@ -63,24 +63,27 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
     }
 
     override fun onPlayStateChanged(playState: Int) {
-        LogUtils.d(TAG, "onPlayStateChanged  $playState  ${PlayStatusStr.getStatusStr(playState)} " )
+        LogUtils.d(TAG, "onPlayStateChanged  $playState  ${PlayStatusStr.getStatusStr(playState)} ")
 
         when (playState) {
             PlayStatus.STATE_START_ABORT -> {
                 ll_net_tip?.visibility = View.VISIBLE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
+                thumb?.visibility = View.GONE
 
             }
-            PlayStatus.STATE_BUFFERED->{
+            PlayStatus.STATE_BUFFERED -> {
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
+                thumb?.visibility = View.GONE
             }
             PlayStatus.STATE_PREPARING -> {
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.VISIBLE
+                thumb?.visibility = View.VISIBLE
             }
 
             PlayStatus.STATE_PAUSED -> {
@@ -88,6 +91,7 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
                 start_play?.isSelected = false
                 start_play?.visibility = View.VISIBLE
                 loading?.visibility = View.GONE
+                thumb?.visibility = View.GONE
 
             }
             PlayStatus.STATE_PLAYING -> {
@@ -95,6 +99,7 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
                 start_play?.isSelected = true
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
+                thumb?.visibility = View.GONE
             }
 
             PlayStatus.STATE_ERROR,
@@ -105,7 +110,7 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
-
+                thumb?.visibility = View.GONE
             }
         }
     }
@@ -128,5 +133,6 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             }
         }
     }
+
 
 }

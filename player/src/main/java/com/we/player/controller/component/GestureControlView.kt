@@ -104,6 +104,7 @@ class GestureControlView : FrameLayout, IGestureViewItemController, View.OnClick
         this.mediaPlayerController=mediaPlayerController
         this.iViewController=iViewController
     }
+
     override fun getView(): View {
         return this
     }

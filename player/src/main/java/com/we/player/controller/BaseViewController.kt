@@ -96,6 +96,9 @@ abstract class BaseViewController : FrameLayout, IViewController, OrientationEve
         if (activity?.isFinishing()!!) {
             return
         }
+        if (!mediaPlayerController?.isFullScreen()!! && !mediaPlayerController?.isPlaying()!!) {
+            return
+        }
 
         //记录用户手机上一次放置的位置
         val lastOrientation: Int = mOrientation

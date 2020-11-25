@@ -3,7 +3,6 @@ package com.we.player.view
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
-import android.content.res.AssetFileDescriptor
 import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -128,6 +127,11 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             addDisplay()
             startPrepare(false)
             mAPlayer?.setLooping(isLoop)
+            if (isMute) {
+                mAPlayer?.setVolume(0f, 0f)
+            } else {
+                mAPlayer?.setVolume(1f, 1f)
+            }
         }
     }
 
@@ -366,8 +370,6 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             : String? = null
     protected var mHeaders //当前视频地址的请求头
             : Map<String, String>? = null
-    protected var mAssetFileDescriptor //assets文件
-            : AssetFileDescriptor? = null
 
     /**
      * 设置视频地址
@@ -383,7 +385,6 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
      * @param headers 请求头
      */
     open fun setUrl(url: String, headers: Map<String, String>?) {
-        mAssetFileDescriptor = null
         mUrl = url
         mHeaders = headers
     }

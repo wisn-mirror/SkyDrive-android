@@ -46,7 +46,7 @@ interface MediaPlayerController {
     fun setVideoRotation(rotation: Int)
 
 
-    fun startFullScreen( requestedOrientation:Int)
+    fun startFullScreen(requestedOrientation: Int)
 
     fun stopFullScreen()
 

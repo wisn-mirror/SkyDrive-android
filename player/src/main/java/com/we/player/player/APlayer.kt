@@ -93,6 +93,11 @@ abstract class APlayer {
     abstract fun geSpeed(): Float
 
     /**
+     * 是否静音，并返回当前状态
+     */
+    abstract fun toggleMulteReturnCurrent(): Boolean
+
+    /**
      * 获取缓冲百分比
      */
     abstract fun getBufferedPercentage(): Int
