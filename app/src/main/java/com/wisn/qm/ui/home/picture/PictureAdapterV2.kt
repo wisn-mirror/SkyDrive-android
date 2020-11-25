@@ -4,6 +4,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
+import com.library.base.utils.GlideUtils
 import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
 import com.wisn.qm.databinding.RvItemPictureImageBinding
@@ -26,6 +27,7 @@ class PictureAdapterV2(pictureController: PictureCallBack?) : BaseMultiItemQuick
     init {
         addItemType(FileType.TimeTitle, R.layout.rv_item_picture_title)
         addItemType(FileType.ImageViewItem, R.layout.rv_item_picture_image)
+        addItemType(FileType.VideoViewItem, R.layout.rv_item_picture_image)
         this.pictureController = pictureController!!
     }
 
@@ -49,7 +51,7 @@ class PictureAdapterV2(pictureController: PictureCallBack?) : BaseMultiItemQuick
         if (viewType == FileType.TimeTitle) {
             viewHolder.setDataBinding<RvItemPictureImageBinding>(viewHolder.itemView)
 //            viewHolder.dataBinding = DataBindingUtil.bind<RvItemPictureImageBinding>(viewHolder.itemView)
-        } else if (viewType == FileType.ImageViewItem) {
+        } else if (viewType == FileType.ImageViewItem||viewType == FileType.VideoViewItem) {
             viewHolder.setDataBinding<RvItemPictureTitleBinding>(viewHolder.itemView)
 //            viewHolder.dataBinding = DataBindingUtil.bind<RvItemPictureTitleBinding>(viewHolder.itemView)
         }
@@ -67,9 +69,10 @@ class PictureAdapterV2(pictureController: PictureCallBack?) : BaseMultiItemQuick
             val dataBinding = holder.getDataBinding<RvItemPictureImageBinding>()
 //            LogUtils.d(item.filePath)
             dataBinding?.image?.let {
-                Glide.with(context).load(File(item.filePath!!))
-                        .apply(RequestOptions())
-                        .into(it)
+                GlideUtils.load(item.filePath!!,it)
+//                Glide.with(context).load(File(item.filePath!!))
+//                        .apply(RequestOptions())
+//                        .into(it)
                 dataBinding.image.setOnLongClickListener(View.OnLongClickListener {
                     if (!isSelectModel) {
                         map.clear()

@@ -1,7 +1,10 @@
 package com.wisn.qm.ui.preview
 
 import android.view.View
+import androidx.annotation.Px
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.blankj.utilcode.util.ToastUtils
 import com.library.base.BaseFragment
 import com.library.base.base.NoViewModel
@@ -30,7 +33,24 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
         dataBinding?.vpContent?.adapter = PreviewAdapter(data, this@PreviewFragment)
 
         dataBinding?.vpContent?.setCurrentItem(position, false)
+        dataBinding?.vpContent?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
+            override fun onPageScrolled(position: Int, positionOffset: Float,
+                                        @Px positionOffsetPixels: Int) {
+
+            }
+
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+
+            override fun onPageScrollStateChanged(@ScrollState state: Int) {
+
+            }
+
+        })
         dataBinding?.tvAddto?.onClick {
             val values = mHomeViewModel.getUserDirlist().value;
             var addItem = View.inflate(context, R.layout.item_album_new_album, null)
@@ -42,7 +62,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
                         .setAddCancelBtn(true)
                         .setAllowDrag(true)
                         .setNeedRightMark(true)
-                        .setOnSheetItemClickListener { dialog, itemView, position, tag  ->
+                        .setOnSheetItemClickListener { dialog, itemView, position, tag ->
                             dialog.dismiss()
                             mHomeViewModel.saveMedianInfo(position)
                             ToastUtils.showShort("已经添加到上传任务")
@@ -74,6 +94,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
     override fun onFetchTransitionConfig(): TransitionConfig {
         return SCALE_TRANSITION_CONFIG
     }
+
     override fun onContentClick(view: View) {
         if (dataBinding?.groupContent?.visibility == View.GONE) {
             dataBinding?.groupContent?.visibility = View.VISIBLE

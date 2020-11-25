@@ -134,11 +134,18 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             }
         }
     }
+    override fun stop() {
+        mAPlayer?.stop()
+    }
 
     override fun pause() {
         mAPlayer?.pause()
         setPlayStatus(PlayStatus.STATE_PAUSED)
 
+    }
+
+    override fun release() {
+        mAPlayer?.release()
     }
 
     override fun getDuration(): Long {

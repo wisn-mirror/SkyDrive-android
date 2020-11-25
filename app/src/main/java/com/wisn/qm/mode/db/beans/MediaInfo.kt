@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.google.gson.annotations.SerializedName
+import com.wisn.qm.mode.bean.FileType
 import java.io.Serializable
 
 @Entity(tableName = "mediainfo")
@@ -61,12 +62,20 @@ data class MediaInfo(
 
         @ColumnInfo(name = "height")
         @SerializedName("height")
-        var height: Int?,
-
-        override var itemType: Int = 0
+        var height: Int?
 
 
 ) :Serializable, MultiItemEntity {
+
+    override var itemType: Int = 0
+    get() {
+        if(isVideo!!){
+            return FileType.VideoViewItem
+        }else{
+            return FileType.ImageViewItem
+        }
+    }
+
 
     @ColumnInfo(name = "pid")
     @SerializedName("pid")

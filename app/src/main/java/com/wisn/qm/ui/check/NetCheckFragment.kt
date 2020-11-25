@@ -60,7 +60,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
             }
             viewModel.setServerIp("$sp1.$sp2.$sp3.$sp4")
 
-            startFragment(TestVideoPlayerFragment())
+//            startFragment(TestVideoPlayerFragment())
         }
         viewModel.getResult().observe(this, Observer {
             val text = dataBinding?.result?.text;

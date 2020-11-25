@@ -1,5 +1,6 @@
 package com.wisn.qm.ui.preview
 
+import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
 import com.wisn.qm.mode.db.beans.MediaInfo
 
-class PreviewViewHolder(view: View, var previewCallback: PreviewCallback) : RecyclerView.ViewHolder(view) {
+class PreviewImageViewHolder(var context: Context, view: View, var previewCallback: PreviewCallback) : BasePreviewHolder(view) {
     var iv_image: SubsamplingScaleImageView = view.findViewById(R.id.iv_image)
     var gif_view: PhotoView = view.findViewById(R.id.gif_view)
 
@@ -34,11 +35,11 @@ class PreviewViewHolder(view: View, var previewCallback: PreviewCallback) : Recy
         gif_view.setScaleType(ImageView.ScaleType.FIT_CENTER)
     }
 
-    fun loadImage(mediainfo: MediaInfo) {
+    override fun loadImage(mediainfo: MediaInfo) {
         iv_image.setImage(ImageSource.uri(mediainfo.filePath!!))
     }
 
-    fun loadVideo(mediainfo: MediaInfo) {
+    override fun loadVideo(mediainfo: MediaInfo) {
 
     }
 

@@ -25,6 +25,7 @@ class SelectPictureAdapter(selectPictureCallBack: SelectPictureCallBack?) : Base
     init {
         addItemType(FileType.TimeTitle, R.layout.rv_item_picture_title)
         addItemType(FileType.ImageViewItem, R.layout.rv_item_picture_image)
+        addItemType(FileType.VideoViewItem, R.layout.rv_item_picture_image)
         this.selectPictureCallBack = selectPictureCallBack!!
     }
 
@@ -48,7 +49,7 @@ class SelectPictureAdapter(selectPictureCallBack: SelectPictureCallBack?) : Base
         if (viewType == FileType.TimeTitle) {
             viewHolder.setDataBinding<RvItemPictureImageBinding>(viewHolder.itemView)
 //            viewHolder.dataBinding = DataBindingUtil.bind<RvItemPictureImageBinding>(viewHolder.itemView)
-        } else if (viewType == FileType.ImageViewItem) {
+        } else if (viewType == FileType.ImageViewItem||viewType == FileType.VideoViewItem) {
             viewHolder.setDataBinding<RvItemPictureTitleBinding>(viewHolder.itemView)
 //            viewHolder.dataBinding = DataBindingUtil.bind<RvItemPictureTitleBinding>(viewHolder.itemView)
         }

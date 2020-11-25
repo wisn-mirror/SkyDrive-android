@@ -61,5 +61,9 @@ interface MediaPlayerController {
 
     fun onBackPressed(): Boolean
 
+    fun stop()
+
+    fun release()
+
 
 }
