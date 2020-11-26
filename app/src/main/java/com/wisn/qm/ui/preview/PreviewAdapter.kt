@@ -7,7 +7,7 @@ import com.wisn.qm.R
 import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.MediaInfo
 
-class PreviewAdapter(var data: MutableList<MediaInfo>,var previewCallback:PreviewCallback ) : RecyclerView.Adapter<BasePreviewHolder>() {
+class PreviewAdapter(var data: MutableList<MediaInfo>, var previewCallback: PreviewCallback) : RecyclerView.Adapter<BasePreviewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasePreviewHolder {
         if (viewType == FileType.ImageViewItem) {
@@ -21,15 +21,17 @@ class PreviewAdapter(var data: MutableList<MediaInfo>,var previewCallback:Previe
 
     override fun onBindViewHolder(holder: BasePreviewHolder, position: Int) {
         if (getItemViewType(position) == FileType.ImageViewItem) {
-            holder.loadImage(data.get(position))
+            holder.loadImage(position,data.get(position))
         } else {
-            holder.loadVideo(data.get(position))
+            holder.loadVideo(position,data.get(position))
         }
     }
 
     override fun onViewDetachedFromWindow(holder: BasePreviewHolder) {
         super.onViewDetachedFromWindow(holder)
-        holder.releaseVideo()
+        if (holder is PreviewVideoViewHolder) {
+            holder.releaseVideo(holder.adapterPosition)
+        }
 
     }
 

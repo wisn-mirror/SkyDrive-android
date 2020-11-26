@@ -16,17 +16,13 @@ import com.we.player.player.PlayStatus
  * @Author: Wisn
  * @CreateDate: 2020/11/15 上午10:39
  */
-class PreviewVideoController : BaseViewController, View.OnClickListener {
+class ListVideoController : BaseViewController, View.OnClickListener {
     var lock_left: ImageView? = null
     var lock_right: ImageView? = null
-    var previewControlView: PreviewControlView? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
-        previewControlView = PreviewControlView(context)
-
-        addIViewItemControllerOne(previewControlView!!)
         addIViewItemControllerOne(ErrorControlView(context))
         addIViewItemControllerOne(PlayControlView(context))
         lock_left = findViewById(R.id.lock_left)

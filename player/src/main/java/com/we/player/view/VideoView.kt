@@ -54,7 +54,7 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     var currentState: Int? = PlayStatus.STATE_IDLE
     var mediaPlayer: PlayerFactory<APlayer>? = null
     private var mIRenderView: IRenderView? = null
-    var renderViewFactory: RenderViewFactory<IRenderView> ?= null
+    var renderViewFactory: RenderViewFactory<IRenderView>? = null
 
     var iViewController: BaseViewController? = null
         set(value) {
@@ -94,8 +94,8 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     fun addDisplay() {
 
-        if (mIRenderView == null ) {
-            mIRenderView= renderViewFactory?.createIRenderView(context)
+        if (mIRenderView == null) {
+            mIRenderView = renderViewFactory?.createIRenderView(context)
         }
         if (mIRenderView == null || mAPlayer == null) {
             return
@@ -140,25 +140,38 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
             }
         }
     }
+
     override fun stop() {
-        mAPlayer?.stop()
-        setPlayStatus(PlayStatus.STATE_IDLE)
+        mAPlayer?.let {
+            if (PlayStatus.isPlayingStatus(currentState) && it.isPlaying()) {
+                it?.stop()
+                setPlayStatus(PlayStatus.STATE_IDLE)
+            }
+        }
+
 
     }
 
     override fun pause() {
-        mAPlayer?.pause()
-        setPlayStatus(PlayStatus.STATE_PAUSED)
+        mAPlayer?.let {
+            if (PlayStatus.isPlayingStatus(currentState) && it.isPlaying()) {
+                it.pause()
+                setPlayStatus(PlayStatus.STATE_PAUSED)
+            }
+        }
 
     }
 
     override fun release() {
+        if (currentState == PlayStatus.STATE_IDLE) {
+            return
+        }
         mAPlayer?.release()
         mIRenderView?.let {
             mPlayerContainer?.removeView(it.getRenderView())
             it.release()
         }
-        mIRenderView=null
+        mIRenderView = null
         setPlayStatus(PlayStatus.STATE_IDLE)
     }
 

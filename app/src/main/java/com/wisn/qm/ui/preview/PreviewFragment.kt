@@ -3,6 +3,7 @@ package com.wisn.qm.ui.preview
 import android.view.View
 import androidx.annotation.Px
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
 import com.blankj.utilcode.util.ToastUtils
@@ -38,6 +39,8 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
             override fun onPageScrolled(position: Int, positionOffset: Float,
                                         @Px positionOffsetPixels: Int) {
 
+
+
             }
 
 
@@ -51,6 +54,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
             }
 
         })
+
         dataBinding?.tvAddto?.onClick {
             val values = mHomeViewModel.getUserDirlist().value;
             var addItem = View.inflate(context, R.layout.item_album_new_album, null)

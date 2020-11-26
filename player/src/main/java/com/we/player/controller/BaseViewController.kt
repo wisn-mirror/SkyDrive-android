@@ -278,14 +278,20 @@ abstract class BaseViewController : FrameLayout, IViewController, OrientationEve
         }
     }
 
-    fun addIViewItemControllerOne(iviewItemController: IViewItemController) {
+    fun addIViewItemControllerOne(iviewItemController: IViewItemController,isPrivate:Boolean) {
         this.iviewItemControllers.add(iviewItemController)
         removeView(iviewItemController.getView())
-        addView(iviewItemController.getView())
+        if(!isPrivate){
+            addView(iviewItemController.getView())
+        }
         iviewItemController.attach(mediaPlayerController, this)
         if (iviewItemController is IGestureViewItemController) {
             IGestureViewItemControllers.add(iviewItemController)
         }
+    }
+
+    fun addIViewItemControllerOne(iviewItemController: IViewItemController) {
+        addIViewItemControllerOne(iviewItemController,false)
     }
 
     override fun onBackPressed(): Boolean {

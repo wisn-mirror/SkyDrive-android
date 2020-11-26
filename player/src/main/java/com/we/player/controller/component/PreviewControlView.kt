@@ -32,6 +32,7 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
     var ll_net_tip: LinearLayout? = null
     var message: TextView? = null
     var status_btn: TextView? = null
+    var playClick: PlayClick? = null
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
@@ -104,13 +105,20 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
 
             PlayStatus.STATE_ERROR,
             PlayStatus.STATE_PREPARED,
-            PlayStatus.STATE_IDLE,
             PlayStatus.STATE_PLAYBACK_COMPLETED,
             PlayStatus.STATE_BUFFERING -> {
                 ll_net_tip?.visibility = View.GONE
                 start_play?.visibility = View.GONE
                 loading?.visibility = View.GONE
                 thumb?.visibility = View.GONE
+            }
+            PlayStatus.STATE_IDLE -> {
+                ll_net_tip?.visibility = View.GONE
+                start_play?.visibility = View.VISIBLE
+                loading?.visibility = View.GONE
+                thumb?.visibility = View.VISIBLE
+                start_play?.isSelected = false
+
             }
         }
     }
@@ -126,13 +134,20 @@ class PreviewControlView : FrameLayout, IViewItemController, View.OnClickListene
             R.id.status_btn -> {
                 //继续播放
                 mediaPlayerController?.start()
+
             }
             R.id.start_play -> {
+                if (playClick != null && playClick!!.click()) {
+                    return
+                }
                 //开始播放
                 mediaPlayerController?.togglePlay()
             }
         }
     }
 
+    interface PlayClick {
+        fun click(): Boolean
+    }
 
 }

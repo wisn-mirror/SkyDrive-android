@@ -3,7 +3,6 @@ package com.wisn.qm.ui.preview
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
-import androidx.recyclerview.widget.RecyclerView
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.chrisbanes.photoview.PhotoView
@@ -35,11 +34,11 @@ class PreviewImageViewHolder(var context: Context, view: View, var previewCallba
         gif_view.setScaleType(ImageView.ScaleType.FIT_CENTER)
     }
 
-    override fun loadImage(mediainfo: MediaInfo) {
+    override fun loadImage(position:Int,mediainfo: MediaInfo) {
         iv_image.setImage(ImageSource.uri(mediainfo.filePath!!))
     }
 
-    override fun loadVideo(mediainfo: MediaInfo) {
+    override fun loadVideo(position:Int,mediainfo: MediaInfo) {
 
     }
 
