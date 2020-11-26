@@ -150,7 +150,7 @@ class HomeFragment : BaseFragment<HomeViewModel, ViewDataBinding>(), HomeControl
         val album = qmuiTabBuilder
                 .setNormalDrawable(ContextCompat.getDrawable(requireContext(), R.mipmap.ic_tab_album_normal))
                 .setSelectedDrawable(ContextCompat.getDrawable(requireContext(), R.mipmap.ic_tab_album_checked))
-                .setText("相册")
+                .setText("云相册")
                 .build(context)
         val mine = qmuiTabBuilder
                 .setNormalDrawable(ContextCompat.getDrawable(requireContext(), R.mipmap.ic_tab_mine_normal))

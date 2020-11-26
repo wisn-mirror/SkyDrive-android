@@ -45,6 +45,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
         }
     }
 
+
     override fun initView(views: View) {
         super.initView(views)
         initTopBar()
@@ -60,7 +61,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
             }
             viewModel.setServerIp("$sp1.$sp2.$sp3.$sp4")
 
-//            startFragment(TestVideoPlayerFragment())
+            startFragment(TestVideoPlayerFragment())
         }
         viewModel.getResult().observe(this, Observer {
             val text = dataBinding?.result?.text;
@@ -77,9 +78,6 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
         }
         getContext()?.let {
             try {
-                if (ipAddressByWifi == null) {
-                    return
-                }
                 val split = ipAddressByWifi?.split(".")
                 setAdapter(it, dataBinding?.spinner1!!, 1, null, split?.get(0))
                 setAdapter(it, dataBinding?.spinner2!!, 2, split?.get(0), split?.get(1))
@@ -91,9 +89,12 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
                         setAdapter(it, dataBinding?.spinner2!!, 2, info, split?.get(1))
                     }
 
-                    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
+                    override fun onNothingSelected(adapterView: AdapterView<*>?) {
+
+                    }
                 })
             } catch (e: Exception) {
+                e.printStackTrace()
             }
 
         }
@@ -129,6 +130,10 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
                 }
             } else if ("172".equals(lastSelect)) {
                 for (index in 16 until 32) {
+                    spinnerItems.add(index.toString())
+                }
+            }else{
+                for (index in 0 until 256) {
                     spinnerItems.add(index.toString())
                 }
             }

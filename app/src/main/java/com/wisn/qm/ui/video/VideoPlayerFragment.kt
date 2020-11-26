@@ -9,6 +9,7 @@ import com.we.player.controller.component.TitleControlView
 import com.we.player.controller.controller.StandardController
 import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.TextureRenderView
+import com.we.player.render.impl.TextureRenderViewFactory
 import com.we.player.view.VideoView
 import com.wisn.qm.R
 
@@ -30,7 +31,7 @@ class VideoPlayerFragment(var videourl: String, var thumbUrl: String,var title: 
         QMUIStatusBarHelper.setStatusBarDarkMode(requireActivity())
         videoview = rootView.findViewById<VideoView>(R.id.videoview)
         videoview?.setUrl(videourl)
-        videoview?.mIRenderView = TextureRenderView(requireContext())
+        videoview?.renderViewFactory = TextureRenderViewFactory()
 //        videoview?.mIRenderView = SurfaceRenderView(requireContext())
         videoview?.mediaPlayer = ExoPlayerFactory()
 //        videoview?.mediaPlayer = AndroidMediaPlayerFactory()

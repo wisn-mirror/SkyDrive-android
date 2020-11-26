@@ -9,7 +9,7 @@ import com.qmuiteam.qmui.arch.QMUIFragment
 import com.we.player.controller.controller.StandardController
 import com.we.player.player.ScreenConfig
 import com.we.player.player.exo.ExoPlayerFactory
-import com.we.player.render.TextureRenderView
+import com.we.player.render.impl.TextureRenderViewFactory
 import com.we.player.view.VideoView
 import com.wisn.qm.R
 import com.wisn.qm.ui.testUrl
@@ -33,7 +33,7 @@ class TestVideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         super.onViewCreated(rootView)
         videoview = rootView.findViewById<VideoView>(R.id.videoview)
         videoview?.setUrl("https://static1.laiyifen.com/files/sns/image/137ee373bcf94ea6b67b9733ce23728a.mp4")
-        videoview?.mIRenderView = TextureRenderView(requireContext())
+        videoview?.renderViewFactory = TextureRenderViewFactory()
 //        videoview?.mIRenderView = SurfaceRenderView(requireContext())
         videoview?.mediaPlayer = ExoPlayerFactory()
 //        videoview?.mediaPlayer = AndroidMediaPlayerFactory()
@@ -48,9 +48,9 @@ class TestVideoPlayerFragment : QMUIFragment(), View.OnClickListener {
         rootView.findViewById<View>(R.id.mirrorRotion).setOnClickListener(this)
         rootView.findViewById<View>(R.id.Rotation).setOnClickListener(this)
         rootView.findViewById<View>(R.id.startNew).setOnClickListener(this)
+        rootView.findViewById<View>(R.id.nextV).setOnClickListener(this)
         speedsBt = rootView.findViewById(R.id.Speeds)
         speedsBt?.setOnClickListener(this)
-
 
 
     }
@@ -112,19 +112,32 @@ class TestVideoPlayerFragment : QMUIFragment(), View.OnClickListener {
                 videoview?.setSpeed(speeds)
                 speedsBt?.setText("speed$speeds")
             }
-            R.id.startNew -> {
-                if(index>=(videoList.size-1)){
-                    index=0
+            R.id.nextV -> {
+                if (index >= (videoList.size - 1)) {
+                    index = 0
                 }
                 index++
                 val get = videoList.get(index)
-                val
-                        videoPlayerFragment = VideoPlayerFragment(get.videoUrl, get.thumb,get.title, false)
+//                videoview?.stop()
+                videoview?.release()
+                videoview?.setUrl(get.videoUrl)
+                videoview?.start()
+            }
+
+            R.id.startNew -> {
+                if (index >= (videoList.size - 1)) {
+                    index = 0
+                }
+                index++
+                val get = videoList.get(index)
+//
+                val videoPlayerFragment = VideoPlayerFragment(get.videoUrl, get.thumb, get.title, false)
                 startFragment(videoPlayerFragment)
             }
         }
     }
-    var index:Int=0;
+
+    var index: Int = 0;
 
     override fun onBackPressed() {
         if (videoview?.onBackPressed() == true) {

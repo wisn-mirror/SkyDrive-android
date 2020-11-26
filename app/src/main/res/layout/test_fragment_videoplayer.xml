@@ -65,6 +65,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="speed" />
+
+            <Button
+                android:id="@+id/nextV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="next" />
+
             <Button
                 android:id="@+id/startNew"
                 android:layout_width="wrap_content"

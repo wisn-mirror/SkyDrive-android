@@ -6,7 +6,7 @@ import com.library.base.utils.GlideUtils
 import com.we.player.controller.component.PlayControlView
 import com.we.player.controller.controller.PreviewVideoController
 import com.we.player.player.exo.ExoPlayerFactory
-import com.we.player.render.TextureRenderView
+import com.we.player.render.impl.TextureRenderViewFactory
 import com.we.player.view.VideoView
 import com.wisn.qm.R
 import com.wisn.qm.mode.db.beans.MediaInfo
@@ -17,7 +17,7 @@ class PreviewVideoViewHolder(var context: Context, view: View, var previewCallba
     val preViewImage = standardController.previewControlView?.thumb
 
     init {
-        videoview.mIRenderView = TextureRenderView(context)
+        videoview?.renderViewFactory = TextureRenderViewFactory()
         videoview.mediaPlayer = ExoPlayerFactory()
         standardController.addIViewItemControllerOne(PlayControlView(context))
         videoview.iViewController = standardController
@@ -25,7 +25,6 @@ class PreviewVideoViewHolder(var context: Context, view: View, var previewCallba
     }
 
     override fun loadVideo(mediainfo: MediaInfo) {
-        videoview.pause()
         preViewImage?.let {
             GlideUtils.load(mediainfo.filePath!!,preViewImage)
 
@@ -36,7 +35,7 @@ class PreviewVideoViewHolder(var context: Context, view: View, var previewCallba
 
     override fun releaseVideo() {
         super.releaseVideo()
-        videoview.stop()
+        videoview.release()
     }
 
 

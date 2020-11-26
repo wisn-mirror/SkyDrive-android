@@ -17,6 +17,7 @@ import com.we.player.R
 import com.we.player.controller.BaseViewController
 import com.we.player.player.*
 import com.we.player.render.IRenderView
+import com.we.player.render.RenderViewFactory
 import com.we.player.utils.PlayerUtils
 
 /**
@@ -52,7 +53,8 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     var currentState: Int? = PlayStatus.STATE_IDLE
     var mediaPlayer: PlayerFactory<APlayer>? = null
-    var mIRenderView: IRenderView? = null
+    private var mIRenderView: IRenderView? = null
+    var renderViewFactory: RenderViewFactory<IRenderView> ?= null
 
     var iViewController: BaseViewController? = null
         set(value) {
@@ -91,6 +93,10 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
 
     fun addDisplay() {
+
+        if (mIRenderView == null ) {
+            mIRenderView= renderViewFactory?.createIRenderView(context)
+        }
         if (mIRenderView == null || mAPlayer == null) {
             return
         }
@@ -136,6 +142,8 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
     override fun stop() {
         mAPlayer?.stop()
+        setPlayStatus(PlayStatus.STATE_IDLE)
+
     }
 
     override fun pause() {
@@ -146,6 +154,12 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
 
     override fun release() {
         mAPlayer?.release()
+        mIRenderView?.let {
+            mPlayerContainer?.removeView(it.getRenderView())
+            it.release()
+        }
+        mIRenderView=null
+        setPlayStatus(PlayStatus.STATE_IDLE)
     }
 
     override fun getDuration(): Long {

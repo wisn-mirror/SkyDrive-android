@@ -42,10 +42,12 @@ open class PictureController(context: Context, mhomeFragment: HomeFragment, home
     override val layoutId: Int
         get() = R.layout.home_controller_picture
 
+    private val titleStr = "照片"
+
     init {
         LogUtils.d(" PictureController .init")
 
-        title = topbar.setTitle("文件")
+        title = topbar.setTitle(titleStr)
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         leftCancel = topbar.addLeftTextButton("取消 ", R.id.topbar_right_add_button)
@@ -120,7 +122,7 @@ open class PictureController(context: Context, mhomeFragment: HomeFragment, home
                 leftCancel.visibility = View.VISIBLE
             } else {
                 leftCancel.visibility = View.GONE
-                title.text = "文件"
+                title.text = titleStr
             }
             mAdapter.updateSelect(isShow)
         }
@@ -143,7 +145,7 @@ open class PictureController(context: Context, mhomeFragment: HomeFragment, home
                 title.text = "已选中${mHomeViewModel.selectData.value?.size ?: 0}项"
             }
         } else {
-            title.text = "文件"
+            title.text = titleStr
         }
     }
 

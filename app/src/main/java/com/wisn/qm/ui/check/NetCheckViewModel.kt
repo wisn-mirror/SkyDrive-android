@@ -70,10 +70,12 @@ class NetCheckViewModel : BaseViewModel() {
 
     fun setServerIp(ip: String) {
         if (ipTemp.isNullOrEmpty()) {
-            ipTemp = ip;
+            ipTemp = ip
+            getResult().setValue(" 开始测试 ip:$ip   ${Thread.currentThread().name}")
             launchGoLo({
                 LogUtils.d(TAG, Thread.currentThread().name)
                 if (NetCheckUtils.isConnectByIp(ip)) {
+                    getResult().postValue("测试")
                     ApiNetWork.newInstance().updateBaseUrl(ip)
                     fixedRateTimer?.cancel()
                     LogUtils.d(TAG, Thread.currentThread().name)

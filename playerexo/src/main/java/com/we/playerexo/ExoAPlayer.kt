@@ -61,11 +61,7 @@ class ExoAPlayer(var app: Application) : APlayer(), Player.EventListener, VideoL
 
     override fun setDisplay(holder: SurfaceHolder) {
         super.setDisplay(holder)
-        if (holder == null) {
-            setSurface(null)
-        } else {
-            setSurface(holder!!.surface)
-        }
+        setSurface(holder.surface)
     }
 
     override fun prepareAsync() {
