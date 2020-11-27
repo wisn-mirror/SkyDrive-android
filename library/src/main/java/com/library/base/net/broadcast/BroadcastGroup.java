@@ -11,8 +11,11 @@ import java.net.NetworkInterface;
 public class BroadcastGroup {
     private static final String TAG = "BroadcastGroup";
     private static BroadcastGroup broadcastGroup;
+    private boolean isRungFlag = true;
+    private MulticastSocket ms = null;
 
-    private BroadcastGroup() { }
+    private BroadcastGroup() {
+    }
 
     public static BroadcastGroup getInstance() {
         if (broadcastGroup == null) {
@@ -29,26 +32,31 @@ public class BroadcastGroup {
     public void listenerMessage(String IP, int listenerPort, final MessageCall messageCall) {
         try {
             final byte[] data = new byte[256];
-            final MulticastSocket ms = new MulticastSocket(listenerPort);
+            ms = new MulticastSocket(listenerPort);
             ms.joinGroup(InetAddress.getByName(IP));
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        while (true) {
+                        while (isRungFlag) {
                             //receive()是阻塞方法，会等待客户端发送过来的信息
                             DatagramPacket packet = new DatagramPacket(data, data.length);
                             ms.receive(packet);
-                            String message = new String(packet.getData(), 0, packet.getLength());
-                            Log.d(TAG, message);
-                            if (messageCall != null) {
-                                messageCall.callBackMessage(message, packet.getAddress().getHostAddress());
+                            if (isRungFlag) {
+                                String message = new String(packet.getData(), 0, packet.getLength());
+                                Log.d(TAG, message);
+                                if (messageCall != null) {
+                                    messageCall.callBackMessage(message, packet.getAddress().getHostAddress());
+                                }
                             }
+
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
-                        ms.close();
+                        if (ms != null && !ms.isClosed()) {
+                            ms.close();
+                        }
                     }
                 }
             }).start();
@@ -74,4 +82,20 @@ public class BroadcastGroup {
             e.printStackTrace();
         }
     }
+
+
+    public void cancel() {
+        isRungFlag = false;
+        try {
+            if (ms != null && ms.isConnected()) {
+                ms.disconnect();
+            }
+            if (ms != null && !ms.isClosed()) {
+                ms.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

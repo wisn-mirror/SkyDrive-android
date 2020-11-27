@@ -23,14 +23,15 @@ class NetCheckViewModel : BaseViewModel() {
     private var ipTemp: String? = null
     private val TAG = "CheckNetViewModel"
     var isSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    var broadCastGroup = BroadcastGroup.getInstance()
+    var broadCastAll = BroadcastAll.getInstance()
+
 
     fun initBroadcastListener() {
-      try {
-            var broadCastGroup = BroadcastGroup.getInstance()
+        try {
             broadCastGroup?.listenerMessage(UdpConfig.groupIp, UdpConfig.Group_ClientListenport, MessageCall { message, ip ->
                 setResult("group $message ", ip)
             })
-            var broadCastAll = BroadcastAll.getInstance()
             broadCastAll?.listenerMessage(UdpConfig.All_ClientListenport, MessageCall { message, ip ->
                 setResult("broadcast $message ", ip)
             })
@@ -67,7 +68,6 @@ class NetCheckViewModel : BaseViewModel() {
     }
 
 
-
     fun setServerIp(ip: String) {
         if (ipTemp.isNullOrEmpty()) {
             ipTemp = ip
@@ -84,12 +84,15 @@ class NetCheckViewModel : BaseViewModel() {
                     ipTemp = null
                 }
             })
-
         }
 
     }
-    fun destory(){
+
+    fun destory() {
         fixedRateTimer?.cancel()
+        broadCastGroup?.cancel()
+        broadCastAll?.cancel()
+
     }
 
 }

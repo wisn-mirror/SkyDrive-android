@@ -18,6 +18,7 @@ abstract class BaseFragmentActivity<VM : BaseViewModel, DB : ViewDataBinding> : 
     protected var dataBinding: DB? = null
 
     override fun onCreateRootView(fragmentContainerId: Int): RootView {
+        BaseApp.refwatcher?.watch(this)
         val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
         if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
             dataBinding = layoutView()?.let { DataBindingUtil.getBinding(it) }

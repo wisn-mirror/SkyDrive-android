@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.library.base.base.BaseViewModel
 import com.library.base.base.ViewModelFactory
 import com.library.base.event.Message
+import com.squareup.leakcanary.LeakCanary
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding> : AppCompatActivity() {
@@ -21,6 +22,7 @@ abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding> : AppCompa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+       BaseApp.refwatcher?.watch(this)
         val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
         if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
             if (layoutId() != -1) {

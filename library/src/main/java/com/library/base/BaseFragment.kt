@@ -27,6 +27,8 @@ abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding> : QMUIFrag
     protected var dataBinding: DB? = null
 
     override fun onCreateView(): View {
+        BaseApp.refwatcher?.watch(this)
+
         val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
         if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
 //            dataBinding = DataBindingUtil.bind<DB>(views)

@@ -11,7 +11,8 @@ public class BroadcastAll {
     private static final String TAG = "BroadcastAll";
 
     private static BroadcastAll broadcastAll;
-
+    private boolean isRungFlag = true;
+    DatagramSocket ds = null;
     private BroadcastAll() { }
 
     public static BroadcastAll getInstance() {
@@ -29,23 +30,24 @@ public class BroadcastAll {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DatagramSocket ds = null;
                 try {
                     byte[] buffer = new byte[65507];
                     ds = new DatagramSocket(listenerPort);
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    while (true) {
+                    while (isRungFlag) {
                         ds.receive(packet);
-                        String message = new String(packet.getData(), 0, packet.getLength());
-                        Log.d(TAG, packet.getAddress() + " hostname" + packet.getAddress().getHostName() + ":" + packet.getPort() + "    →    ");
-                        if (messageCall != null) {
-                            messageCall.callBackMessage(message, packet.getAddress().getHostAddress());
+                        if(isRungFlag){
+                            String message = new String(packet.getData(), 0, packet.getLength());
+                            Log.d(TAG, packet.getAddress() + " hostname" + packet.getAddress().getHostName() + ":" + packet.getPort() + "    →    ");
+                            if (messageCall != null) {
+                                messageCall.callBackMessage(message, packet.getAddress().getHostAddress());
+                            }
                         }
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    if (ds != null) {
+                    if (ds != null && !ds.isClosed()) {
                         ds.close();
                     }
                 }
@@ -65,4 +67,20 @@ public class BroadcastAll {
             e.printStackTrace();
         }
     }
+
+
+    public void cancel() {
+        isRungFlag = false;
+        try {
+            if (ds != null && ds.isConnected()) {
+                ds.disconnect();
+            }
+            if (ds != null && !ds.isClosed()) {
+                ds.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
