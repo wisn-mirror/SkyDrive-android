@@ -4,7 +4,6 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.wisn.qm.databinding.RvItemPictureImageBinding
 
 /**
  * Created by Wisn on 2020/6/6 下午6:18.

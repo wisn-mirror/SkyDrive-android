@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ScrollState
-import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.Utils
 import com.library.base.BaseApp
 import com.library.base.BaseFragment
 import com.library.base.base.NoViewModel
@@ -17,7 +17,7 @@ import com.library.base.base.ViewModelFactory
 import com.qmuiteam.qmui.kotlin.onClick
 import com.qmuiteam.qmui.skin.QMUISkinManager
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet
-import com.we.player.controller.controller.ListVideoController
+import com.wisn.qm.ui.preview.view.ListVideoController
 import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.impl.TextureRenderViewFactory
 import com.we.player.view.VideoView
@@ -25,6 +25,7 @@ import com.wisn.qm.R
 import com.wisn.qm.databinding.FragmentPreviewBinding
 import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.MediaInfo
+import com.wisn.qm.task.UploadTaskUitls
 import com.wisn.qm.ui.album.newalbum.NewAlbumFragment
 import com.wisn.qm.ui.home.HomeViewModel
 
@@ -118,7 +119,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
                         .setNeedRightMark(true)
                         .setOnSheetItemClickListener { dialog, itemView, position, tag ->
                             dialog.dismiss()
-                            mHomeViewModel.saveMedianInfo(position)
+                            mHomeViewModel.saveMedianInfo(position,false)
                             ToastUtils.showShort("已经添加到上传任务")
                         }
                 for (dirlist in values) {
@@ -136,7 +137,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
         }
         dataBinding?.tvUpload?.onClick {
             val get = data.get(dataBinding?.vpContent?.currentItem!!)
-            mHomeViewModel.saveMedianInfo(position, get)
+            mHomeViewModel.saveMedianInfo(0, get,false)
             ToastUtils.showShort("已经添加到上传任务")
         }
         dataBinding?.ivBack?.onClick {
@@ -192,6 +193,8 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
     override fun onDestroy() {
         super.onDestroy()
         videoView?.release()
+        UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+
     }
 
 

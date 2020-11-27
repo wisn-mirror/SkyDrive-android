@@ -1,8 +1,6 @@
 package com.wisn.qm.ui.home.picture
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.library.base.utils.GlideUtils
 import com.qmuiteam.qmui.kotlin.onClick
@@ -13,7 +11,6 @@ import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.MediaInfo
 import com.wisn.qm.ui.home.BaseDataBindlingViewHolder
 import com.wisn.qm.ui.preview.PreviewFragment
-import java.io.File
 
 /**
  * Created by Wisn on 2020/6/6 下午6:14.

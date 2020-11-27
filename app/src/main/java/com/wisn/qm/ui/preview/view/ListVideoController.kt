@@ -1,4 +1,4 @@
-package com.we.player.controller.controller
+package com.wisn.qm.ui.preview.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -24,7 +24,7 @@ class ListVideoController : BaseViewController, View.OnClickListener {
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {
         addIViewItemControllerOne(ErrorControlView(context))
-        addIViewItemControllerOne(PlayControlView(context))
+        addIViewItemControllerOne(PlayLocalControlView(context))
         lock_left = findViewById(R.id.lock_left)
         lock_right = findViewById(R.id.lock_right)
         lock_left?.setOnClickListener(this)

@@ -32,7 +32,7 @@ class MediaScanWorker(context: Context, workerParams: WorkerParameters) : Worker
 
                     LogUtils.d("CCCCCCCMediaScanWorker2  差量aa " + maxId + " ???")
                     var start = System.currentTimeMillis();
-                    // //todo 再次扫描更新
+                    // todo 再次扫描更新
                     val mediaImageListNew = DataRepository.getInstance().getMediaImageAndVideoList(maxId.toString())
                     var start11 = System.currentTimeMillis();
                     LogUtils.d("CCCCCCCMediaScanWorker2 aa " + (start11 - start))

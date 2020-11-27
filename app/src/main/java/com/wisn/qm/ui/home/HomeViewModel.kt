@@ -172,6 +172,10 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun saveMedianInfo(position: Int) {
+        saveMedianInfo(position,true)
+    }
+
+    fun saveMedianInfo(position: Int, isauto: Boolean) {
         launchUI {
             LogUtils.d("saveMedianInfo", Thread.currentThread().name)
             launchFlow {
@@ -187,7 +191,9 @@ class HomeViewModel : BaseViewModel() {
                     }
                     LogUtils.d("uploadlist size", uploadlist.size)
                     AppDataBase.getInstanse().uploadBeanDao?.insertUploadBeanList(uploadlist)
-                    UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+                    if (isauto) {
+                        UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+                    }
                 }
 
             }.flowOn(Dispatchers.IO).collect {
@@ -197,7 +203,8 @@ class HomeViewModel : BaseViewModel() {
     }
 
 
-    fun saveMedianInfo(position: Int, mediainfo: MediaInfo) {
+
+    fun saveMedianInfo(position: Int, mediainfo: MediaInfo, isauto: Boolean) {
         LogUtils.d("saveMedianInfo", Thread.currentThread().name)
         GlobalScope.launch {
             var dirinfo = getDirInfo(position)
@@ -209,9 +216,15 @@ class HomeViewModel : BaseViewModel() {
                 val buidUploadBean = UploadTaskUitls.buidUploadBean(mediainfo)
                 LogUtils.d("upload mediainfo", mediainfo)
                 AppDataBase.getInstanse().uploadBeanDao?.insertUploadBean(buidUploadBean)
-                UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+                if (isauto) {
+                    UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+                }
             }
         }
+    }
+
+    fun saveMedianInfo(position: Int, mediainfo: MediaInfo) {
+        saveMedianInfo(position,mediainfo,true)
     }
 
     private suspend fun getDirInfo(position: Int): UserDirBean? {

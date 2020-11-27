@@ -6,6 +6,8 @@ import android.widget.ImageView
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.chrisbanes.photoview.PhotoView
+import com.library.base.utils.GlideUtils
+import com.library.base.utils.ImageUtils
 import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
 import com.wisn.qm.mode.db.beans.MediaInfo
@@ -34,11 +36,19 @@ class PreviewImageViewHolder(var context: Context, view: View, var previewCallba
         gif_view.setScaleType(ImageView.ScaleType.FIT_CENTER)
     }
 
-    override fun loadImage(position:Int,mediainfo: MediaInfo) {
-        iv_image.setImage(ImageSource.uri(mediainfo.filePath!!))
+    override fun loadImage(position: Int, mediainfo: MediaInfo) {
+        if (ImageUtils.isGifImageWithMime(mediainfo.filePath!!, mediainfo.filePath!!)) {
+            iv_image.visibility = View.GONE
+            gif_view.visibility = View.VISIBLE
+            GlideUtils.load(mediainfo.filePath!!, gif_view)
+        } else {
+            iv_image.visibility = View.VISIBLE
+            gif_view.visibility = View.GONE
+            iv_image.setImage(ImageSource.uri(mediainfo.filePath!!))
+        }
     }
 
-    override fun loadVideo(position:Int,mediainfo: MediaInfo) {
+    override fun loadVideo(position: Int, mediainfo: MediaInfo) {
 
     }
 

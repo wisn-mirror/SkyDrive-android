@@ -1,12 +1,5 @@
 package com.wisn.qm.ui.preview
 
-import android.view.ViewGroup
-import com.library.base.BaseApp
-import com.we.player.controller.controller.ListVideoController
-import com.we.player.player.exo.ExoPlayerFactory
-import com.we.player.render.impl.TextureRenderViewFactory
-import com.we.player.view.VideoView
-
 
 /**
  *
