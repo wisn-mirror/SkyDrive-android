@@ -153,6 +153,9 @@ class VideoView : FrameLayout, MediaPlayerController, PlayerEventListener {
     }
 
     override fun pause() {
+        if(PlayStatus.STATE_PAUSED==currentState){
+            return ;
+        }
         mAPlayer?.let {
             if (PlayStatus.isPlayingStatus(currentState) && it.isPlaying()) {
                 it.pause()

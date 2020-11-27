@@ -15,7 +15,7 @@ import com.we.player.view.VideoView
  * @CreateDate: 2020/11/26 下午3:41
  */
 object VideoManager {
-    var currentPlay: Int? = -1
+  /*  var currentPlay: Int? = -1
     var videoMap: HashMap<String, VideoView> = HashMap()
 
     fun getVideoView(tag: String): VideoView {
@@ -39,7 +39,6 @@ object VideoManager {
                 it.removeView(videoview)
             }
             videoview.release()
-
         }
-    }
+    }*/
 }
