@@ -32,7 +32,7 @@ class AlbumDetailsFragment : BaseFragment<AlbumViewModel, FragmentAlbumdetailsBi
     lateinit var rightButton: Button
     var isShowEdit: Boolean = false
     val albumPictureAdapter by lazy {
-        AlbumDetailsAdapter(this)
+        AlbumDetailsAdapter(this,this)
     }
     val get by lazy { arguments?.get(ConstantKey.albuminfo) as UserDirBean }
 

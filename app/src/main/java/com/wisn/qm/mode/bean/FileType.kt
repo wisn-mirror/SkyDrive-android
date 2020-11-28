@@ -1,6 +1,5 @@
 package com.wisn.qm.mode.bean
 
-import androidx.databinding.Bindable
 
 object FileType {
     const val ImageViewItem = 0

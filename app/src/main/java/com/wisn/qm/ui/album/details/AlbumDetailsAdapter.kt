@@ -15,12 +15,13 @@ import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.ui.album.EditAlbumDetails
 import com.wisn.qm.ui.home.BaseDataBindlingViewHolder
+import com.wisn.qm.ui.netpreview.NetPreviewFragment
 
 /**
  * Created by Wisn on 2020/6/6 下午6:14.
  */
 
-class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiItemQuickAdapter<UserDirBean, BaseDataBindlingViewHolder>() {
+class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails, var albumDetailsFragment: AlbumDetailsFragment) : BaseMultiItemQuickAdapter<UserDirBean, BaseDataBindlingViewHolder>() {
     var isSelectModel: Boolean = false
     protected var map: HashMap<Long, Boolean> = HashMap()
 
@@ -29,6 +30,7 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
         addItemType(FileType.TitleInfo, R.layout.rv_item_album_detail_title)
         addItemType(FileType.TimeTitle, R.layout.rv_item_album_detail_timetitle)
         addItemType(FileType.ImageViewItem, R.layout.rv_item_album_detail_media)
+        addItemType(FileType.VideoViewItem, R.layout.rv_item_album_detail_media)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseDataBindlingViewHolder {
@@ -56,7 +58,7 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
             viewHolder.setDataBinding<RvItemAlbumDetailTimetitleBinding>(viewHolder.itemView)
         } else if (viewType == FileType.TitleInfo) {
             viewHolder.setDataBinding<RvItemAlbumDetailTitleBinding>(viewHolder.itemView)
-        } else if (viewType == FileType.ImageViewItem) {
+        } else if (viewType == FileType.ImageViewItem || viewType == FileType.VideoViewItem) {
             viewHolder.setDataBinding<RvItemAlbumDetailMediaBinding>(viewHolder.itemView)
         } else if (viewType == FileType.UploadProgressItem) {
 //            viewHolder.setDataBinding<RvItemAlbumDetailProgressBinding>(viewHolder.itemView)
@@ -70,7 +72,7 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
 //            viewHolder.setDataBinding<RvItemAlbumDetailTimetitleBinding>(viewHolder.itemView)
         } else if (item.itemType == FileType.TitleInfo) {
 //            viewHolder.setDataBinding<RvItemAlbumDetailTitleBinding>(viewHolder.itemView)
-        } else if (item.itemType == FileType.ImageViewItem) {
+        } else if (item.itemType == FileType.ImageViewItem || item.itemType == FileType.VideoViewItem) {
 //            viewHolder.setDataBinding<RvItemAlbumDetailMediaBinding>(viewHolder.itemView)
             val dataBinding = holder.getDataBinding<RvItemAlbumDetailMediaBinding>()
             dataBinding?.image?.let {
@@ -84,7 +86,7 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
                         isSelectModel = true;
                         notifyDataSetChanged()
                         editAlbumDetails.isShowEdit(true)
-                        editAlbumDetails.changeSelectData(true,true,item)
+                        editAlbumDetails.changeSelectData(true, true, item)
                     }
                     return@OnLongClickListener false
                 })
@@ -98,10 +100,11 @@ class AlbumDetailsAdapter(var editAlbumDetails: EditAlbumDetails) : BaseMultiIte
                         }
                         map.put(item.id!!, isSelect)
                         notifyItemChanged(adapterPosition)
-                        editAlbumDetails.changeSelectData(false,isSelect,item)
+                        editAlbumDetails.changeSelectData(false, isSelect, item)
                     } else {
                         //查看大图
-//                        val previewFragment = PreviewFragment(data, adapterPosition)
+                        val netPreviewFragment = NetPreviewFragment(data, adapterPosition)
+                        albumDetailsFragment.startFragment(netPreviewFragment)
 //                        pictureController.getHomeFragment().startFragment(previewFragment)
                     }
                 }

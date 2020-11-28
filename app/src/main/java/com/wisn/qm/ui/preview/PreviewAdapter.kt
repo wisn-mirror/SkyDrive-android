@@ -11,11 +11,11 @@ class PreviewAdapter(var data: MutableList<MediaInfo>, var previewCallback: Prev
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasePreviewHolder {
         if (viewType == FileType.ImageViewItem) {
-            return PreviewImageViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_image, parent, false), previewCallback)
+            return PreviewImageViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_localimage, parent, false), previewCallback)
         } else if (viewType == FileType.VideoViewItem) {
-            return PreviewVideoViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_video, parent, false), previewCallback)
+            return PreviewVideoViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_localvideo, parent, false), previewCallback)
         } else {
-            return PreviewImageViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_video, parent, false), previewCallback)
+            return PreviewImageViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.rv_item_preview_localvideo, parent, false), previewCallback)
         }
     }
 
