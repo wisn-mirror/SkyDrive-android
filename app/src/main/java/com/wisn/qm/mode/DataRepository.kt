@@ -7,7 +7,7 @@ import com.wisn.qm.mode.file.MediaInfoScanHelper
 import com.wisn.qm.mode.net.ApiNetWork
 import java.lang.Exception
 
-class DataRepository private constructor(private val apiNetWork: ApiNetWork, val appDataBase: AppDataBase, private val mediaInfohelper: MediaInfoScanHelper) {
+class DataRepository private constructor( val apiNetWork: ApiNetWork, val appDataBase: AppDataBase,  val mediaInfohelper: MediaInfoScanHelper) {
 
 
     suspend fun getMediaImageList(maxid: String): MutableList<MediaInfo> {

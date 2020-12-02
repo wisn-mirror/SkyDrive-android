@@ -9,8 +9,11 @@ import com.blankj.utilcode.util.Utils
 import com.library.base.base.BaseViewModel
 import com.library.base.config.GlobalUser
 import com.library.base.config.UserBean
+import com.wisn.qm.BuildConfig
 import com.wisn.qm.mode.DataRepository
+import com.wisn.qm.mode.bean.BaseResult
 import com.wisn.qm.mode.bean.FileType
+import com.wisn.qm.mode.bean.Update
 import com.wisn.qm.mode.db.AppDataBase
 import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.mode.db.beans.MediaInfo
@@ -35,6 +38,7 @@ class HomeViewModel : BaseViewModel() {
     var usernameData = MutableLiveData<String>()
     var userBean = MutableLiveData<UserBean>()
     var deleteDirs = MutableLiveData<Boolean>()
+    var UpdateData = MutableLiveData<Update>()
 
     /* fun getMediaImageList(): MutableLiveData<MutableList<MediaInfo>> {
          LogUtils.d("getMediaImageList1", Thread.currentThread().name)
@@ -98,6 +102,26 @@ class HomeViewModel : BaseViewModel() {
             }
         })
         return dirlistLD
+    }
+
+    /**
+     * 蒲公英更新
+     */
+    fun checkUpdate(): MutableLiveData<Update> {
+        launchGoLo({
+            val result = DataRepository.getInstance().apiNetWork.checkUpdate(BuildConfig.VERSION_NAME, "")
+            if (result != null && result.data != null) {
+                if (result.data.buildHaveNewVersion && !result.data.downloadURL.isNullOrEmpty() && !result.data.buildBuildVersion.isNullOrEmpty()){
+                    val toInt = result.data.buildVersionNo?.toInt()
+                    toInt?.let {
+                        if(toInt>BuildConfig.VERSION_CODE){
+                            UpdateData.value = result.data
+                        }
+                    }
+                }
+            }
+        })
+        return UpdateData
     }
 
     fun getUserInfo(): MutableLiveData<UserBean> {
@@ -172,7 +196,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun saveMedianInfo(position: Int) {
-        saveMedianInfo(position,true)
+        saveMedianInfo(position, true)
     }
 
     fun saveMedianInfo(position: Int, isauto: Boolean) {
@@ -203,7 +227,6 @@ class HomeViewModel : BaseViewModel() {
     }
 
 
-
     fun saveMedianInfo(position: Int, mediainfo: MediaInfo, isauto: Boolean) {
         LogUtils.d("saveMedianInfo", Thread.currentThread().name)
         GlobalScope.launch {
@@ -224,7 +247,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun saveMedianInfo(position: Int, mediainfo: MediaInfo) {
-        saveMedianInfo(position,mediainfo,true)
+        saveMedianInfo(position, mediainfo, true)
     }
 
     private suspend fun getDirInfo(position: Int): UserDirBean? {

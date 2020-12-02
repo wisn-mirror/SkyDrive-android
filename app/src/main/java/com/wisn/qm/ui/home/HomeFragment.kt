@@ -9,6 +9,8 @@ import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.blankj.utilcode.util.VibrateUtils
 import com.library.base.BaseFragment
+import androidx.lifecycle.Observer
+import com.library.base.utils.DownloadUtils
 import com.qmuiteam.qmui.arch.QMUIFragment
 import com.qmuiteam.qmui.kotlin.onClick
 import com.qmuiteam.qmui.skin.QMUISkinManager
@@ -16,6 +18,7 @@ import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import com.qmuiteam.qmui.widget.QMUIViewPager
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet.BottomListSheetBuilder
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 import com.qmuiteam.qmui.widget.tab.QMUITabSegment
 import com.wisn.qm.R
 import com.wisn.qm.task.UploadTaskUitls
@@ -83,6 +86,21 @@ class HomeFragment : BaseFragment<HomeViewModel, ViewDataBinding>(), HomeControl
         initTabs()
         initPager()
         UploadTaskUitls.exeRequest(Utils.getApp(), UploadTaskUitls.buildUploadRequest())
+        viewModel.checkUpdate().observe(this,Observer {
+            QMUIDialog.MessageDialogBuilder(context)
+                    .setTitle("更新提醒")
+                    .setSkinManager(QMUISkinManager.defaultInstance(context))
+                    .setMessage("更新版本号${it.buildBuildVersion} (build${it.buildBuildVersion})")
+                    .addAction("取消") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .addAction("下载") { dialog, _ ->
+                        dialog.dismiss()
+                        DownloadUtils.addDownload(requireContext(),it.downloadURL!!,"更新","更新版本号${it.buildVersion} (build${it.buildBuildVersion})")
+                        ToastUtils.showShort("已添加升级下载任务")
+                    }
+                    .create(R.style.QMUI_Dialog).show()
+        })
     }
 
     override fun onBackPressed() {

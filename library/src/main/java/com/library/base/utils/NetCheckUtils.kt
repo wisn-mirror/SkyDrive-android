@@ -11,7 +11,7 @@ import java.net.URL
 
 object NetCheckUtils {
     const val check = "user/checknet"
-    suspend fun isConnect(url: String): Boolean {
+   private suspend fun isConnect(url: String ,timeout:Int): Boolean {
         return withContext(Dispatchers.IO) {
             var result: Boolean = false
             try {
@@ -24,8 +24,8 @@ object NetCheckUtils {
                 val httpURLConnection = urlConnection as HttpURLConnection
                 // 设定请求的方法，默认是GET
                 httpURLConnection.requestMethod = "GET"
-                httpURLConnection.connectTimeout = 1000
-                httpURLConnection.readTimeout = 1000
+                httpURLConnection.connectTimeout = timeout
+                httpURLConnection.readTimeout = timeout
                 // 设置字符编码
                 httpURLConnection.setRequestProperty("Charset", "UTF-8")
                 // 打开到此 URL 引用的资源的通信链接（如果尚未建立这样的连接）。
@@ -48,14 +48,14 @@ object NetCheckUtils {
      * 检查当前选中的ip 是否可用
      */
     suspend fun isConnectByIp(ip: String): Boolean {
-        return isConnect(Constant.getBaseTemp(ip) + check)
+        return isConnect(Constant.getBaseTemp(ip) + check,3000)
     }
 
     /**
      * 初始化检查上一个ip 是否可用
      */
     suspend fun isConnectCheckInit(): Boolean {
-        return isConnect(Constant.BASE_URL + check)
+        return isConnect(Constant.BASE_URL + check,1000)
     }
 
 }

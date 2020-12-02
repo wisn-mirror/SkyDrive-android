@@ -2,16 +2,19 @@ package com.wisn.qm.mode.net
 
 import com.library.base.config.UserBean
 import com.library.base.net.RetrofitClient
+import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.mode.bean.BaseResult
 import com.wisn.qm.mode.bean.MultiPartInfo
+import com.wisn.qm.mode.bean.Update
 import com.wisn.qm.mode.db.beans.UserDirBean
 import okhttp3.MultipartBody
 import retrofit2.http.Field
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 class ApiNetWork {
 
-     var mService: Api? =null
+    var mService: Api? = null
 //     var getServie() by lazy { RetrofitClient.getInstance().create(Api::class.java) }
 
     suspend fun login(username: String, password: String): BaseResult<String> {
@@ -161,6 +164,14 @@ class ApiNetWork {
     suspend fun deleteDirs(@Query("ids") ids: String): BaseResult<Boolean> {
         return getServie().deleteDirs(ids)
     }
+
+    /**
+     * 蒲公英更新
+     */
+    suspend fun checkUpdate(buildVersion: String, buildBuildVersion: String): BaseResult<Update> {
+        return getServie().checkUpdate(buildVersion = buildVersion, buildBuildVersion = buildBuildVersion)
+    }
+
 
     companion object {
         private var netWork: ApiNetWork? = null

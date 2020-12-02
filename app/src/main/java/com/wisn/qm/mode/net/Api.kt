@@ -2,7 +2,9 @@ package com.wisn.qm.mode.net
 
 import com.wisn.qm.mode.bean.BaseResult
 import com.library.base.config.UserBean
+import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.mode.bean.MultiPartInfo
+import com.wisn.qm.mode.bean.Update
 import com.wisn.qm.mode.db.beans.UserDirBean
 import okhttp3.MultipartBody
 import retrofit2.http.*
@@ -140,6 +142,15 @@ interface Api {
      */
     @POST("/userfile/deleteDir")
     suspend fun deleteDirs(@Query("ids") ids: String): BaseResult<Boolean>
+
+
+    /**
+     * 蒲公英更新
+     */
+    @FormUrlEncoded
+    @POST
+    suspend fun checkUpdate(@Url url: String = ConstantKey.pgyerUpdate, @Field("_api_key") _api_key: String = ConstantKey._api_key, @Field("appKey") appKey: String = ConstantKey.appKey,
+                            @Field("buildVersion") buildVersion: String, @Field("buildBuildVersion") buildBuildVersion: String): BaseResult<Update>
 
 
 }
