@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment<HomeViewModel, ViewDataBinding>(), HomeControl
             QMUIDialog.MessageDialogBuilder(context)
                     .setTitle("更新提醒")
                     .setSkinManager(QMUISkinManager.defaultInstance(context))
-                    .setMessage("更新版本号${it.buildBuildVersion} (build${it.buildBuildVersion})")
+                    .setMessage("更新版本号${it.buildVersion} (build${it.buildBuildVersion})")
                     .addAction("取消") { dialog, _ ->
                         dialog.dismiss()
                     }
