@@ -13,10 +13,10 @@ import com.jeremyliao.liveeventbus.LiveEventBus
 import com.library.base.BaseFragment
 import com.qmuiteam.qmui.qqface.QMUIQQFaceView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentUploadlistBinding
 import com.wisn.qm.mode.ConstantKey
+import kotlinx.android.synthetic.main.fragment_uploadlist.*
 
-open class UploadListFragment : BaseFragment<UploadListViewModel, FragmentUploadlistBinding>(), SwipeRefreshLayout.OnRefreshListener {
+open class UploadListFragment : BaseFragment<UploadListViewModel>(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var title: QMUIQQFaceView
     private val mAdapter by lazy { UploadListAdapter() }
 
@@ -25,20 +25,20 @@ open class UploadListFragment : BaseFragment<UploadListViewModel, FragmentUpload
     }
 
     override fun initView(views: View) {
-        title = dataBinding?.topbar?.setTitle("上传列表")!!
+        title =   topbar?.setTitle("上传列表")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton()
+        val addLeftBackImageButton =   topbar?.addLeftBackImageButton()
         addLeftBackImageButton?.setColorFilter(Color.BLACK)
         addLeftBackImageButton?.setOnClickListener {
             popBackStack()
         }
-        with(dataBinding?.recyclerView) {
+        with(  recyclerView) {
             this?.layoutManager = LinearLayoutManager(context)
             this?.adapter = mAdapter
         }
         viewModel.getUploadList().observe(this, Observer {
-            dataBinding?.swiperefresh?.isRefreshing=false
+              swiperefresh?.isRefreshing=false
             if (it.isNullOrEmpty()) {
                 var item_empty: View = View.inflate(context, R.layout.item_empty, null)
                 var empty_tip = item_empty.findViewById<TextView>(R.id.empty_tip)
@@ -50,7 +50,7 @@ open class UploadListFragment : BaseFragment<UploadListViewModel, FragmentUpload
                 mAdapter.setNewInstance(it)
             }
         })
-        dataBinding?.swiperefresh?.setOnRefreshListener(this)
+          swiperefresh?.setOnRefreshListener(this)
         LiveEventBus
                 .get(ConstantKey.updatePhotoList, Int::class.java)
                 .observe(this, Observer {

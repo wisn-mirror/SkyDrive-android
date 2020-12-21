@@ -20,10 +20,10 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog.CheckBoxMessageDialogBuilder
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentUserinfoBinding
 import com.wisn.qm.ui.home.HomeViewModel
+import kotlinx.android.synthetic.main.fragment_userinfo.*
 
-open class UserInfoFragment : BaseFragment<UserViewModel, FragmentUserinfoBinding>(), View.OnClickListener {
+open class UserInfoFragment : BaseFragment<UserViewModel>(), View.OnClickListener {
 
     lateinit var title: QMUIQQFaceView
     lateinit var username: QMUICommonListItemView
@@ -40,20 +40,20 @@ open class UserInfoFragment : BaseFragment<UserViewModel, FragmentUserinfoBindin
 
     override fun initView(views: View) {
         super.initView(views)
-        title = dataBinding?.topbar?.setTitle("个人信息")!!
+        title =   topbar?.setTitle("个人信息")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton()
+        val addLeftBackImageButton =   topbar?.addLeftBackImageButton()
         addLeftBackImageButton?.setColorFilter(Color.BLACK)
         addLeftBackImageButton?.setOnClickListener {
             popBackStack()
         }
 
-        username = dataBinding?.groupListView?.createItemView(null, "用户名", GlobalUser.userinfo?.user_name
+        username =   groupListView?.createItemView(null, "用户名", GlobalUser.userinfo?.user_name
                 ?: "", QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON)!!
-        phone = dataBinding?.groupListView?.createItemView(null, "手机号", GlobalUser.userinfo?.phone
+        phone =   groupListView?.createItemView(null, "手机号", GlobalUser.userinfo?.phone
                 ?: "", QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_NONE)!!
-        registertime = dataBinding?.groupListView?.createItemView(null, "注册时间", GlobalUser.userinfo?.signup_at
+        registertime =   groupListView?.createItemView(null, "注册时间", GlobalUser.userinfo?.signup_at
                 ?: "", QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_NONE)!!
 
         QMUIGroupListView.newSection(context)
@@ -65,9 +65,9 @@ open class UserInfoFragment : BaseFragment<UserViewModel, FragmentUserinfoBindin
                 .addItemView(registertime, this)
 //                .setOnlyShowMiddleSeparator(true)
                 .setMiddleSeparatorInset(QMUIDisplayHelper.dp2px(context, 18), 0)
-                .addTo(dataBinding?.groupListView);
+                .addTo(  groupListView);
 
-        dataBinding?.rbLoginout?.onClick {
+          rb_loginout?.onClick {
             CheckBoxMessageDialogBuilder(activity)
                     .setTitle("退出后是否删除账号信息?")
                     .setMessage("删除账号信息")

@@ -7,7 +7,7 @@ import com.wisn.qm.mode.file.MediaInfoScanHelper
 import com.wisn.qm.mode.net.ApiNetWork
 import java.lang.Exception
 
-class DataRepository private constructor( val apiNetWork: ApiNetWork, val appDataBase: AppDataBase,  val mediaInfohelper: MediaInfoScanHelper) {
+class DataRepository private constructor(val apiNetWork: ApiNetWork, val appDataBase: AppDataBase, val mediaInfohelper: MediaInfoScanHelper) {
 
 
     suspend fun getMediaImageList(maxid: String): MutableList<MediaInfo> {
@@ -27,11 +27,11 @@ class DataRepository private constructor( val apiNetWork: ApiNetWork, val appDat
         return null
     }
 
-    suspend fun  getUserDirlist(isUserCache:Boolean): MutableList<UserDirBean>? {
+    suspend fun getUserDirlist(isUserCache: Boolean): MutableList<UserDirBean>? {
         try {
             val dirlist = apiNetWork.getUserDirlist(-1)
             if (dirlist.isSuccess()) {
-                return dirlist.data.also {
+                return dirlist.data.list.also {
                     if (isUserCache) {
                         appDataBase.userDirDao?.deleteAllDirBeanList()
                         appDataBase.userDirDao?.insertUserDirBeanList(it)
@@ -55,7 +55,7 @@ class DataRepository private constructor( val apiNetWork: ApiNetWork, val appDat
         fun getInstance(): DataRepository =
                 INSTANCE ?: synchronized(this) {
                     INSTANCE
-                            ?: DataRepository(ApiNetWork.newInstance(),AppDataBase.getInstanse() ,MediaInfoScanHelper.newInstance()).also { INSTANCE = it }
+                            ?: DataRepository(ApiNetWork.newInstance(), AppDataBase.getInstanse(), MediaInfoScanHelper.newInstance()).also { INSTANCE = it }
                 }
 
     }

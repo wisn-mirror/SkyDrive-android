@@ -4,6 +4,7 @@ import com.wisn.qm.mode.bean.BaseResult
 import com.library.base.config.UserBean
 import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.mode.bean.MultiPartInfo
+import com.wisn.qm.mode.bean.PageBean
 import com.wisn.qm.mode.bean.Update
 import com.wisn.qm.mode.db.beans.UserDirBean
 import okhttp3.MultipartBody
@@ -66,7 +67,7 @@ interface Api {
      * 获取当前用户所有文件夹
      */
     @GET("/userfile/getlist")
-    suspend fun getUserFileAlllist(): BaseResult<List<UserDirBean>>
+    suspend fun getUserFileAlllist(): BaseResult<PageBean<List<UserDirBean>>>
 
     /**
      * 单文件上传
@@ -93,7 +94,7 @@ interface Api {
      * 获取每个目录的文件夹列表
      */
     @GET("/userfile/dirlist")
-    suspend fun getUserDirlist(@Query("pid") pid: Long): BaseResult<MutableList<UserDirBean>>
+    suspend fun getUserDirlist(@Query("pid") pid: Long): BaseResult<PageBean<MutableList<UserDirBean>>>
 
     /**
      * 获取所有文件sha1

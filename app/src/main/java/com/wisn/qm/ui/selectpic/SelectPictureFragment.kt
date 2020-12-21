@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.library.base.BaseFragment
 import com.qmuiteam.qmui.qqface.QMUIQQFaceView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentSelectfileBinding
 import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.MediaInfo
 
-open class SelectPictureFragment : BaseFragment<SelectPictureViewModel, FragmentSelectfileBinding>(), SelectPictureCallBack {
+import kotlinx.android.synthetic.main.fragment_selectfile.*
+
+open class SelectPictureFragment : BaseFragment<SelectPictureViewModel>(), SelectPictureCallBack {
     lateinit var title: QMUIQQFaceView
     lateinit var leftCancel: Button
     lateinit var rightButton: Button
@@ -26,10 +27,10 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel, Fragment
     }
 
     override fun initView(views: View) {
-        title = dataBinding?.topbar?.setTitle("照片库")!!
+        title =      topbar?.setTitle("照片库")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        leftCancel = dataBinding?.topbar?.addLeftTextButton("取消 ", R.id.topbar_right_add_button)!!
+        leftCancel =      topbar?.addLeftTextButton("取消 ", R.id.topbar_right_add_button)!!
         leftCancel.setTextColor(Color.BLACK)
         leftCancel.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         leftCancel.visibility = View.VISIBLE
@@ -38,7 +39,7 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel, Fragment
         }
 //        val get = arguments?.get(ConstantKey.albuminfo) as UserDirBean
 
-        rightButton = dataBinding?.topbar?.addRightTextButton("确定 ", R.id.topbar_right_add_button)!!
+        rightButton =      topbar?.addRightTextButton("确定 ", R.id.topbar_right_add_button)!!
         rightButton.setTextColor(Color.BLACK)
         rightButton.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         rightButton.setOnClickListener {
@@ -66,7 +67,7 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel, Fragment
         with(gridLayoutManager) {
             spanSizeLookup = SelectSpanSizeLookup(mAdapter)
         }
-        with(dataBinding?.recyclerView) {
+        with(     recyclerView) {
             this?.layoutManager = gridLayoutManager
             this?.adapter = mAdapter
         }

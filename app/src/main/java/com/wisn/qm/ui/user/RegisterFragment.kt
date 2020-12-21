@@ -6,41 +6,40 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.blankj.utilcode.util.ToastUtils
 import com.library.base.BaseFragment
-import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentRegisterBinding
+import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
  * Created by Wisn on 2020/6/6 下午5:06.
  */
-class RegisterFragment : BaseFragment<UserViewModel, FragmentRegisterBinding>() {
+class RegisterFragment : BaseFragment<UserViewModel>() {
 
 
     override fun initView(views: View) {
         super.initView(views)
         initTopBar()
-        dataBinding?.etRegister?.onClick {
+        et_register?.setOnClickListener {
 
-            var phone = dataBinding?.etPhone?.text.toString();
-            var password = dataBinding?.etPassword?.text.toString()
-            var etPassword2 = dataBinding?.etPassword2?.text.toString()
+            var phone = et_phone?.text.toString();
+            var password = et_password?.text.toString()
+            var etPassword2 = et_password2?.text.toString()
             if (phone.isEmpty()) {
                 ToastUtils.showShort("请输入手机号")
-                return@onClick;
+                return@setOnClickListener;
             }
             if (password.isEmpty()) {
                 ToastUtils.showShort("请设置密码")
-                return@onClick;
+                return@setOnClickListener;
             }
             if (etPassword2.isEmpty()) {
                 ToastUtils.showShort("请再次确认密码")
-                return@onClick;
+                return@setOnClickListener;
             }
-            viewModel.register(phone, password, dataBinding?.etPassword2?.text.toString()).observe(this, Observer {
+            viewModel.register(phone, password, et_password.text.toString()).observe(this, Observer {
                 ToastUtils.showShort(it)
             })
         }
-        dataBinding?.login?.onClick {
+        login?.setOnClickListener {
 //            startFragment(LoginFragment())
             popBackStack()
         }
@@ -52,10 +51,10 @@ class RegisterFragment : BaseFragment<UserViewModel, FragmentRegisterBinding>() 
     }
 
     private fun initTopBar() {
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton();
+        val addLeftBackImageButton = topbar?.addLeftBackImageButton();
         addLeftBackImageButton?.setColorFilter(Color.BLACK);
         addLeftBackImageButton?.setOnClickListener { popBackStack() }
-        val title = dataBinding?.topbar?.setTitle("注册");
+        val title = topbar?.setTitle("注册");
         title?.setTextColor(Color.BLACK)
         title?.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
 

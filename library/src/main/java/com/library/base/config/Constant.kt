@@ -15,11 +15,11 @@ object Constant {
         if (sha1.isNullOrEmpty()) {
             return null;
         }
-        return "${BASE_URL}file/get_open?filesha1=${sha1}&token=${GlobalUser.token}"
+        return "${BASE_URL}file/getopen?filesha1=${sha1}&token=${GlobalUser.token}"
     }
 
     fun getImageDownloadUrl(sha1: String): String {
-        return "${BASE_URL}file/get_download?filesha1=${sha1}&token=${GlobalUser.token}"
+        return "${BASE_URL}file/getdownload?filesha1=${sha1}&token=${GlobalUser.token}"
     }
 
 

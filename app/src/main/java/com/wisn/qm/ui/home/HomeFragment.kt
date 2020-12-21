@@ -26,11 +26,12 @@ import com.wisn.qm.ui.album.newalbum.NewAlbumFragment
 import com.wisn.qm.ui.home.adapter.HomePagerAdapter
 import com.wisn.qm.ui.home.controller.*
 import java.util.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * Created by Wisn on 2020/4/30 下午8:03.
  */
-class HomeFragment : BaseFragment<HomeViewModel, ViewDataBinding>(), HomeControlListener {
+class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
     val addablum: String = "addablum"
     var mTabSegment: QMUITabSegment? = null
     var pager: QMUIViewPager? = null

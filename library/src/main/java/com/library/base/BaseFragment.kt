@@ -6,8 +6,6 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,31 +18,22 @@ import com.qmuiteam.qmui.arch.SwipeBackLayout
 import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding> : QMUIFragment() {
+abstract class BaseFragment<VM : BaseViewModel> : QMUIFragment() {
     private var isFirst: Boolean = true
     protected lateinit var viewModel: VM
     protected lateinit var views: View
-    protected var dataBinding: DB? = null
 
     override fun onCreateView(): View {
         BaseApp.refwatcher?.watch(this)
-
-        val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
-        if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
-//            dataBinding = DataBindingUtil.bind<DB>(views)
-            dataBinding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), null, false)
-            views = dataBinding?.root!!
-        } else {
-            views = LayoutInflater.from(activity).inflate(layoutId(), null)
-
-        }
         createViewModel()
         lifecycle.addObserver(viewModel)
-
-        initView(views)
-
+        views = LayoutInflater.from(activity).inflate(layoutId(), null)
         return views;
+    }
 
+    override fun onViewCreated(rootView: View) {
+        super.onViewCreated(rootView)
+        initView(views)
     }
 
     abstract fun layoutId(): Int

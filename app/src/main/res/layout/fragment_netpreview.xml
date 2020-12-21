@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
 
     <com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2 xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -84,5 +83,3 @@
             android:visibility="gone"
             app:constraint_referenced_ids="top_bg,iv_back,bottom_bg,tv_collection,tv_delete" />
     </com.qmuiteam.qmui.widget.QMUIWindowInsetLayout2>
-
-</layout>

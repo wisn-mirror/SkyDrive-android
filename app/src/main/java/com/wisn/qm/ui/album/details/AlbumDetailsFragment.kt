@@ -18,7 +18,6 @@ import com.qmuiteam.qmui.qqface.QMUIQQFaceView
 import com.qmuiteam.qmui.skin.QMUISkinManager
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentAlbumdetailsBinding
 import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.UserDirBean
@@ -26,13 +25,15 @@ import com.wisn.qm.mode.db.beans.MediaInfo
 import com.wisn.qm.ui.album.AlbumViewModel
 import com.wisn.qm.ui.album.EditAlbumDetails
 import com.wisn.qm.ui.selectpic.SelectPictureFragment
+import kotlinx.android.synthetic.main.fragment_albumdetails.*
 
-class AlbumDetailsFragment : BaseFragment<AlbumViewModel, FragmentAlbumdetailsBinding>(), SwipeRefreshLayout.OnRefreshListener, EditAlbumDetails {
+
+class AlbumDetailsFragment : BaseFragment<AlbumViewModel>(), SwipeRefreshLayout.OnRefreshListener, EditAlbumDetails {
     lateinit var title: QMUIQQFaceView
     lateinit var rightButton: Button
     var isShowEdit: Boolean = false
     val albumPictureAdapter by lazy {
-        AlbumDetailsAdapter(this,this)
+        AlbumDetailsAdapter(this, this)
     }
     val get by lazy { arguments?.get(ConstantKey.albuminfo) as UserDirBean }
 
@@ -42,10 +43,10 @@ class AlbumDetailsFragment : BaseFragment<AlbumViewModel, FragmentAlbumdetailsBi
 
     override fun initView(views: View) {
         super.initView(views)
-        title = dataBinding?.topbar?.setTitle("相册")!!
+        title = topbar.setTitle("相册")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton()
+        val addLeftBackImageButton = topbar?.addLeftBackImageButton()
         addLeftBackImageButton?.setColorFilter(Color.BLACK)
         addLeftBackImageButton?.setOnClickListener {
             if (isShowEdit) {
@@ -55,7 +56,7 @@ class AlbumDetailsFragment : BaseFragment<AlbumViewModel, FragmentAlbumdetailsBi
             }
         }
 
-        rightButton = dataBinding?.topbar?.addRightTextButton("添加 ", R.id.topbar_right_add_button)!!
+        rightButton = topbar?.addRightTextButton("添加 ", R.id.topbar_right_add_button)!!
         rightButton.setTextColor(Color.BLACK)
         rightButton.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         rightButton.setOnClickListener {
@@ -79,20 +80,20 @@ class AlbumDetailsFragment : BaseFragment<AlbumViewModel, FragmentAlbumdetailsBi
                 startFragmentForResult(selectPictureFragment, 100)
             }
         }
-        dataBinding?.swiperefresh?.setOnRefreshListener(this)
+        swiperefresh?.setOnRefreshListener(this)
 
         var gridLayoutManager = GridLayoutManager(context, 3)
         with(gridLayoutManager) {
             spanSizeLookup = SpanSizeLookup(albumPictureAdapter)
         }
 
-        with(dataBinding?.recyclerView!!) {
+        with(recyclerView!!) {
             adapter = albumPictureAdapter
             layoutManager = gridLayoutManager
         }
         title.text = get.filename
         viewModel.getUserDirlist(get.id).observe(this, Observer {
-            dataBinding?.swiperefresh?.isRefreshing = false
+            swiperefresh?.isRefreshing = false
             albumPictureAdapter.updateSelect(false)
 
             if (it.isNullOrEmpty()) {

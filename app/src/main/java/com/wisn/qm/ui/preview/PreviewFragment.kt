@@ -22,14 +22,15 @@ import com.we.player.player.exo.ExoPlayerFactory
 import com.we.player.render.impl.TextureRenderViewFactory
 import com.we.player.view.VideoView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentPreviewBinding
 import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.MediaInfo
 import com.wisn.qm.task.UploadTaskUitls
 import com.wisn.qm.ui.album.newalbum.NewAlbumFragment
 import com.wisn.qm.ui.home.HomeViewModel
+import kotlinx.android.synthetic.main.fragment_preview.*
 
-class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : BaseFragment<NoViewModel, FragmentPreviewBinding>(), PreviewCallback {
+
+class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : BaseFragment<NoViewModel>(), PreviewCallback {
 
 
     var recyclerView: RecyclerView? = null
@@ -53,13 +54,13 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
         super.initView(views)
         var mHomeViewModel = ViewModelProvider(requireActivity(), ViewModelFactory()).get(HomeViewModel::class.java)
 
-        dataBinding?.groupContent?.visibility = View.GONE
+        group_content?.visibility = View.GONE
 
-        dataBinding?.vpContent?.adapter = PreviewAdapter(data, this@PreviewFragment)
+        vp_content?.adapter = PreviewAdapter(data, this@PreviewFragment)
 
-        dataBinding?.vpContent?.setCurrentItem(position, false)
-        dataBinding?.vpContent?.overScrollMode = View.OVER_SCROLL_NEVER
-        dataBinding?.vpContent?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        vp_content?.setCurrentItem(position, false)
+        vp_content?.overScrollMode = View.OVER_SCROLL_NEVER
+        vp_content?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
             override fun onPageScrolled(position: Int, positionOffset: Float,
                                         @Px positionOffsetPixels: Int) {
@@ -76,7 +77,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
                 if (get.itemType != FileType.VideoViewItem) {
                     return
                 }
-                dataBinding?.vpContent?.post {
+                vp_content?.post {
                     startPlay(position)
                 }
             }
@@ -106,7 +107,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
 
         })
 
-        dataBinding?.tvAddto?.onClick {
+        tv_addto?.onClick {
             val values = mHomeViewModel.getUserDirlist().value;
             var addItem = View.inflate(context, R.layout.item_album_new_album, null)
             values?.let {
@@ -119,7 +120,7 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
                         .setNeedRightMark(true)
                         .setOnSheetItemClickListener { dialog, itemView, position, tag ->
                             dialog.dismiss()
-                            mHomeViewModel.saveMedianInfo(position,false)
+                            mHomeViewModel.saveMedianInfo(position, false)
                             ToastUtils.showShort("已经添加到上传任务")
                         }
                 for (dirlist in values) {
@@ -135,16 +136,16 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
                 }
             }
         }
-        dataBinding?.tvUpload?.onClick {
-            val get = data.get(dataBinding?.vpContent?.currentItem!!)
-            mHomeViewModel.saveMedianInfo(0, get,false)
+        tv_upload?.onClick {
+            val get = data.get(vp_content?.currentItem!!)
+            mHomeViewModel.saveMedianInfo(0, get, false)
             ToastUtils.showShort("已经添加到上传任务")
         }
-        dataBinding?.ivBack?.onClick {
+        iv_back?.onClick {
             popBackStack()
         }
 
-        recyclerView = dataBinding?.vpContent?.getChildAt(0) as RecyclerView?
+        recyclerView = vp_content?.getChildAt(0) as RecyclerView?
     }
 
 
@@ -183,10 +184,10 @@ class PreviewFragment(var data: MutableList<MediaInfo>, var position: Int) : Bas
     }
 
     override fun onContentClick(view: View) {
-        if (dataBinding?.groupContent?.visibility == View.GONE) {
-            dataBinding?.groupContent?.visibility = View.VISIBLE
+        if (vp_content?.visibility == View.GONE) {
+            vp_content?.visibility = View.VISIBLE
         } else {
-            dataBinding?.groupContent?.visibility = View.GONE
+            vp_content?.visibility = View.GONE
         }
     }
 

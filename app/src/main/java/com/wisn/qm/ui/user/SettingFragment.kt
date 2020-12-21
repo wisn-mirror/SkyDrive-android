@@ -15,21 +15,22 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog.MessageDialogBuilder
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentSettingBinding
+import kotlinx.android.synthetic.main.fragment_setting.*
 
-open class SettingFragment : BaseFragment<UserViewModel, FragmentSettingBinding>(), View.OnClickListener {
+
+open class SettingFragment : BaseFragment<UserViewModel>(), View.OnClickListener {
     lateinit var title: QMUIQQFaceView
-    val autoUpload by lazy { dataBinding?.groupListView?.createItemView(null, "是否自动同步", null, QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_SWITCH) }
-    val lowBatteryUpload by lazy { dataBinding?.groupListView?.createItemView(null, "低电量是否同步", null, QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_SWITCH) }
-    val versionItem by lazy { dataBinding?.groupListView?.createItemView(null, "版本号", AppUtils.getAppVersionName(), QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_NONE) }
-    val about by lazy { dataBinding?.groupListView?.createItemView(null, "关于APP", " ", QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON) }
+    val autoUpload by lazy {  groupListView?.createItemView(null, "是否自动同步", null, QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_SWITCH) }
+    val lowBatteryUpload by lazy {  groupListView?.createItemView(null, "低电量是否同步", null, QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_SWITCH) }
+    val versionItem by lazy {  groupListView?.createItemView(null, "版本号", AppUtils.getAppVersionName(), QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_NONE) }
+    val about by lazy {  groupListView?.createItemView(null, "关于APP", " ", QMUICommonListItemView.HORIZONTAL, QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON) }
     override fun layoutId() = R.layout.fragment_setting
     override fun initView(views: View) {
         super.initView(views)
-        title = dataBinding?.topbar?.setTitle("设置")!!
+        title =  topbar?.setTitle("设置")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton()
+        val addLeftBackImageButton =  topbar?.addLeftBackImageButton()
         addLeftBackImageButton?.setColorFilter(Color.BLACK)
         addLeftBackImageButton?.setOnClickListener {
             popBackStack()
@@ -78,7 +79,7 @@ open class SettingFragment : BaseFragment<UserViewModel, FragmentSettingBinding>
                 .addItemView(versionItem, this)
                 .addItemView(about, this)
                 .setMiddleSeparatorInset(QMUIDisplayHelper.dp2px(context, 18), 0)
-                .addTo(dataBinding?.groupListView);
+                .addTo( groupListView);
 
     }
 

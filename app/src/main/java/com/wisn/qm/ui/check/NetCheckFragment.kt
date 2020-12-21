@@ -18,16 +18,16 @@ import com.library.base.config.GlobalUser
 import com.qmuiteam.qmui.kotlin.onClick
 import com.qmuiteam.qmui.qqface.QMUIQQFaceView
 import com.wisn.qm.R
-import com.wisn.qm.databinding.FragmentNetcheckBinding
 import com.wisn.qm.ui.home.HomeFragment
 import com.wisn.qm.ui.user.LoginFragment
 import com.wisn.qm.ui.video.TestVideoPlayerFragment
 
+import kotlinx.android.synthetic.main.fragment_netcheck.*
 
 /**
  * Created by Wisn on 2020/6/6 下午5:08.
  */
-class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding>() {
+class NetCheckFragment : BaseFragment<NetCheckViewModel>() {
     lateinit var title: QMUIQQFaceView
     var ipAddressByWifi: String? = null
     override fun layoutId(): Int {
@@ -35,10 +35,10 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
     }
 
     private fun initTopBar() {
-        title = dataBinding?.topbar?.setTitle("查找服务器")!!
+        title = topbar?.setTitle("查找服务器")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        val addLeftBackImageButton = dataBinding?.topbar?.addLeftBackImageButton()
+        val addLeftBackImageButton = topbar?.addLeftBackImageButton()
         addLeftBackImageButton?.setColorFilter(Color.BLACK)
         addLeftBackImageButton?.setOnClickListener {
             popBackStack()
@@ -49,13 +49,13 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
     override fun initView(views: View) {
         super.initView(views)
         initTopBar()
-        dataBinding?.selectOk?.onClick {
+        select_ok?.onClick {
 //            viewModel.checkNet()
             LogUtils.d("getNetinfo 222", Thread.currentThread().name)
-            val sp1 = dataBinding?.spinner1?.selectedItem.toString()
-            val sp2 = dataBinding?.spinner2?.selectedItem.toString()
-            val sp3 = dataBinding?.spinner3?.selectedItem.toString()
-            val sp4 = dataBinding?.spinner4?.selectedItem.toString()
+            val sp1 = spinner1?.selectedItem.toString()
+            val sp2 = spinner2?.selectedItem.toString()
+            val sp3 = spinner3?.selectedItem.toString()
+            val sp4 = spinner4?.selectedItem.toString()
             if (sp1.isNullOrEmpty() || sp2.isNullOrEmpty() || sp3.isNullOrEmpty() || sp4.isNullOrEmpty()) {
                 return@onClick
             }
@@ -64,29 +64,29 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
             startFragment(TestVideoPlayerFragment())
         }
         viewModel.getResult().observe(this, Observer {
-            val text = dataBinding?.result?.text;
-            dataBinding?.result?.text = "$text \n$it"
+            val text = result?.text;
+            result?.text = "$text \n$it"
         })
-        dataBinding?.result?.setMovementMethod(ScrollingMovementMethod.getInstance());
+        result?.setMovementMethod(ScrollingMovementMethod.getInstance());
         viewModel.initBroadcastListener()
         val wifiConnected = NetworkUtils.isWifiConnected()
         if (wifiConnected) {
             ipAddressByWifi = NetworkUtils.getIpAddressByWifi();
-            dataBinding?.tvInfo?.text = "当前Wifi IP:${ipAddressByWifi}"
+            tv_info?.text = "当前Wifi IP:${ipAddressByWifi}"
         } else {
-            dataBinding?.tvInfo?.text = "请连接Wifi"
+            tv_info?.text = "请连接Wifi"
         }
         getContext()?.let {
             try {
                 val split = ipAddressByWifi?.split(".")
-                setAdapter(it, dataBinding?.spinner1!!, 1, null, split?.get(0))
-                setAdapter(it, dataBinding?.spinner2!!, 2, split?.get(0), split?.get(1))
-                setAdapter(it, dataBinding?.spinner3!!, 3, null, split?.get(2))
-                setAdapter(it, dataBinding?.spinner4!!, 4, null, split?.get(3))
-                dataBinding?.spinner1!!.setOnItemSelectedListener(object : OnItemSelectedListener {
+                setAdapter(it, spinner1!!, 1, null, split?.get(0))
+                setAdapter(it, spinner2!!, 2, split?.get(0), split?.get(1))
+                setAdapter(it, spinner3!!, 3, null, split?.get(2))
+                setAdapter(it, spinner4!!, 4, null, split?.get(3))
+                spinner1!!.setOnItemSelectedListener(object : OnItemSelectedListener {
                     override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
                         val info = adapterView.getItemAtPosition(i).toString() //获取i所在的文本
-                        setAdapter(it, dataBinding?.spinner2!!, 2, info, split?.get(1))
+                        setAdapter(it, spinner2!!, 2, info, split?.get(1))
                     }
 
                     override fun onNothingSelected(adapterView: AdapterView<*>?) {
@@ -107,16 +107,16 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
                 }
             }
         })
-        dataBinding?.rgModel?.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
+        rg_model?.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
                 if (checkedId == R.id.radio_Button_input) {
-                    dataBinding?.group?.visibility = View.VISIBLE
+                    spinnerAll?.visibility = View.VISIBLE
                 } else {
-                    dataBinding?.group?.visibility = View.GONE
+                    spinnerAll?.visibility = View.GONE
                 }
             }
         })
-        dataBinding?.group?.visibility = View.GONE
+        spinnerAll?.visibility = View.GONE
     }
 
     fun setAdapter(context: Context, spanner: Spinner, position: Int, lastSelect: String?, selectStr: String?) {
@@ -132,7 +132,7 @@ class NetCheckFragment : BaseFragment<NetCheckViewModel, FragmentNetcheckBinding
                 for (index in 16 until 32) {
                     spinnerItems.add(index.toString())
                 }
-            }else{
+            } else {
                 for (index in 0 until 256) {
                     spinnerItems.add(index.toString())
                 }
