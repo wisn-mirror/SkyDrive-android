@@ -1,7 +1,5 @@
 package com.library.base
 
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.ToastUtils
@@ -11,18 +9,11 @@ import com.library.base.event.Message
 import com.qmuiteam.qmui.arch.QMUIFragmentActivity
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseFragmentActivity<VM : BaseViewModel, DB : ViewDataBinding> : QMUIFragmentActivity() {
+abstract class BaseFragmentActivity<VM : BaseViewModel> : QMUIFragmentActivity() {
 
     protected lateinit var viewModel: VM
-
-    protected var dataBinding: DB? = null
-
     override fun onCreateRootView(fragmentContainerId: Int): RootView {
         BaseApp.refwatcher?.watch(this)
-        val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
-        if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
-            dataBinding = layoutView()?.let { DataBindingUtil.getBinding(it) }
-        }
         createViewModel()
         lifecycle.addObserver(viewModel)
         registerDefUIChange()

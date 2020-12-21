@@ -26,6 +26,7 @@ import com.wisn.qm.ui.album.AlbumViewModel
 import com.wisn.qm.ui.album.EditAlbumDetails
 import com.wisn.qm.ui.selectpic.SelectPictureFragment
 import kotlinx.android.synthetic.main.fragment_albumdetails.*
+import kotlinx.android.synthetic.main.item_empty.view.*
 
 
 class AlbumDetailsFragment : BaseFragment<AlbumViewModel>(), SwipeRefreshLayout.OnRefreshListener, EditAlbumDetails {
@@ -98,10 +99,8 @@ class AlbumDetailsFragment : BaseFragment<AlbumViewModel>(), SwipeRefreshLayout.
 
             if (it.isNullOrEmpty()) {
                 var item_empty: View = View.inflate(context, R.layout.item_empty, null)
-                var empty_tip = item_empty.findViewById<TextView>(R.id.empty_tip)
-                var image = item_empty.findViewById<ImageView>(R.id.image)
-                image.setImageResource(R.mipmap.share_ic_blank_album)
-                empty_tip.setText("相册为空,快去添吧！")
+                item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
+                item_empty. empty_tip.setText("相册为空,快去添吧！")
                 albumPictureAdapter.setEmptyView(item_empty)
             } else {
                 albumPictureAdapter.setNewInstance(it)

@@ -27,10 +27,10 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel>(), Selec
     }
 
     override fun initView(views: View) {
-        title =      topbar?.setTitle("照片库")!!
+        title = topbar?.setTitle("照片库")!!
         title.setTextColor(Color.BLACK)
         title.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-        leftCancel =      topbar?.addLeftTextButton("取消 ", R.id.topbar_right_add_button)!!
+        leftCancel =topbar?.addLeftTextButton("取消 ", R.id.topbar_right_add_button)!!
         leftCancel.setTextColor(Color.BLACK)
         leftCancel.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         leftCancel.visibility = View.VISIBLE
@@ -39,7 +39,7 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel>(), Selec
         }
 //        val get = arguments?.get(ConstantKey.albuminfo) as UserDirBean
 
-        rightButton =      topbar?.addRightTextButton("确定 ", R.id.topbar_right_add_button)!!
+        rightButton = topbar?.addRightTextButton("确定 ", R.id.topbar_right_add_button)!!
         rightButton.setTextColor(Color.BLACK)
         rightButton.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
         rightButton.setOnClickListener {
@@ -67,7 +67,7 @@ open class SelectPictureFragment : BaseFragment<SelectPictureViewModel>(), Selec
         with(gridLayoutManager) {
             spanSizeLookup = SelectSpanSizeLookup(mAdapter)
         }
-        with(     recyclerView) {
+        with(recyclerView) {
             this?.layoutManager = gridLayoutManager
             this?.adapter = mAdapter
         }

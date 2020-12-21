@@ -14,25 +14,14 @@ import com.library.base.event.Message
 import com.squareup.leakcanary.LeakCanary
 import java.lang.reflect.ParameterizedType
 
-abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     protected lateinit var viewModel: VM
 
-    protected var dataBinding: DB? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        BaseApp.refwatcher?.watch(this)
-        val cla = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<*>
-        if (ViewDataBinding::class.java != cla && ViewDataBinding::class.java.isAssignableFrom((cla))) {
-            if (layoutId() != -1) {
-                dataBinding = DataBindingUtil.setContentView(this, layoutId())
-                setContentView(dataBinding?.root)
-            } else {
-                dataBinding = layoutView()?.let { DataBindingUtil.getBinding(it) }
-                setContentView(dataBinding?.root)
-            }
-        }
         createViewModel()
         lifecycle.addObserver(viewModel)
         registerDefUIChange()

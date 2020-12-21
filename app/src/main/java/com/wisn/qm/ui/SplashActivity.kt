@@ -9,13 +9,13 @@ import com.library.base.utils.NetCheckUtils
 import com.qmuiteam.qmui.arch.QMUIFragmentActivity
 import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
-import com.wisn.qm.databinding.ActivitySplash1Binding
 import com.wisn.qm.ui.check.NetCheckFragment
 import com.wisn.qm.ui.user.LoginFragment
+import kotlinx.android.synthetic.main.activity_splash1.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class SplashActivity : BaseActivity<NoViewModel, ActivitySplash1Binding>() {
+class SplashActivity : BaseActivity<NoViewModel>() {
     override fun layoutId(): Int {
         return R.layout.activity_splash1
     }
@@ -24,7 +24,7 @@ class SplashActivity : BaseActivity<NoViewModel, ActivitySplash1Binding>() {
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
 
-        dataBinding?.startmain?.onClick {
+        startmain?.onClick {
             startActivity(Intent(this, MainActivity::class.java))
         }
         GlobalScope.launch {

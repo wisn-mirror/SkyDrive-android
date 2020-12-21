@@ -15,6 +15,7 @@ import com.qmuiteam.qmui.qqface.QMUIQQFaceView
 import com.wisn.qm.R
 import com.wisn.qm.mode.ConstantKey
 import kotlinx.android.synthetic.main.fragment_uploadlist.*
+import kotlinx.android.synthetic.main.item_empty.view.*
 
 open class UploadListFragment : BaseFragment<UploadListViewModel>(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var title: QMUIQQFaceView
@@ -41,10 +42,8 @@ open class UploadListFragment : BaseFragment<UploadListViewModel>(), SwipeRefres
               swiperefresh?.isRefreshing=false
             if (it.isNullOrEmpty()) {
                 var item_empty: View = View.inflate(context, R.layout.item_empty, null)
-                var empty_tip = item_empty.findViewById<TextView>(R.id.empty_tip)
-                var image = item_empty.findViewById<ImageView>(R.id.image)
-                image.setImageResource(R.mipmap.share_ic_blank_album)
-                empty_tip.setText("上传列表为空,快去添吧！")
+                item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
+                item_empty.empty_tip.setText("上传列表为空,快去添吧！")
                 mAdapter.setEmptyView(item_empty)
             } else {
                 mAdapter.setNewInstance(it)

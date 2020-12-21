@@ -28,7 +28,7 @@ import com.wisn.qm.ui.home.HomeFragment
 @FirstFragments(value = [HomeFragment::class])
 @DefaultFirstFragment(HomeFragment::class)
 @LatestVisitRecord
-open class MainActivity : BaseFragmentActivity<MainViewModel, ViewDataBinding>() {
+open class MainActivity : BaseFragmentActivity<MainViewModel>() {
     private val storagePermissions: Array<String> = arrayOf("android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.ACCESS_WIFI_STATE");
 
     override fun onCreate(savedInstanceState: Bundle?) {

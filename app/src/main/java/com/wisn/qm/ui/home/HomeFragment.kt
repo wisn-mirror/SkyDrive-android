@@ -42,10 +42,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
 
     override fun initView(views: View) {
         super.initView(views)
-        mTabSegment = views.findViewById(R.id.tabs)
-        pager = views.findViewById(R.id.pager)
-        tv_upload = views.findViewById(R.id.tv_upload)
-        tv_addto = views.findViewById(R.id.tv_addto)
         tv_upload?.onClick {
             viewModel.saveMedianInfo(0)
             pictureController?.onBackPressedExit()
@@ -82,7 +78,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
             }
 
         }
-        item_photo_select_bottom = views.findViewById(R.id.item_photo_select_bottom)
         showPictureControl(false)
         initTabs()
         initPager()
