@@ -19,6 +19,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog
 import com.wisn.qm.R
 import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.ui.album.details.AlbumDetailsFragment
+import com.wisn.qm.ui.album.details.AlbumDetailsPageingFragment
 import com.wisn.qm.ui.album.newalbum.NewAlbumFragment
 import com.wisn.qm.ui.home.HomeFragment
 import com.wisn.qm.ui.home.HomeViewModel
@@ -71,7 +72,7 @@ class AlbumController(context: Context?, mhomeFragment: HomeFragment?, homeViewM
             })
             mAdapter.setOnItemClickListener { baseQuickAdapter: BaseQuickAdapter<*, *>, view: View, i: Int ->
                 mHomeControlListener.let {
-                    val albumDetailsFragment = AlbumDetailsFragment()
+                    val albumDetailsFragment = AlbumDetailsPageingFragment()
                     albumDetailsFragment.arguments = Bundle()
                     albumDetailsFragment.requireArguments().putSerializable(ConstantKey.albuminfo, mAdapter.getItem(i))
                     mHomeControlListener.startFragmentByView(albumDetailsFragment)

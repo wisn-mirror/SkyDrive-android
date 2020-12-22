@@ -94,7 +94,7 @@ interface Api {
      * 获取每个目录的文件夹列表
      */
     @GET("/userfile/dirlist")
-    suspend fun getUserDirlist(@Query("pid") pid: Long): BaseResult<PageBean<MutableList<UserDirBean>>>
+    suspend fun getUserDirlist(@Query("pid") pid: Long,@Query("pageSize") pageSize :Long? =20,@Query("lastId") lastId :Long? =0): BaseResult<PageBean<MutableList<UserDirBean>>>
 
     /**
      * 获取所有文件sha1

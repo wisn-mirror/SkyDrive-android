@@ -1,10 +1,14 @@
 package com.wisn.qm.ui.album
 
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 import com.library.base.base.BaseViewModel
+import com.wisn.qm.mode.UserDirListDataSource
 import com.wisn.qm.mode.bean.FileType
+import com.wisn.qm.mode.bean.PageKey
 import com.wisn.qm.mode.db.AppDataBase
 import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.mode.db.beans.MediaInfo
@@ -45,6 +49,13 @@ class AlbumViewModel : BaseViewModel() {
         }
 
     }
+
+    /**
+     * 获取数据
+     */
+    fun getUserDirListDataSource(pid: Long) = Pager(PagingConfig(pageSize = 1), PageKey(pid,lastId = 0)) {
+        UserDirListDataSource()
+    }.flow
 
 
     fun addUserDir(filename: String): MutableLiveData<UserDirBean> {

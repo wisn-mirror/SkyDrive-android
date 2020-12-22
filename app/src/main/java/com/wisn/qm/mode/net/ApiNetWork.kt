@@ -2,7 +2,6 @@ package com.wisn.qm.mode.net
 
 import com.library.base.config.UserBean
 import com.library.base.net.RetrofitClient
-import com.wisn.qm.mode.ConstantKey
 import com.wisn.qm.mode.bean.BaseResult
 import com.wisn.qm.mode.bean.MultiPartInfo
 import com.wisn.qm.mode.bean.PageBean
@@ -125,8 +124,8 @@ class ApiNetWork {
     /**
      * 每个目录的文件夹列表
      */
-    suspend fun getUserDirlist(@Query("pid") pid: Long): BaseResult<PageBean<MutableList<UserDirBean>>> {
-        return getServie().getUserDirlist(pid)
+    suspend fun getUserDirlist(@Query("pid") pid: Long, @Query("pageSize") pageSize:Long? =20, @Query("lastId") lastId: Long? =0): BaseResult<PageBean<MutableList<UserDirBean>>> {
+        return getServie().getUserDirlist(pid,pageSize,lastId)
     }
 
 

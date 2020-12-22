@@ -7,9 +7,9 @@ package com.wisn.qm.mode.bean
  * @CreateDate: 2020/12/21 上午10:43
  */
 data class PageBean<T>(
-        val nextpageid: Int?,
-        val pageNo: Int?,
-        val pageSize: Int?,
-        val total: Int?,
+        val nextpageid: Long?,
+        val pageNo: Long?,
+        val pageSize: Long?,
+        val total: Long?,
         val list: T
 )

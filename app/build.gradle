@@ -101,6 +101,8 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation "androidx.paging:paging-runtime:3.0.0-alpha03"
+    testImplementation "androidx.paging:paging-common:3.0.0-alpha03"
 
 
     // Test helpers

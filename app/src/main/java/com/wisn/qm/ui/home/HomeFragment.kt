@@ -1,9 +1,7 @@
 package com.wisn.qm.ui.home
 
 import android.view.View
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.ViewDataBinding
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
@@ -16,10 +14,8 @@ import com.qmuiteam.qmui.kotlin.onClick
 import com.qmuiteam.qmui.skin.QMUISkinManager
 import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import com.qmuiteam.qmui.widget.QMUIViewPager
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet.BottomListSheetBuilder
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog
-import com.qmuiteam.qmui.widget.tab.QMUITabSegment
 import com.wisn.qm.R
 import com.wisn.qm.task.UploadTaskUitls
 import com.wisn.qm.ui.album.newalbum.NewAlbumFragment
@@ -27,27 +23,24 @@ import com.wisn.qm.ui.home.adapter.HomePagerAdapter
 import com.wisn.qm.ui.home.controller.*
 import java.util.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.item_photo_select_bottom.*
+import kotlinx.android.synthetic.main.item_photo_select_bottom.view.*
 
 /**
  * Created by Wisn on 2020/4/30 下午8:03.
  */
 class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
     val addablum: String = "addablum"
-    var mTabSegment: QMUITabSegment? = null
-    var pager: QMUIViewPager? = null
-    var item_photo_select_bottom: View? = null
-    var tv_upload: TextView? = null
-    var tv_addto: TextView? = null
     var pictureController: PictureController? = null
 
     override fun initView(views: View) {
         super.initView(views)
-        tv_upload?.onClick {
+        item_photo_select_bottom.tv_upload.onClick {
             viewModel.saveMedianInfo(0)
             pictureController?.onBackPressedExit()
             ToastUtils.showShort("已经添加到上传任务")
         }
-        tv_addto?.onClick {
+        item_photo_select_bottom.tv_addto.onClick {
             val values = viewModel.getUserDirlist().value;
             values?.let {
                 val builder = BottomListSheetBuilder(activity)
@@ -121,7 +114,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
         pagers[Pager.getPagerByPosition(3)] = MineController(requireContext(), this, viewModel)
         with(pager) {
             this?.adapter = HomePagerAdapter(pagers)
-            mTabSegment!!.setupWithViewPager(this, false)
+            tabs!!.setupWithViewPager(this, false)
             this?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
@@ -152,7 +145,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
 
     private fun initTabs() {
 //        LogUtils.d("initTabs")
-        val qmuiTabBuilder = mTabSegment!!.tabBuilder()
+        val qmuiTabBuilder = tabs!!.tabBuilder()
         qmuiTabBuilder.setSelectedIconScale(1.1f)
                 .setTextSize(QMUIDisplayHelper.sp2px(context, 12), QMUIDisplayHelper.sp2px(context, 14))
                 .setDynamicChangeIconColor(false)
@@ -171,7 +164,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
                 .setSelectedDrawable(ContextCompat.getDrawable(requireContext(), R.mipmap.ic_tab_mine_checked))
                 .setText("我的")
                 .build(context)
-        mTabSegment!!
+        tabs!!
                 .addTab(picture)
                 .addTab(album)
                 .addTab(mine)
@@ -195,7 +188,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), HomeControlListener {
             if (isShow) {
                 VibrateUtils.vibrate(100)
             }
-            mTabSegment?.visibility = if (isShow) View.INVISIBLE else View.VISIBLE
+            tabs?.visibility = if (isShow) View.INVISIBLE else View.VISIBLE
 
         }
     }
