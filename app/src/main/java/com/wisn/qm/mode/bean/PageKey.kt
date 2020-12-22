@@ -1,7 +1,5 @@
 package com.wisn.qm.mode.bean
 
-import android.util.Log
-
 /**
  *
  * @Description:
@@ -10,6 +8,6 @@ import android.util.Log
  */
 data class PageKey(
         val pid: Long,
-        val lastId: Long?,
+        val lastId: Long?=-1,
         val pageNo: Long?=1,
         val pageSize: Long?=20)

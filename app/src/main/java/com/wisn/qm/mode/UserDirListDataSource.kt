@@ -20,9 +20,9 @@ class UserDirListDataSource : PagingSource<PageKey, UserDirBean>() {
 
         return try {
             //页码未定义置为1
-            var currentPage = params.key ?: PageKey(-1, 0, pageSize = 20);
+            var currentPage = params.key ?: PageKey(-1, -1, pageSize = 20);
             //仓库层请求数据
-            Log.d("MainActivity", "请求第${currentPage}页")
+            Log.d("UserDirListDataSource", "请求第${currentPage}页")
             val dirlist = ApiNetWork.newInstance().getUserDirlist(currentPage.pid, currentPage.pageSize, currentPage.lastId)
             var nextPage = if (dirlist.isSuccess() && dirlist.data != null && currentPage.lastId != dirlist.data.nextpageid && dirlist.data.list.size > 0) {
                 PageKey(currentPage.pid, dirlist.data.nextpageid, pageSize = 20);
@@ -36,10 +36,7 @@ class UserDirListDataSource : PagingSource<PageKey, UserDirBean>() {
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            if (e is IOException) {
-                Log.d("测试错误数据", "-------连接失败")
-            }
-            Log.d("测试错误数据", "-------${e.message}")
+            Log.d("UserDirListDataSource", "-------${e.message}")
             LoadResult.Error(throwable = e)
         }
 

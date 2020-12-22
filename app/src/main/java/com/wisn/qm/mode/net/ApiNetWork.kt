@@ -124,7 +124,7 @@ class ApiNetWork {
     /**
      * 每个目录的文件夹列表
      */
-    suspend fun getUserDirlist(@Query("pid") pid: Long, @Query("pageSize") pageSize:Long? =20, @Query("lastId") lastId: Long? =0): BaseResult<PageBean<MutableList<UserDirBean>>> {
+    suspend fun getUserDirlist(pid: Long,  pageSize:Long? =20,lastId: Long? =-1): BaseResult<PageBean<MutableList<UserDirBean>>> {
         return getServie().getUserDirlist(pid,pageSize,lastId)
     }
 
@@ -132,15 +132,15 @@ class ApiNetWork {
     /**
      * 添加文件夹
      */
-    suspend fun addUserDir(@Field("pid") pid: Long, @Field("filename") filename: String): BaseResult<UserDirBean> {
+    suspend fun addUserDir( pid: Long,  filename: String): BaseResult<UserDirBean> {
         return getServie().addUserDir(pid, filename)
     }
 
     /**
      * 初始化分块上传
      */
-    suspend fun initMultipartInfo(@Query("pid") pid: Long, @Query("filename") filename: String,
-                                  @Query("filesize") filesize: Long, @Query("sha1") sha1: String): BaseResult<MultiPartInfo> {
+    suspend fun initMultipartInfo(pid: Long,  filename: String,
+                                   filesize: Long,sha1: String): BaseResult<MultiPartInfo> {
         return getServie().initMultipartInfo(pid, filename, filesize, sha1)
     }
 

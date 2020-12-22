@@ -20,7 +20,6 @@ import com.wisn.qm.mode.bean.FileType
 import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.ui.album.EditAlbumDetails
 import com.wisn.qm.ui.home.BaseDataBindlingViewHolder
-import com.wisn.qm.ui.netpreview.NetPreviewFragment
 
 /**
  *

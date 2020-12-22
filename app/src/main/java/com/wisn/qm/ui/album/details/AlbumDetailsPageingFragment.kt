@@ -27,7 +27,6 @@ import com.wisn.qm.ui.album.AlbumViewModel
 import com.wisn.qm.ui.album.EditAlbumDetails
 import com.wisn.qm.ui.selectpic.SelectPictureFragment
 import kotlinx.android.synthetic.main.fragment_albumdetails.*
-import kotlinx.android.synthetic.main.item_empty.view.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -41,10 +40,11 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
     var TAG = "AlbumDetailsPageingFragment"
 
     val albumPictureAdapter by lazy {
-        AlbumDetailsPageingAdapter(this, this,{ i: Int, it: UserDirBean?, albumDetailsPageingAdapter: AlbumDetailsPageingAdapter ->
+        AlbumDetailsPageingAdapter(this, this) { i: Int, it: UserDirBean?, albumDetailsPageingAdapter: AlbumDetailsPageingAdapter ->
 //            it?. = "黄林晴${position}"
+            Log.d(TAG, "getUserDirListDataSource update")
             albumDetailsPageingAdapter.notifyDataSetChanged()
-        })
+        }
     }
     val get by lazy { arguments?.get(ConstantKey.albuminfo) as UserDirBean }
 
@@ -104,19 +104,19 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
             layoutManager = gridLayoutManager
         }
         title.text = get.filename
-       /* viewModel.getUserDirlist(get.id).observe(this, Observer {
-            swiperefresh?.isRefreshing = false
-            albumPictureAdapter.updateSelect(false)
+        /* viewModel.getUserDirlist(get.id).observe(this, Observer {
+             swiperefresh?.isRefreshing = false
+             albumPictureAdapter.updateSelect(false)
 
-            if (it.isNullOrEmpty()) {
-                var item_empty: View = View.inflate(context, R.layout.item_empty, null)
-                item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
-                item_empty.empty_tip.setText("相册为空,快去添吧！")
-//                albumPictureAdapter.setEmptyView(item_empty)
-            } else {
-//                albumPictureAdapter.setNewInstance(it)
-            }
-        })*/
+             if (it.isNullOrEmpty()) {
+                 var item_empty: View = View.inflate(context, R.layout.item_empty, null)
+                 item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
+                 item_empty.empty_tip.setText("相册为空,快去添吧！")
+ //                albumPictureAdapter.setEmptyView(item_empty)
+             } else {
+ //                albumPictureAdapter.setNewInstance(it)
+             }
+         })*/
 
 
         viewModel.selectData().observe(this, Observer {
@@ -156,7 +156,7 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
                 }
             }
         }
-        swiperefresh.isRefreshing=true
+        swiperefresh.isRefreshing = true
         onRefresh()
 
     }
@@ -175,6 +175,7 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
             try {
                 viewModel.getUserDirListDataSource(get.id).collectLatest {
 //                    mPagingData = it
+                    Log.d(TAG, "getUserDirListDataSource ")
                     swiperefresh?.isRefreshing = false
                     albumPictureAdapter.submitData(it)
                 }
@@ -207,16 +208,16 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
 
 open class SpanSizeLookupPage(var adapterV2: AlbumDetailsPageingAdapter) : GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
-      if(adapterV2.itemCount>position){
-          return when (adapterV2.getItemViewType(position)) {
-              FileType.VideoViewItem,
-              FileType.ImageViewItem -> 1
-              FileType.TimeTitle -> 3
-              else -> 3
-          }
-      }else{
-          return 3
-      }
+        if (adapterV2.itemCount > position) {
+            return when (adapterV2.getItemViewType(position)) {
+                FileType.VideoViewItem,
+                FileType.ImageViewItem -> 1
+                FileType.TimeTitle -> 3
+                else -> 3
+            }
+        } else {
+            return 3
+        }
 
     }
 

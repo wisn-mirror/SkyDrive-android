@@ -53,7 +53,7 @@ class AlbumViewModel : BaseViewModel() {
     /**
      * 获取数据
      */
-    fun getUserDirListDataSource(pid: Long) = Pager(PagingConfig(pageSize = 1), PageKey(pid,lastId = 0)) {
+    fun getUserDirListDataSource(pid: Long) = Pager(PagingConfig(pageSize = 1), PageKey(pid)) {
         UserDirListDataSource()
     }.flow
 

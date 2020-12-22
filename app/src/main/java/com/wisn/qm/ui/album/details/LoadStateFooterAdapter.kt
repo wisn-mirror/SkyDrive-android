@@ -15,7 +15,6 @@ class LoadStateFooterAdapter (private val retry: () -> Unit) :
         LoadStateAdapter<LoadStateViewHolder>() {
 
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
-        Log.d("MainActivity", "---去绑定 onBindViewHolder")
         holder.bindState(loadState)
     }
 
