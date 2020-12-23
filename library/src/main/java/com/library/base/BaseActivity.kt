@@ -21,7 +21,6 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       BaseApp.refwatcher?.watch(this)
         createViewModel()
         lifecycle.addObserver(viewModel)
         registerDefUIChange()
@@ -71,6 +70,12 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
             val tClass = tp as? Class<VM> ?: BaseViewModel::class.java
             viewModel = ViewModelProvider(this, ViewModelFactory()).get(tClass) as VM
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BaseApp.refwatcher?.watch(this)
+
     }
 
 }

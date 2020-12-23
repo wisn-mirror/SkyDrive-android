@@ -11,9 +11,9 @@ object Constant {
     //    const val BASE_URL = "http://10.0.2.2:9996/"
     var BASE_URL = "http://192.168.0.100:9996/"
 
-    fun getImageUrl(sha1: String): String? {
+    fun getImageUrl(sha1: String?): String {
         if (sha1.isNullOrEmpty()) {
-            return null;
+            return "";
         }
         return "${BASE_URL}file/open?filesha1=${sha1}&token=${GlobalUser.token}"
     }

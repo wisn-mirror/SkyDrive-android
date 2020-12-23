@@ -24,7 +24,6 @@ abstract class BaseFragment<VM : BaseViewModel> : QMUIFragment() {
     protected lateinit var views: View
 
     override fun onCreateView(): View {
-        BaseApp.refwatcher?.watch(this)
         createViewModel()
         lifecycle.addObserver(viewModel)
         views = LayoutInflater.from(activity).inflate(layoutId(), null)

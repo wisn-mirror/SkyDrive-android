@@ -13,7 +13,7 @@ interface UserDirDao {
     suspend fun deleteAllDirBeanList()
 
 
-    @Query("select * from userdirlist")
+    @Query("select * from userdirlist order by id desc ")
     suspend fun getAllUserDirBeanList(): MutableList<UserDirBean>
 
 }

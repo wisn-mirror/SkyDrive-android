@@ -130,7 +130,7 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
                 .get(ConstantKey.updatePhotoList, Int::class.java)
                 .observe(this, Observer {
                     LogUtils.d("updatePhotoList")
-                    viewModel.getUserDirlist(get.id)
+                    albumPictureAdapter.refresh()
                 })
 
         //初始状态添加监听
@@ -157,20 +157,6 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
             }
         }
         swiperefresh.isRefreshing = true
-        onRefresh()
-
-    }
-
-    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onFragmentResult(requestCode, resultCode, data)
-        var list = data?.extras?.getSerializable("data") as ArrayList<MediaInfo>
-        LogUtils.d("onFragmentResult", list)
-        viewModel.saveMedianInfo(list, get)
-    }
-
-    override fun onRefresh() {
-//        viewModel.getUserDirlist(get.id)
-        LogUtils.d("onRefresh")
         lifecycleScope.launch {
             try {
                 viewModel.getUserDirListDataSource(get.id).collectLatest {
@@ -184,8 +170,21 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
                 e.printStackTrace()
                 Log.d("测试错误数据 view层", "---错误了怎么办呢")
             }
-
         }
+    }
+
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onFragmentResult(requestCode, resultCode, data)
+        var list = data?.extras?.getSerializable("data") as ArrayList<MediaInfo>
+        LogUtils.d("onFragmentResult", list)
+        viewModel.saveMedianInfo(list, get)
+    }
+
+    override fun onRefresh() {
+        albumPictureAdapter.refresh()
+//        viewModel.getUserDirlist(get.id)
+        LogUtils.d("onRefresh")
+
     }
 
     override fun isShowEdit(isShow: Boolean) {

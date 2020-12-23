@@ -33,8 +33,8 @@ class LoadStateViewHolder (parent: ViewGroup, var retry: () -> Unit) : RecyclerV
             }
             is LoadState.Loading -> {
                 Log.d("LoadStateViewHolder", "Loading")
-                itemView.ll_loading.visibility = View.GONE
-                itemView.btn_retry.visibility=View.VISIBLE
+                itemView.ll_loading.visibility = View.VISIBLE
+                itemView.btn_retry.visibility=View.GONE
             }
             else -> {
                 Log.d("LoadStateViewHolder", "--"+loadState)

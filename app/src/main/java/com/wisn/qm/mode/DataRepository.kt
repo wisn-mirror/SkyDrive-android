@@ -29,7 +29,7 @@ class DataRepository private constructor(val apiNetWork: ApiNetWork, val appData
 
     suspend fun getUserDirlist(isUserCache: Boolean): MutableList<UserDirBean>? {
         try {
-            val dirlist = apiNetWork.getUserDirlist(-1)
+            val dirlist = apiNetWork.getUserDirlist(-1,pageSize = 100)
             if (dirlist.isSuccess()) {
                 return dirlist.data.list.also {
                     if (isUserCache) {

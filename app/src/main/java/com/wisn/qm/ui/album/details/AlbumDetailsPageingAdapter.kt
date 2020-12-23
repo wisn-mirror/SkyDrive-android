@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.util.getItemView
 import com.library.base.config.Constant
+import com.library.base.utils.GlideUtils
 import com.qmuiteam.qmui.kotlin.onClick
 import com.wisn.qm.R
 import com.wisn.qm.databinding.RvItemAlbumDetailMediaBinding
@@ -60,9 +61,10 @@ class AlbumDetailsPageingAdapter(var editAlbumDetails: EditAlbumDetails, var alb
 //            viewHolder.setDataBinding<RvItemAlbumDetailMediaBinding>(viewHolder.itemView)
             val dataBinding = holder.getDataBinding<RvItemAlbumDetailMediaBinding>()
             dataBinding?.image?.let {
-                Glide.with(it.context).load(Constant.getImageUrl(item.sha1!!))
-                        .apply(RequestOptions())
-                        .into(it)
+//                Glide.with(it.context).load(Constant.getImageUrl(item.sha1!!))
+//                        .apply(RequestOptions())
+//                        .into(it)
+                GlideUtils.loadUrl(Constant.getImageUrl(item.sha1!!),it)
                 dataBinding?.image?.setOnLongClickListener(View.OnLongClickListener {
                     if (!isSelectModel) {
                         map.clear()
