@@ -8,10 +8,8 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentContainerView
 import com.library.base.BaseFragmentActivity
-import com.qmuiteam.qmui.arch.SwipeBackLayout
 import com.qmuiteam.qmui.arch.annotation.DefaultFirstFragment
 import com.qmuiteam.qmui.arch.annotation.FirstFragments
 import com.qmuiteam.qmui.arch.annotation.LatestVisitRecord
@@ -173,9 +171,9 @@ open class MainActivity : BaseFragmentActivity<MainViewModel>() {
             fragmentContainer.id = fragmentContainerId
 //            fragmentContainer.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             fragmentContainer.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-                for (i in 0 until childCount) {
-                    SwipeBackLayout.updateLayoutInSwipeBack(getChildAt(i))
-                }
+//                for (i in 0 until childCount) {
+////                    SwipeBackLayout.updateLayoutInSwipeBack(getChildAt(i))
+//                }
             }
             addView(fragmentContainer, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))

@@ -44,8 +44,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'com.android.support:multidex:1.0.3'
     api 'com.blankj:utilcodex:1.29.0'
-    api 'com.qmuiteam:qmui:2.0.0-alpha10'
-    api "com.qmuiteam:arch:2.0.0-alpha10"
+    api 'com.qmuiteam:qmui:2.0.0-alpha11'
+    api "com.qmuiteam:arch:2.0.0-alpha11"
     annotationProcessor "com.qmuiteam:arch-compiler:2.0.0-alpha10"
     // use annotationProcessor if java
     api 'com.android.support:multidex:1.0.3'
