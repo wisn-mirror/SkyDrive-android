@@ -5,7 +5,9 @@ import androidx.paging.PagingSource
 import com.wisn.qm.mode.bean.PageKey
 import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.mode.net.ApiNetWork
-import java.io.IOException
+import com.wisn.qm.ui.album.details.LoadDataError
+import com.wisn.qm.ui.album.details.EmptyDataError
+import com.wisn.qm.ui.album.details.NoMoreDataError
 import java.lang.Exception
 
 /**
@@ -16,6 +18,7 @@ import java.lang.Exception
  */
 
 class UserDirListDataSource : PagingSource<PageKey, UserDirBean>() {
+    var  mutableList:ArrayList<UserDirBean> =ArrayList<UserDirBean>()
     override suspend fun load(params: LoadParams<PageKey>): LoadResult<PageKey, UserDirBean> {
 
         return try {
@@ -29,17 +32,32 @@ class UserDirListDataSource : PagingSource<PageKey, UserDirBean>() {
             } else {
                 null
             }
-            LoadResult.Page(
-                    data = dirlist.data.list,
-                    prevKey = null,
-                    nextKey = nextPage
-            )
+            if(dirlist.data.list.size == 0){
+                if (currentPage.lastId == -1L ) {
+                    mutableList.clear()
+                    //空数据
+                    LoadResult.Error(EmptyDataError(null))
+                } else {
+                    //没有更多了
+                    LoadResult.Error(NoMoreDataError(null))
+                }
+            }else{
+                mutableList.addAll(dirlist.data.list)
+                //正常加载数据
+                LoadResult.Page(
+                        data = dirlist.data.list,
+                        prevKey = null,
+                        nextKey = nextPage
+                )
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("UserDirListDataSource", "-------${e.message}")
-            LoadResult.Error(throwable = e)
+            //加载出错
+            LoadResult.Error(LoadDataError(e))
         }
 
     }
+
 
 }

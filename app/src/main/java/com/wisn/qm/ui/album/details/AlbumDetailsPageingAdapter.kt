@@ -4,12 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.chad.library.adapter.base.util.getItemView
 import com.library.base.config.Constant
 import com.library.base.utils.GlideUtils
 import com.qmuiteam.qmui.kotlin.onClick
@@ -90,8 +86,7 @@ class AlbumDetailsPageingAdapter(var editAlbumDetails: EditAlbumDetails, var alb
                     } else {
                         //查看大图
 //                        val netPreviewFragment = NetPreviewFragment(this.da, adapterPosition)
-//                        albumDetailsFragment.startFragment(netPreviewFragment)
-//                        pictureController.getHomeFragment().startFragment(previewFragment)
+                        albumDetailsFragment.prePic(adapterPosition)
                     }
                 }
             }

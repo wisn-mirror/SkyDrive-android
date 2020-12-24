@@ -3,6 +3,7 @@ package com.wisn.qm.ui.album
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 import com.library.base.base.BaseViewModel
@@ -23,6 +24,7 @@ class AlbumViewModel : BaseViewModel() {
     var result = ArrayList<String>()
     var dirlistLD = MutableLiveData<MutableList<UserDirBean>>()
     var selectData = MutableLiveData<MutableList<UserDirBean>>()
+    var userDirListDataSource: UserDirListDataSource? = null
 
 
     fun selectData(): MutableLiveData<MutableList<UserDirBean>> {
@@ -54,8 +56,18 @@ class AlbumViewModel : BaseViewModel() {
      * 获取数据
      * prefetchDistance = 10 预加载10条
      */
-    fun getUserDirListDataSource(pid: Long) = Pager(PagingConfig(pageSize = 1,prefetchDistance = 40), PageKey(pid)) {
-        UserDirListDataSource()
+    fun getDirListAll(): ArrayList<UserDirBean> {
+
+        arrayListOf(1,2,3)
+        if (userDirListDataSource == null) {
+            return ArrayList()
+        }
+        return userDirListDataSource!!.mutableList!!
+    }
+
+    fun getUserDirListDataSource(pid: Long) = Pager(PagingConfig(pageSize = 1, prefetchDistance = 40), PageKey(pid)) {
+        userDirListDataSource = UserDirListDataSource()
+        return@Pager userDirListDataSource!!
     }.flow
 
 

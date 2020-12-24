@@ -23,13 +23,21 @@ class LoadStateViewHolder (parent: ViewGroup, var retry: () -> Unit) : RecyclerV
     fun bindState(loadState: LoadState) {
         when (loadState) {
             is LoadState.Error -> {
-                itemView.btn_retry.visibility = View.VISIBLE
-                itemView.ll_loading.visibility = View.GONE
-                itemView.btn_retry.text="重试"
-                itemView.btn_retry.setOnClickListener {
-                    retry()
+                if(loadState.error is LoadDataError){
+                    itemView.btn_retry.visibility = View.VISIBLE
+                    itemView.ll_loading.visibility = View.GONE
+                    itemView.btn_retry.text="重试"
+                    itemView.btn_retry.setOnClickListener {
+                        retry()
+                    }
+                    Log.d("LoadStateViewHolder", "Error")
                 }
-                Log.d("LoadStateViewHolder", "Error")
+                if(loadState.error is NoMoreDataError){
+                    Log.d("LoadStateViewHolder", "--"+loadState)
+                    itemView.btn_retry.visibility=View.VISIBLE
+                    itemView.ll_loading.visibility = View.GONE
+                    itemView.btn_retry.text="没有更多了"
+                }
             }
             is LoadState.Loading -> {
                 Log.d("LoadStateViewHolder", "Loading")

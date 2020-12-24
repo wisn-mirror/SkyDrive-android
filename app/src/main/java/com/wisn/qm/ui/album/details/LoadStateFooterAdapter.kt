@@ -1,6 +1,5 @@
 package com.wisn.qm.ui.album.details
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter

@@ -25,11 +25,12 @@ import com.wisn.qm.mode.db.beans.UserDirBean
 import com.wisn.qm.mode.db.beans.MediaInfo
 import com.wisn.qm.ui.album.AlbumViewModel
 import com.wisn.qm.ui.album.EditAlbumDetails
+import com.wisn.qm.ui.netpreview.NetPreviewFragment
 import com.wisn.qm.ui.selectpic.SelectPictureFragment
 import kotlinx.android.synthetic.main.fragment_albumdetails.*
+import kotlinx.android.synthetic.main.item_empty.view.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.lang.Exception
 
 
@@ -37,9 +38,10 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
     lateinit var title: QMUIQQFaceView
     lateinit var rightButton: Button
     var isShowEdit: Boolean = false
+
     var TAG = "AlbumDetailsPageingFragment"
 
-    val albumPictureAdapter by lazy {
+    private val albumPictureAdapter by lazy {
         AlbumDetailsPageingAdapter(this, this) { i: Int, it: UserDirBean?, albumDetailsPageingAdapter: AlbumDetailsPageingAdapter ->
 //            it?. = "黄林晴${position}"
             Log.d(TAG, "getUserDirListDataSource update")
@@ -104,19 +106,6 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
             layoutManager = gridLayoutManager
         }
         title.text = get.filename
-        /* viewModel.getUserDirlist(get.id).observe(this, Observer {
-             swiperefresh?.isRefreshing = false
-             albumPictureAdapter.updateSelect(false)
-
-             if (it.isNullOrEmpty()) {
-                 var item_empty: View = View.inflate(context, R.layout.item_empty, null)
-                 item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
-                 item_empty.empty_tip.setText("相册为空,快去添吧！")
- //                albumPictureAdapter.setEmptyView(item_empty)
-             } else {
- //                albumPictureAdapter.setNewInstance(it)
-             }
-         })*/
 
 
         viewModel.selectData().observe(this, Observer {
@@ -132,27 +121,27 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
                     LogUtils.d("updatePhotoList")
                     albumPictureAdapter.refresh()
                 })
-
-        //初始状态添加监听
         albumPictureAdapter.addLoadStateListener {
+            Log.d(TAG, "it.source addLoadStateListener " + it.source)
+            Log.d(TAG, "it.prepend addLoadStateListener " + it.prepend)
+            Log.d(TAG, "it.append addLoadStateListener " + it.append)
+            Log.d(TAG, "it.refresh addLoadStateListener " + it.refresh)
             when (it.refresh) {
-
                 is LoadState.NotLoading -> {
                     Log.d(TAG, "is NotLoading")
                 }
-                is LoadState.Loading -> {
-                    Log.d(TAG, "is Loading")
-                }
                 is LoadState.Error -> {
-                    Log.d(TAG, "is Error:")
-                    when ((it.refresh as LoadState.Error).error) {
-                        is IOException -> {
-                            Log.d(TAG, "IOException")
-                        }
-                        else -> {
-                            Log.d(TAG, "others exception")
-                        }
+                    if ((it.refresh as LoadState.Error).error is EmptyDataError) {
+//                        Log.d("LoadStateViewHolder", "--"+loadState)
+                        item_empty.image.setImageResource(R.mipmap.share_ic_blank_album)
+                        item_empty.empty_tip.setText("相册为空,快去添吧！")
+                        swiperefresh.visibility = View.GONE
+                        item_empty.visibility = View.VISIBLE
                     }
+                }
+                is LoadState.Loading -> {
+                    Log.d(TAG, "Loading")
+
                 }
             }
         }
@@ -160,15 +149,15 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
         lifecycleScope.launch {
             try {
                 viewModel.getUserDirListDataSource(get.id).collectLatest {
-//                    mPagingData = it
-                    Log.d(TAG, "getUserDirListDataSource ")
+                    Log.d(TAG, "AAAAAgetUserDirListDataSource ")
                     swiperefresh?.isRefreshing = false
+                    swiperefresh.visibility = View.VISIBLE
+                    item_empty.visibility = View.GONE
                     albumPictureAdapter.submitData(it)
                 }
-
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("测试错误数据 view层", "---错误了怎么办呢")
+                LogUtils.d(TAG, "getUserDirListDataSource：" + e)
             }
         }
     }
@@ -191,16 +180,21 @@ class AlbumDetailsPageingFragment : BaseFragment<AlbumViewModel>(), SwipeRefresh
         this.isShowEdit = isShow
         if (isShow) {
             title.text = "已选中${viewModel.selectData.value?.size ?: 0}项"
-            rightButton.setText("删除")
+            rightButton.text = "删除"
         } else {
             title.text = get.filename
-            rightButton.setText("添加")
+            rightButton.text = "添加"
         }
     }
 
     override fun changeSelectData(isinit: Boolean, isAdd: Boolean, userDirBean: UserDirBean?) {
         viewModel.editUserDirBean(isinit, isAdd, userDirBean)
 
+    }
+    open fun prePic(position: Int) {
+        //查看大图
+        val netPreviewFragment = NetPreviewFragment(this.viewModel.getDirListAll(), position)
+        startFragment(netPreviewFragment)
     }
 
 }
